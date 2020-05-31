@@ -9,7 +9,7 @@ $ sudo yum install openssl-devel
 
 To compile cpp
 
-$ g++ sample.cpp -o sample -lcrypto
+$ g++ -I/usr/local/opt/openssl@1.1/include -L/usr/local/opt/openssl@1.1/lib sha256.cpp -o sha256 -lcrypto
 */
 
 #include <iostream>
