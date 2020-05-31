@@ -10,29 +10,96 @@
 #include <netdb.h>
 #include <errno.h>
 #include <sys/time.h>
+#include <vector>
 
 int balance = 100;
+int pid;
 int port = 8000;
 char *server_ip = "127.0.0.1";
-
-// Helper function to connect to a server
-void connectTo(int socket, struct sockaddr_in *address, int port)
+int sockets[5];                  // sockets[pid - 1] should never be used
+struct sockaddr_in addresses[5]; // Addresses[pid - 1] should never be used
+int new_sockets[5];              // For accepted connection. new_sockts[pid - 1] should never be used
+int addrlen[5];
+bool CONNECT[5];
+struct tranx
 {
-    address->sin_family = AF_INET;
-    address->sin_addr.s_addr = inet_addr(server_ip);
-    address->sin_port = htons(port);
-    if (connect(socket, (struct sockaddr *)(address), sizeof(struct sockaddr_in)) != 0)
+    int sender;
+    int receiver;
+    int amount;
+};
+std::vector<tranx> queue;
+
+// Money transfer
+void moneyTransfer(int receiver, int amount)
+{
+    tranx newTranx;
+    newTranx.sender = pid;
+    newTranx.receiver = receiver;
+    newTranx.amount = amount;
+    if (balance >= amount)
     {
-        printf("Error number: %d\n", errno);
-        printf("The error message is %s\n", strerror(errno));
-        printf("Connection with the server failed.\n");
-        exit(0);
+        queue.push_back(newTranx);
+        balance -= amount;
+    }
+    else 
+    {
+        std::cout << "Insufficient balance!\n";
     }
 }
 
-// Helper function to listen to a client
-void listenTo()
+// Fail the link
+void failLink(int dst)
 {
+    CONNECT[dst - 1] = false;
+    // Send a message to tell the process to set the bool
+}
+
+// Fix the link
+void fixLink(int dst)
+{
+    CONNECT[dst - 1] = true;
+    // Send a message to tell the process to set the bool
+}
+
+void failProccess()
+{
+    // Disconnect with all the processes
+    for (int i = 0; i < 5; i++)
+    {
+        CONNECT[i] = false;
+    }
+
+    for (int i = 0; i < 5; i++)
+    {
+        failLink(i + 1);
+    }
+
+    // Restore the process
+}
+
+// Print out the current balance
+void printBalance()
+{
+    std::cout << "Current ballance: $" << balance << "\n";
+}
+
+// Print out the transaction queue
+void printQueue()
+{
+    if (queue.empty())
+    {
+        std::cout << "The queue is empty now. Do some transactions.\n";
+    }
+    for (int i = 0; i < queue.size(); i++)
+    {
+        std::cout << "<P" << queue[i].sender + 1 << ", P" << queue[i].receiver << ", " << queue[i].amount << ">\n";
+    }
+}
+
+// Print out the blockchain
+void printBlockchain()
+{
+    std::cout << "STUB\n";
 }
 
 // Main function
@@ -44,7 +111,6 @@ int main()
     std::cout << "\n";
 
     // Create four sockets to connect to other four processes
-    int sockets[5]; // sockets[pid - 1] should never be used
     for (int i = 0; i < 5; i++)
     {
         if (i != pid - 1)
@@ -59,9 +125,6 @@ int main()
     std::cout << "Sockets created.\n";
 
     // Set all the sockets except sockts[pid - 1]
-    struct sockaddr_in addresses[5]; // Addresses[pid - 1] should never be used
-    int new_sockets[5];              // For accepted connection. new_sockts[pid - 1] should never be used
-    int addrlen[5];
     for (int i = 0; i < 5; i++)
     {
         if (i != pid - 1)
@@ -105,6 +168,7 @@ int main()
                     exit(errno);
                 }
                 std::cout << "Process " << i + 1 << " connected.\n";
+                CONNECT[i] = true;
             }
 
             // Set sockets if P2
@@ -124,6 +188,7 @@ int main()
                         exit(0);
                     }
                     std::cout << "Connected!\n";
+                    CONNECT[i] = true;
                 }
                 else
                 { // Set other sockets for P3 (2), P4 (3), P5 (4)
@@ -151,6 +216,7 @@ int main()
                         exit(errno);
                     }
                     std::cout << "Process " << i + 1 << " connected.\n";
+                    CONNECT[i] = true;
                 }
             }
 
@@ -172,6 +238,7 @@ int main()
                         exit(0);
                     }
                     std::cout << "Connected!\n";
+                    CONNECT[i] = true;
                 }
                 else if (i == 1)
                 {
@@ -188,6 +255,7 @@ int main()
                         exit(0);
                     }
                     std::cout << "Connected!\n";
+                    CONNECT[i] = true;
                 }
                 else
                 { // Set sockets for P4 (3), P5 (4)
@@ -215,6 +283,7 @@ int main()
                         exit(errno);
                     }
                     std::cout << "Process " << i + 1 << " connected.\n";
+                    CONNECT[i] = true;
                 }
             }
 
@@ -234,6 +303,8 @@ int main()
                         printf("Connection with the server failed.\n");
                         exit(0);
                     }
+                    std::cout << "Process " << i + 1 << " connected.\n";
+                    CONNECT[i] = true;
                 }
                 else if (i == 1)
                 { // Connect to P2 (8006)
@@ -248,6 +319,8 @@ int main()
                         printf("Connection with the server failed.\n");
                         exit(0);
                     }
+                    std::cout << "Process " << i + 1 << " connected.\n";
+                    CONNECT[i] = true;
                 }
                 else if (i == 2)
                 { // Connect to P3 (8008)
@@ -262,6 +335,8 @@ int main()
                         printf("Connection with the server failed.\n");
                         exit(0);
                     }
+                    std::cout << "Process " << i + 1 << " connected.\n";
+                    CONNECT[i] = true;
                 }
                 else
                 { // Set socket for P5 (8010)
@@ -290,6 +365,7 @@ int main()
                         exit(errno);
                     }
                     std::cout << "Process " << i + 1 << " connected.\n";
+                    CONNECT[i] = true;
                 }
             }
 
@@ -309,6 +385,8 @@ int main()
                         printf("Connection with the server failed.\n");
                         exit(0);
                     }
+                    std::cout << "Process " << i + 1 << " connected.\n";
+                    CONNECT[i] = true;
                 }
                 else if (i == 1)
                 { // Connect to P2 (8007)
@@ -323,6 +401,8 @@ int main()
                         printf("Connection with the server failed.\n");
                         exit(0);
                     }
+                    std::cout << "Process " << i + 1 << " connected.\n";
+                    CONNECT[i] = true;
                 }
                 else if (i == 2)
                 { // Connect to P3 (8009)
@@ -337,6 +417,8 @@ int main()
                         printf("Connection with the server failed.\n");
                         exit(0);
                     }
+                    std::cout << "Process " << i + 1 << " connected.\n";
+                    CONNECT[i] = true;
                 }
                 else if (i == 3)
                 { // Connect to P4 (8010)
@@ -351,8 +433,75 @@ int main()
                         printf("Connection with the server failed.\n");
                         exit(0);
                     }
+                    std::cout << "Process " << i + 1 << " connected.\n";
+                    CONNECT[i] = true;
                 }
             }
+        }
+    }
+    while (true)
+    {
+        int job;
+        std::cout << "What do you want to do?\n\t(0) Quit the session\n\t(1) New Money Transfer\n\t(2) Fail a link\n\t(3) Fix a link\n\t(4) Fail the process\n\t(5) Print blockchain\n\t(6) Print the balance\n\t(7) Print the pending transactions(queue)\n";
+        std::cin >> job;
+
+        // Quit the session
+        if (job == 0)
+            break;
+
+        // New Money transfer
+        else if (job == 1)
+        {
+            int receiver, amount;
+            std::cout << "Which process do you want to send?\n";
+            std::cin >> receiver;
+            std::cout << "How much do you want to send?\n";
+            std::cin >> amount;
+            moneyTransfer(receiver, amount);
+        }
+
+        // Fail a link
+        else if (job == 2)
+        {
+            int dst;
+            std::cout << "Which link you want to fail?\n";
+            std::cin >> dst;
+            failLink(dst);
+            std::cout << "You cannot communicate with P" << dst << " now\n";
+        }
+
+        // Fix a link
+        else if (job == 3)
+        {
+            int dst;
+            std::cout << "Which link you want to fix?\n";
+            std::cin >> dst;
+            fixLink(dst);
+            std::cout << "You can communicate with P" << dst << " now\n";
+        }
+
+        // Fail the process
+        else if (job == 4)
+        {
+            failProccess();
+        }
+
+        // Print blockchain
+        else if (job == 5)
+        {
+            printBlockchain();
+        }
+
+        // Print balance
+        else if (job == 6)
+        {
+            printBalance();
+        }
+
+        // Print queue
+        else if (job == 7)
+        {
+            printQueue();
         }
     }
 
