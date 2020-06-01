@@ -2,6 +2,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <string>
+#include <vector>
 
 #include <openssl/sha.h>
 

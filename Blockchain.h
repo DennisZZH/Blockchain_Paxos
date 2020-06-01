@@ -14,6 +14,9 @@ class Transaction{
         Transaction();
         Transaction(int sender_id, int receiver_id, int amount): sid(sender_id), rid(receiver_id), amt(amount){}
         void print_Transaction();
+        int get_sid(){return sid;};
+        int get_rid(){return rid;};
+        int get_amt(){return amt;};
     private:
         int sid;
         int rid;

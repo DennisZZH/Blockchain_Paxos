@@ -11,6 +11,8 @@
 #include <errno.h>
 #include <sys/time.h>
 #include <vector>
+#include <list>
+#include "Blockchain.h"
 
 int balance = 100;
 int pid;
@@ -21,21 +23,14 @@ struct sockaddr_in addresses[5]; // Addresses[pid - 1] should never be used
 int new_sockets[5];              // For accepted connection. new_sockts[pid - 1] should never be used
 int addrlen[5];
 bool CONNECT[5];
-struct tranx
-{
-    int sender;
-    int receiver;
-    int amount;
-};
-std::vector<tranx> queue;
+
+std::list<Transaction> queue;   // required lock
 
 // Money transfer
 void moneyTransfer(int receiver, int amount)
 {
-    tranx newTranx;
-    newTranx.sender = pid;
-    newTranx.receiver = receiver;
-    newTranx.amount = amount;
+    Transaction newTranx(pid, receiver, amount);
+
     if (balance >= amount)
     {
         queue.push_back(newTranx);
@@ -90,9 +85,9 @@ void printQueue()
     {
         std::cout << "The queue is empty now. Do some transactions.\n";
     }
-    for (int i = 0; i < queue.size(); i++)
+    for (auto i = queue.begin(); i != queue.end(); i++)
     {
-        std::cout << "<P" << queue[i].sender + 1 << ", P" << queue[i].receiver << ", " << queue[i].amount << ">\n";
+        std::cout << "<P" << i->get_sid() + 1 << ", P" <<i->get_rid()<< ", " <<i->get_amt() << ">\n";
     }
 }
 
@@ -102,15 +97,8 @@ void printBlockchain()
     std::cout << "STUB\n";
 }
 
-// Main function
-int main()
-{
-    int pid;
-    std::cout << "Process #: ";
-    std::cin >> pid;
-    std::cout << "\n";
-
-    // Create four sockets to connect to other four processes
+int connection_setup(){
+        // Create four sockets to connect to other four processes
     for (int i = 0; i < 5; i++)
     {
         if (i != pid - 1)
@@ -439,6 +427,20 @@ int main()
             }
         }
     }
+}
+
+// Main function
+int main()
+{
+    int pid;
+    std::cout << "Process #: ";
+    std::cin >> pid;
+    std::cout << "\n";
+
+    connection_setup();
+
+    // STUB: open Paxos thread
+
     while (true)
     {
         int job;
