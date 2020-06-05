@@ -6,8 +6,6 @@
 #include <string>
 #include <vector>
 
-using namespace std;
-
 
 class Transaction{
     public:
@@ -26,30 +24,30 @@ class Transaction{
 class Block{
     public:
         Block();
-        Block(vector<Transaction> Transactions): txns(Transactions){}
+        Block(std::vector<Transaction> Transactions): txns(Transactions){}
         ~Block();
 
         void set_prev(Block* ptr){prev = ptr;};
-        void set_hash(string hashcode){hash = hashcode;};
+        void set_hash(std::string hashcode){hash = hashcode;};
 
         Block* get_prev(){return prev;};
-        vector<Transaction> get_txns(){return txns;};
-        string get_hash(){return hash;};
-        string get_nonce(){return nonce;};
+        std::vector<Transaction> get_txns(){return txns;};
+        std::string get_hash(){return hash;};
+        std::string get_nonce(){return nonce;};
 
-        static string sha256(const string str);
+        static std::string sha256(const std::string str);
 
-        string find_hash();
+        std::string find_hash();
 
         void print_block();
 
     private:
         Block* prev;
-        vector<Transaction> txns;
-        string nonce;
-        string hash;
+        std::vector<Transaction> txns;
+        std::string nonce;
+        std::string hash;
 
-        string find_nonce();
+        std::string find_nonce();
 };
 
 class Blockchain{

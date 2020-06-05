@@ -13,6 +13,7 @@
 #include <vector>
 #include <list>
 #include "Blockchain.h"
+#include "Msg.pb.h"
 
 int balance = 100;
 int pid;
@@ -24,7 +25,7 @@ int new_sockets[5];              // For accepted connection. new_sockts[pid - 1]
 int addrlen[5];
 bool CONNECT[5];
 
-std::list<Transaction> queue;   // required lock
+std::list<Transaction> queue; // required lock
 
 // Money transfer
 void moneyTransfer(int receiver, int amount)
@@ -36,7 +37,7 @@ void moneyTransfer(int receiver, int amount)
         queue.push_back(newTranx);
         balance -= amount;
     }
-    else 
+    else
     {
         std::cout << "Insufficient balance!\n";
     }
@@ -87,7 +88,7 @@ void printQueue()
     }
     for (auto i = queue.begin(); i != queue.end(); i++)
     {
-        std::cout << "<P" << i->get_sid() + 1 << ", P" <<i->get_rid()<< ", " <<i->get_amt() << ">\n";
+        std::cout << "<P" << i->get_sid() + 1 << ", P" << i->get_rid() << ", " << i->get_amt() << ">\n";
     }
 }
 
@@ -97,8 +98,10 @@ void printBlockchain()
     std::cout << "STUB\n";
 }
 
-int connection_setup(){
-        // Create four sockets to connect to other four processes
+// Set up the connections
+int connection_setup()
+{
+    // Create four sockets to connect to other four processes
     for (int i = 0; i < 5; i++)
     {
         if (i != pid - 1)

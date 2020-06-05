@@ -1,0 +1,57 @@
+syntax = "proto2";
+
+message Ballot {
+	required int32 seq_n = 1;
+	required int32 proc_id = 2;
+    required int32 depth = 3;
+}
+		
+message	Txn {
+	required int32 sender = 1;
+	required int32 receiver = 2;
+    required int32 amount = 3;
+}
+
+message	MsgBlock {
+	required string nonce = 1;
+	required string hash = 2;
+    repeated Txn tranxs = 3;
+}
+
+message	Prepare {
+	required int32 type = 1;
+    required Ballot b_num = 2;
+}
+
+message	Promise {
+	required int32 type = 1;
+	required Ballot b_num = 2;
+    required Ballot p_b_num = 3;
+}
+
+message	Accept {
+	required int32 type = 1;
+	required Ballot b_num = 2;
+    required MsgBlock block = 3;
+}
+		
+message	Accepted {
+	required int32 type = 1;
+    required Ballot b_num = 2;
+}
+
+message	Decide {
+	required int32 type = 1;
+	required Ballot b_num = 2;
+    required MsgBlock block = 3;
+}
+
+message WireMessage {
+    oneof oneOfMessage {
+        Prepare prepare = 1;
+        Promise promise = 2;
+        Accept accept = 3;
+        Accepted accepted = 4;
+        Decide decide = 5;
+    }
+}
