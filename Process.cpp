@@ -49,6 +49,7 @@ void moneyTransfer(int receiver, int amount)
     {
         std::cout << "Insufficient balance!\n";
     }
+    // Send a prepare message with the current transactions in the queue
 }
 
 // Fail the link
