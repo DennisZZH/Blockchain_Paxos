@@ -107,8 +107,9 @@ void failProccess()
     }
 
     // Restore the process
+    std::string str;
     std::cout << "Type anything to restore the process.\n";
-    std::cin;
+    std::cin >> str;
     for (int i = 0; i < QUORUM_SIZE; i++) {
         fixLink(i + 1);
     }
