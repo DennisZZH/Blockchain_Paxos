@@ -82,7 +82,15 @@ void failLink(int dst)
 void fixLink(int dst)
 {
     CONNECT[dst - 1] = true;
-    // Send a message to tell the process to set the bool
+    // Push a restore message to the queue
+    WireMessage m;
+    m.restore();
+    m.restore.set_depth(bc.get_num_blocks);
+
+    // Push with lock/unlock
+    pthread_mutex_lock(&e_lock);
+    events.push(m);
+    pthread_mutex_unlock(&e_lock);
 }
 
 void failProccess()
