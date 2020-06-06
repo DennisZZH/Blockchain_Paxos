@@ -472,15 +472,6 @@ void *receiving(void *arg)
 {
     // The process this thread is listening
     int *id = (int *)arg;
-    int socket;
-    if (id < pid)
-    {
-        socket = new_sockets[id - 1];
-    }
-    else
-    {
-        socket = sockets[id - 1];
-    }
 
     int left_size = sizeof(WireMessage), read_size = 0;
     char buf[sizeof(WireMessage)];
