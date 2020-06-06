@@ -107,6 +107,11 @@ void failProccess()
     }
 
     // Restore the process
+    std::cout << "Type anything to restore the process.\n";
+    std::cin;
+    for (int i = 0; i < QUORUM_SIZE; i++) {
+        fixLink(i + 1);
+    }
 }
 
 // Print out the current balance
