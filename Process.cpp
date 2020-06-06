@@ -17,6 +17,7 @@
 #include "Blockchain.h"
 #include "Msg.pb.h"
 
+#define QUORUM_SIZE 5
 #define QUORUM_MAJORITY 3
 
 int balance = 100;
@@ -25,13 +26,13 @@ int port = 8000;
 char *server_ip = "127.0.0.1";
 int sockfd;
 struct sockaddr_in servaddr, cliaddr;
-bool CONNECT[5];
+bool CONNECT[QUORUM_SIZE];
 bool isPrepare = false;
 int seq_n = 1;
 
 std::queue<WireMessage> events; // require lock
 std::list<Transaction> queue;     // required lock
-Blockchain Blockchain;
+Blockchain bc;
 
 pthread_mutex_t e_lock, q_lock;
 
@@ -52,17 +53,16 @@ void moneyTransfer(int receiver, int amount)
     // Check if prepare is in the queue
     if (!isPrepare && !(queue.empty())) {
         // Push prepare to events queue with current depth of queue
-        int depth = queue.size();
         Ballot ballot;
         ballot.set_seq_n(seq_n);
+        seq_n ++;
         ballot.set_proc_id(pid);
-        ballot.set_depth(depth);
+        ballot.set_depth(bc.get_num_blocks() + 1);
 
         WireMessage m;
         m.prepare();
         m.prepare.set_type(1);
         m.prepare.set_b_num(ballot);
-        seq_n += 1;
 
         // Push with lock/unlock
         pthread_mutex_lock(&e_lock);
@@ -88,12 +88,12 @@ void fixLink(int dst)
 void failProccess()
 {
     // Disconnect with all the processes
-    for (int i = 0; i < 5; i++)
+    for (int i = 0; i < QUORUM_SIZE; i++)
     {
         CONNECT[i] = false;
     }
 
-    for (int i = 0; i < 5; i++)
+    for (int i = 0; i < QUORUM_SIZE; i++)
     {
         failLink(i + 1);
     }
@@ -123,7 +123,7 @@ void printQueue()
 // Print out the blockchain
 void printBlockchain()
 {
-    std::cout << "STUB\n";
+    bc.print_block_chain();
 }
 
 // Set up the connections
@@ -281,7 +281,7 @@ int main()
     }
 
     // Close the sockets
-    for (int i = 0; i < 5; i++)
+    for (int i = 0; i < QUORUM_SIZE; i++)
     {
         if (i < pid - 1)
         {

@@ -69,6 +69,7 @@ class Blockchain{
         void add_block(Block blo);
         void find_block();
         void print_block_chain();
+        int get_num_blocks(){return num_blocks;};
 
     private:
         Block* head;
