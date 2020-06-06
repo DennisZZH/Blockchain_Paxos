@@ -8,15 +8,38 @@
 
 
 void Transaction::print_Transaction(){
-    std::cout<<"Transation: "<<"P"<<sid<<" send $"<<amt<<" To P"<<rid<<endl;
+    std::cout<<"Print Transation: "<<"P"<<sid<<" send $"<<amt<<" To P"<<rid<<endl;
+}
+
+std::string Transaction::serialize_transaction(){
+	return std::to_string(sid) + std::to_string(rid) + std::to_string(amt);
 }
 
 std::string Block::find_hash(){
-    return "STUB";
+    std::string allInfo = "";
+	for(int i = 0; i < txns.size(); i++){
+		allInfo += txns[i].serialize_transaction();
+	}
+	allInfo += nonce;
+	allInfo += hash;
+	return sha256(str);
 }
 
 std::string Block::find_nonce(){
-    return "STUB";
+    std::string tempNounce;
+	std::string allInfo = "";
+	std::string hashInfo;
+	do{
+		srand(time(NULL));
+		tempNounce = string(1, char(rand()%26 + 97));
+		for(int i = 0; i < txns.size(); i++){
+			allInfo += txns[i].serialize_transaction();
+		}
+		allInfo += tempNounce;
+		hashInfo = sha256(allInfo);
+	}while( (*hashInfo.rbegin() != '0') && (*hashInfo.rbegin() != '1') && (*hashInfo.rbegin() != '2') && (*hashInfo.rbegin() != '3') && (*hashInfo.rbegin() != '4'));
+
+	return tempNounce;
 }
 
 std::string Block::sha256(const std::string str){
@@ -34,22 +57,50 @@ std::string Block::sha256(const std::string str){
 }
 
 void Block::print_block(){
-
+	std::cout<<"Print Block: "<<std::endl;
+	for(int i = 0; i < txns.size(); i++){
+		std::cout<<"	";
+		txns[i].print_Transaction();
+	}
+	std::cout<<"Hash = "<<hash<<"; Nonce = "<<nonce<<std::endl;
 }
 
 
 Blockchain::~Blockchain(){
-
+	for(auto i = curr; i != head;){
+		auto prevp = i->get_prev();
+		delete i;
+		i = prevp;
+	}
+	delete head;
 }
 
 void Blockchain::add_block(Block blo){
+	if(num_blocks == 0){
+		head = new Block(blo);
+		curr = head;
+		num_blocks++;
+	}else{
+		Block* newblo = new Block(blo);
+		newblo->set_prev(curr);
+		newblo->set_hash(curr->find_hash());
+		curr = newblo;
+		num_blocks++;
+	}
 
+	cout<<"-------One Block has been added-------"<<endl;
+	curr->print_block();
+	cout<<"The previous Block's hash value is "<<newblo.get_hash()<<endl;
 }
 
 void Blockchain::find_block(){
 
 }
 
-bool Blockchain::verify_and_print_block(){
-    return 0;
+void Blockchain::print_block_chain(){
+	std::cout<<"Print Block Chain: "<<std::endl;
+    for(auto i = curr; i != head; i = i->get_prev()){
+		std::cout<<"	";
+		i->print_block();
+	}
 }

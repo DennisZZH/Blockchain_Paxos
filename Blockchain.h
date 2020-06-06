@@ -15,6 +15,7 @@ class Transaction{
         int get_sid(){return sid;};
         int get_rid(){return rid;};
         int get_amt(){return amt;};
+        std::string serialize_transaction();
     private:
         int sid;
         int rid;
@@ -24,8 +25,18 @@ class Transaction{
 class Block{
     public:
         Block();
-        Block(std::vector<Transaction> Transactions): txns(Transactions){}
-        ~Block();
+        Block(std::vector<Transaction> Transactions){
+            prev = NULL;
+            txns = Transactions;
+            nonce = find_nonce();
+            hash = "";
+        };
+        Block(Block blo){
+            prev = blo.prev;
+            txns = blo.txns;
+            nonce = blo.nonce;
+            hash = blo.hash;
+        };
 
         void set_prev(Block* ptr){prev = ptr;};
         void set_hash(std::string hashcode){hash = hashcode;};
@@ -57,7 +68,7 @@ class Blockchain{
 
         void add_block(Block blo);
         void find_block();
-        bool verify_and_print_block();
+        void print_block_chain();
 
     private:
         Block* head;
