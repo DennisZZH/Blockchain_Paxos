@@ -17,6 +17,8 @@
 #include "Blockchain.h"
 #include "Msg.pb.h"
 
+#define QUORUM_MAJORITY 3
+
 int balance = 100;
 int pid;
 int port = 8000;
