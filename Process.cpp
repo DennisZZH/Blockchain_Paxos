@@ -61,8 +61,8 @@ void moneyTransfer(int receiver, int amount)
 
         WireMessage m;
         m.prepare();
-        m.prepare.set_type(1);
-        m.prepare.set_b_num(ballot);
+        m.prepare().set_type(1);
+        m.prepare().set_b_num(ballot);
 
         // Push with lock/unlock
         pthread_mutex_lock(&e_lock);
@@ -85,7 +85,7 @@ void fixLink(int dst)
     // Push a restore message to the queue
     WireMessage m;
     m.restore();
-    m.restore.set_depth(bc.get_num_blocks);
+    m.restore().set_depth(bc.get_num_blocks);
 
     // Push with lock/unlock
     pthread_mutex_lock(&e_lock);
