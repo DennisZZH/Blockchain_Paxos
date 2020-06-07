@@ -291,6 +291,10 @@ void *process(void *arg)
                     sleep(2);
                     sendto(sockfd, str_message.c_str(), sizeof(WireMessage), &cliaddr, &len);
                 }
+
+                // Clear num accepted and promise
+                num_accepted = 0;
+                num_promise = 0;
             }
             else
             {
