@@ -201,6 +201,12 @@ void *receiving(void *arg)
     }
 }
 
+
+bool compare_ballot(Ballot b1, Ballot b2){
+    // return if b1 >= b2;
+    return false;
+}
+
 // Function to process the event
 void *process(void *arg)
 {
@@ -221,7 +227,6 @@ void *process(void *arg)
                 // Send promise back
             }
         }
-
     }
     else if(m.has_promise()){
         
