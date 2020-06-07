@@ -34,6 +34,8 @@ Blockchain bc;
 Ballot ballot_num, accept_num;
 Block accept_blo;
 bool isPrepare = false;
+int num_promise = 0;
+std::vector<Promise> proms;
 
 std::queue<WireMessage> events; // require lock
 std::list<Transaction> queue;     // required lock
@@ -204,7 +206,12 @@ void *receiving(void *arg)
 
 bool compare_ballot(Ballot b1, Ballot b2){
     // return if b1 >= b2;
+    // STUB
     return false;
+}
+
+Block find_blo_with_highest_b(std::vector<Promise> proms){
+    // STUB
 }
 
 // Function to process the event
@@ -220,16 +227,33 @@ void *process(void *arg)
         m.prepare();
         if(m.b_num().proc_id() == pid){
             // Send prepare to all
+            // STUB
         }
         else{
             if( compare_ballot(m.b_num(), ballot_num) ){
                 ballot_num = m.b_num();
                 // Send promise back
+                // STUB
             }
         }
     }
     else if(m.has_promise()){
-        
+        m.promise();
+        if(m.b_num() == ballot_num){
+            if(num_promise < QUORUM_MAJORITY){
+                num_promise++;
+                proms.push_back(m);
+            }
+            else{
+                if(m.ablock().tranxs().size() == 0){
+                    accept_blo = Block(queue);
+                }else{
+                    accept_blo = find_blo_with_highest_b(proms);
+                }
+                // send accept to all
+                // STUB
+            }
+        }
     }
     else if(m.has_accept()){
 

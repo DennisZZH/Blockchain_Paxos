@@ -5,6 +5,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <list>
 
 
 class Transaction{
@@ -25,9 +26,12 @@ class Transaction{
 class Block{
     public:
         Block();
-        Block(std::vector<Transaction> Transactions){
+        Block(std::list<Transaction> trans_list){
             prev = NULL;
-            txns = Transactions;
+            while(!trans_list.empty()){
+                txns.push_back(trans_list.front());
+                trans_list.pop_front();
+            }
             nonce = find_nonce();
             hash = "";
         };
