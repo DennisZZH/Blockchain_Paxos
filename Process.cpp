@@ -53,13 +53,13 @@ void moneyTransfer(int receiver, int amount)
         if (!isPrepare)
         {
             // Push prepare to events queue with current depth and seq num
-            curr_ballot.set_proc_id(pid);
-            curr_ballot.set_seq_n(++seq_num);
-            curr_ballot.set_depth(bc.get_num_blocks() + 1);
+            ballot_num.set_proc_id(pid);
+            ballot_num.set_seq_n(++seq_num);
+            ballot_num.set_depth(bc.get_num_blocks() + 1);
 
             WireMessage m;
             m.prepare();
-            m.prepare().set_b_num(curr_ballot);
+            m.prepare().set_b_num(ballot_num);
 
             pthread_mutex_lock(&e_lock);
             events.push(m);
@@ -257,7 +257,7 @@ void *process(void *arg)
 {
     int num_accepted = 0;
     int num_promise = 0;
-    WireMessage m, response;
+    WireMessage m, response, addback;
     std::string str_message;
     char buf[sizeof(WireMessage)];
     Block newBlock;
@@ -327,13 +327,23 @@ void *process(void *arg)
                     if (m.promise().ablock().tranxs().size() == 0)
                     {
                         accept_blo = Block(queue);
-                        while(!queue.empty()) queue.pop_front();
+
+                        pthread_mutex_lock(&e_lock);
+                        while(!queue.empty()) events.pop();
+                        pthread_mutex_unlock(&e_lock);
                         isPrepare = false;
                     }
                     else
                     {
                         accept_blo = find_blo_with_highest_b(proms);
-                        events.push()
+                        
+                        ballot_num.set_seq_n(++seq_num);
+                        addback.Clear();
+                        addback.prepare();
+                        addback.prepare().set_b_num(ballot_num);
+                        pthread_mutex_lock(&e_lock);
+                        events.push(addback);
+                        pthread_mutex_unlock(&e_lock);
                     }
                     // Broadcast accept message
                     response.Clear();
