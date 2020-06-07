@@ -285,7 +285,8 @@ void moneyTransfer(int receiver, int amount)
             if (m.restore().pid == pid)
             {
                 if (m.restore().blocks.size() == 0)
-                { // Send the message out
+                { 
+                    // Send the message out
                     for (int i = 0; i < QUORUM_SIZE; i++)
                     {
                         if (CONNECT[i] == true)
@@ -300,6 +301,17 @@ void moneyTransfer(int receiver, int amount)
 
                     int len = sizeof(cliaddr);
                     sendto(sockfd, str_message.c_str(), sizeof(WireMessage), &cliaddr, &len);
+                }
+                else {
+                    // Copy the blockchain
+                    Block* prev = NULL;
+                    for (int i = m.restore().blocks.size() - 1; i >= 0; i--) {
+                        Block* cur = new Block();
+                        cur->set_prev(prev);
+                        cur->set_hash(m.restore().blocks[i].hash());
+                        cur->set_nonce(m.restore().blocks[i].nonce());
+                        
+                    }
                 }
             }
             else
