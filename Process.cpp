@@ -200,6 +200,34 @@ void *receiving(void *arg)
 // Function to process the event
 void *process(void *arg)
 {
+    WireMessage m;
+    pthread_mutex_lock(&e_lock);
+    m = events.front();
+    events.pop();
+    pthread_mutex_unlock(&e_lock);
+
+    if(m.has_prepare()){
+
+    }
+    else if(m.has_promise()){
+
+    }
+    else if(m.has_accept()){
+
+    }
+    else if(m.has_accpted()){
+
+    }
+    else if(m.has_decide()){
+
+    }
+    else if(m.has_restore()){
+
+    }
+    else{
+        std::cout<<"ERROR: Wrong message type!"<<std::endl;
+        exit(0);
+    }
 
 }
 
