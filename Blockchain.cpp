@@ -93,6 +93,10 @@ void Blockchain::add_block(Block blo){
 	cout<<"The previous Block's hash value is "<<newblo.get_hash()<<endl;
 }
 
+Block* Blockchain::currBlock() {
+	return curr;
+}
+
 void Blockchain::find_block(){
 
 }
