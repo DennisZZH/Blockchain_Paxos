@@ -86,6 +86,7 @@ void fixLink(int dst)
     WireMessage m;
     m.restore();
     m.restore().set_depth(bc.get_num_blocks);
+    m.restore().set_pid(pid);
 
     // Push with lock/unlock
     pthread_mutex_lock(&e_lock);
@@ -282,6 +283,7 @@ void *process(void *arg)
             sendto(sockfd, str_message.c_str(), sizeof(WireMessage), &cliaddr, &len);
         }
         else {
+            // Send a copy of local blockchain
 
         }
 

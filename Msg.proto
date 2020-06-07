@@ -21,6 +21,7 @@ message	MsgBlock {
 message Restore {
     required int32 depth = 1;
     repeated MsgBlock blocks = 2;
+    required int32 pid = 3;
 }
 
 message	Prepare {

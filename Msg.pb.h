@@ -752,6 +752,7 @@ class Restore :
   enum : int {
     kBlocksFieldNumber = 2,
     kDepthFieldNumber = 1,
+    kPidFieldNumber = 3,
   };
   // repeated .MsgBlock blocks = 2;
   int blocks_size() const;
@@ -784,15 +785,32 @@ class Restore :
   void _internal_set_depth(::PROTOBUF_NAMESPACE_ID::int32 value);
   public:
 
+  // required int32 pid = 3;
+  bool has_pid() const;
+  private:
+  bool _internal_has_pid() const;
+  public:
+  void clear_pid();
+  ::PROTOBUF_NAMESPACE_ID::int32 pid() const;
+  void set_pid(::PROTOBUF_NAMESPACE_ID::int32 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::int32 _internal_pid() const;
+  void _internal_set_pid(::PROTOBUF_NAMESPACE_ID::int32 value);
+  public:
+
   // @@protoc_insertion_point(class_scope:Restore)
  private:
   class _Internal;
+
+  // helper for ByteSizeLong()
+  size_t RequiredFieldsByteSizeFallback() const;
 
   ::PROTOBUF_NAMESPACE_ID::internal::InternalMetadataWithArena _internal_metadata_;
   ::PROTOBUF_NAMESPACE_ID::internal::HasBits<1> _has_bits_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::MsgBlock > blocks_;
   ::PROTOBUF_NAMESPACE_ID::int32 depth_;
+  ::PROTOBUF_NAMESPACE_ID::int32 pid_;
   friend struct ::TableStruct_Msg_2eproto;
 };
 // -------------------------------------------------------------------
@@ -2272,6 +2290,34 @@ inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::MsgBlock >&
 Restore::blocks() const {
   // @@protoc_insertion_point(field_list:Restore.blocks)
   return blocks_;
+}
+
+// required int32 pid = 3;
+inline bool Restore::_internal_has_pid() const {
+  bool value = (_has_bits_[0] & 0x00000002u) != 0;
+  return value;
+}
+inline bool Restore::has_pid() const {
+  return _internal_has_pid();
+}
+inline void Restore::clear_pid() {
+  pid_ = 0;
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 Restore::_internal_pid() const {
+  return pid_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 Restore::pid() const {
+  // @@protoc_insertion_point(field_get:Restore.pid)
+  return _internal_pid();
+}
+inline void Restore::_internal_set_pid(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _has_bits_[0] |= 0x00000002u;
+  pid_ = value;
+}
+inline void Restore::set_pid(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _internal_set_pid(value);
+  // @@protoc_insertion_point(field_set:Restore.pid)
 }
 
 // -------------------------------------------------------------------
