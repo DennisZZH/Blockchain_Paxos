@@ -220,6 +220,8 @@ void moneyTransfer(int receiver, int amount)
     // Function to process the event
     void *process(void *arg)
     {
+        int acceptedNum = 0;
+
         WireMessage m;
         pthread_mutex_lock(&e_lock);
         m = events.front();
@@ -276,9 +278,47 @@ void moneyTransfer(int receiver, int amount)
         }
         else if (m.has_accpted())
         {
+            acceptedNum ++;
+            if (acceptedNum >= QUORUM_MAJORITY) {
+                // Broadcast decide message
+                WireMessage response;
+                response.decide();
+                response.decide().set_b_num(m.accepted().b_num());
+                response.decide().set_block(m.accepted().block());
+                str_message = m.SerializeAsString();
+
+                memset(&cliaddr, 0, sizeof(cliaddr));
+
+                cliaddr.sin_family = AF_INET;
+                cliaddr.sin_addr.s_addr = server_ip;
+                for (int i = 0; i < QUORUM_SIZE; i++) {
+                    if (i == (pid + 1)) continue;
+                    cliaddr.sin_port = htons(port + i + 1);
+                    int len = sizeof(cliaddr);
+                    sleep(5);
+                    sendto(sockfd, str_message.c_str(), sizeof(WireMessage), &cliaddr, &len);
+                }
+            }
         }
         else if (m.has_decide())
         {
+            // Extract all the transactions andu update the balance if it is needed
+            std::list<Transactions> trans_list;
+            for (int i = 0; i < m.decide().block().trax().size(); i++) {
+                int sender = m.decide().block().trax().at(i).sender();
+                int recevier = m.decide().block().trax().at(i).receiver();
+                int amount = m.decide().blocks().trax().at(i).amount();
+                Transaction newTranx(sender, recevier, amount);
+                trans_list.push_back(newTranx);
+                // Update the balance if needed
+                if (recevier == pid) {
+                    balance += amount;
+                }
+            }
+
+            // Build a new block and append to blockchain
+            Block newBlock(trans_list);
+            bc.add_block(newBlock);
         }
         else if (m.has_restore())
         {

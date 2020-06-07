@@ -1412,6 +1412,7 @@ class Accepted :
 
   enum : int {
     kBNumFieldNumber = 1,
+    kBlockFieldNumber = 2,
   };
   // required .Ballot b_num = 1;
   bool has_b_num() const;
@@ -1428,14 +1429,33 @@ class Accepted :
   ::Ballot* _internal_mutable_b_num();
   public:
 
+  // required .MsgBlock block = 2;
+  bool has_block() const;
+  private:
+  bool _internal_has_block() const;
+  public:
+  void clear_block();
+  const ::MsgBlock& block() const;
+  ::MsgBlock* release_block();
+  ::MsgBlock* mutable_block();
+  void set_allocated_block(::MsgBlock* block);
+  private:
+  const ::MsgBlock& _internal_block() const;
+  ::MsgBlock* _internal_mutable_block();
+  public:
+
   // @@protoc_insertion_point(class_scope:Accepted)
  private:
   class _Internal;
+
+  // helper for ByteSizeLong()
+  size_t RequiredFieldsByteSizeFallback() const;
 
   ::PROTOBUF_NAMESPACE_ID::internal::InternalMetadataWithArena _internal_metadata_;
   ::PROTOBUF_NAMESPACE_ID::internal::HasBits<1> _has_bits_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   ::Ballot* b_num_;
+  ::MsgBlock* block_;
   friend struct ::TableStruct_Msg_2eproto;
 };
 // -------------------------------------------------------------------
@@ -2754,6 +2774,66 @@ inline void Accepted::set_allocated_b_num(::Ballot* b_num) {
   }
   b_num_ = b_num;
   // @@protoc_insertion_point(field_set_allocated:Accepted.b_num)
+}
+
+// required .MsgBlock block = 2;
+inline bool Accepted::_internal_has_block() const {
+  bool value = (_has_bits_[0] & 0x00000002u) != 0;
+  PROTOBUF_ASSUME(!value || block_ != nullptr);
+  return value;
+}
+inline bool Accepted::has_block() const {
+  return _internal_has_block();
+}
+inline void Accepted::clear_block() {
+  if (block_ != nullptr) block_->Clear();
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline const ::MsgBlock& Accepted::_internal_block() const {
+  const ::MsgBlock* p = block_;
+  return p != nullptr ? *p : *reinterpret_cast<const ::MsgBlock*>(
+      &::_MsgBlock_default_instance_);
+}
+inline const ::MsgBlock& Accepted::block() const {
+  // @@protoc_insertion_point(field_get:Accepted.block)
+  return _internal_block();
+}
+inline ::MsgBlock* Accepted::release_block() {
+  // @@protoc_insertion_point(field_release:Accepted.block)
+  _has_bits_[0] &= ~0x00000002u;
+  ::MsgBlock* temp = block_;
+  block_ = nullptr;
+  return temp;
+}
+inline ::MsgBlock* Accepted::_internal_mutable_block() {
+  _has_bits_[0] |= 0x00000002u;
+  if (block_ == nullptr) {
+    auto* p = CreateMaybeMessage<::MsgBlock>(GetArenaNoVirtual());
+    block_ = p;
+  }
+  return block_;
+}
+inline ::MsgBlock* Accepted::mutable_block() {
+  // @@protoc_insertion_point(field_mutable:Accepted.block)
+  return _internal_mutable_block();
+}
+inline void Accepted::set_allocated_block(::MsgBlock* block) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaNoVirtual();
+  if (message_arena == nullptr) {
+    delete block_;
+  }
+  if (block) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena = nullptr;
+    if (message_arena != submessage_arena) {
+      block = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, block, submessage_arena);
+    }
+    _has_bits_[0] |= 0x00000002u;
+  } else {
+    _has_bits_[0] &= ~0x00000002u;
+  }
+  block_ = block;
+  // @@protoc_insertion_point(field_set_allocated:Accepted.block)
 }
 
 // -------------------------------------------------------------------
