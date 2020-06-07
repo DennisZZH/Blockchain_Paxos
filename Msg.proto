@@ -24,31 +24,26 @@ message Restore {
 }
 
 message	Prepare {
-	required int32 type = 1;
-    required Ballot b_num = 2;
+    required Ballot b_num = 1;
 }
 
 message	Promise {
-	required int32 type = 1;
-	required Ballot b_num = 2;
-    required Ballot p_b_num = 3;
+	required Ballot b_num = 1;
+    required Ballot p_b_num = 2;
 }
 
 message	Accept {
-	required int32 type = 1;
-	required Ballot b_num = 2;
-    required MsgBlock block = 3;
+	required Ballot b_num = 1;
+    required MsgBlock block = 2;
 }
 		
 message	Accepted {
-	required int32 type = 1;
-    required Ballot b_num = 2;
+    required Ballot b_num = 1;
 }
 
 message	Decide {
-	required int32 type = 1;
-	required Ballot b_num = 2;
-    required MsgBlock block = 3;
+	required Ballot b_num = 1;
+    required MsgBlock block = 2;
 }
 
 message WireMessage {
