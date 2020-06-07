@@ -218,6 +218,7 @@ Block find_blo_with_highest_b(std::vector<Promise> proms)
     // STUB
 }
 
+// Set update to true if you want to update the receiver balance
 Block to_block(MsgBlock src, bool update) {
     std::list<Transaction> trans_list;
     for (int i = 0; i < src.trax().size(); i++) {
