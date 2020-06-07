@@ -20,54 +20,52 @@
 #define QUORUM_SIZE 5
 #define QUORUM_MAJORITY 3
 
-int balance = 100;
-int pid;
 int port = 8000;
 char *server_ip = "127.0.0.1";
 int sockfd;
 struct sockaddr_in servaddr, cliaddr;
 bool CONNECT[QUORUM_SIZE];
+
+int balance = 100;
+int pid;
+int seq_num = 0;
+Blockchain bc;
+
+Ballot ballot_num, accept_num;
+Block accept_blo;
 bool isPrepare = false;
-int seq_n = 1;
 
 std::queue<WireMessage> events; // require lock
 std::list<Transaction> queue;     // required lock
-Blockchain bc;
 
 pthread_mutex_t e_lock, q_lock;
 
 // Money transfer and send a Prepare message
 void moneyTransfer(int receiver, int amount)
 {
-    Transaction newTranx(pid, receiver, amount);
-
     if (balance >= amount)
     {
+        Transaction newTranx(pid, receiver, amount);
         queue.push_back(newTranx);
         balance -= amount;
-    }
+
+        if (!isPrepare) {
+            // Push prepare to events queue with current depth and seq num
+            curr_ballot.set_proc_id(pid);
+            curr_ballot.set_seq_n(++seq_num);
+            curr_ballot.set_depth(bc.get_num_blocks() + 1);
+
+            WireMessage m;
+            m.prepare();
+            m.prepare().set_b_num(curr_ballot);
+
+            pthread_mutex_lock(&e_lock);
+            events.push(m);
+            pthread_mutex_unlock(&e_lock);
+        }
     else
     {
         std::cout << "Insufficient balance!\n";
-    }
-    // Check if prepare is in the queue
-    if (!isPrepare && !(queue.empty())) {
-        // Push prepare to events queue with current depth of queue
-        Ballot ballot;
-        ballot.set_seq_n(seq_n);
-        seq_n ++;
-        ballot.set_proc_id(pid);
-        ballot.set_depth(bc.get_num_blocks() + 1);
-
-        WireMessage m;
-        m.prepare();
-        m.prepare().set_type(1);
-        m.prepare().set_b_num(ballot);
-
-        // Push with lock/unlock
-        pthread_mutex_lock(&e_lock);
-        events.push(m);
-        pthread_mutex_unlock(&e_lock);
     }
 }
 
@@ -213,10 +211,20 @@ void *process(void *arg)
     pthread_mutex_unlock(&e_lock);
 
     if(m.has_prepare()){
+        m.prepare();
+        if(m.b_num().proc_id() == pid){
+            // Send prepare to all
+        }
+        else{
+            if( compare_ballot(m.b_num(), ballot_num) ){
+                ballot_num = m.b_num();
+                // Send promise back
+            }
+        }
 
     }
     else if(m.has_promise()){
-
+        
     }
     else if(m.has_accept()){
 
@@ -244,6 +252,14 @@ int main()
     std::cout << "Process #: ";
     std::cin >> pid;
     std::cout << "\n";
+
+    ballot_num.set_proc_id(0);
+    ballot_num.set_seq_n(0);
+    ballot_num.set_depth(0);
+
+    accept_num.set_proc_id(0);
+    accept_num.set_seq_n(0);
+    accept_num.set_depth(0);
 
     // Initialize lock
     pthread_mutex_init(&q_lock);
