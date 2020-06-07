@@ -34,7 +34,6 @@ Blockchain bc;
 Ballot ballot_num, accept_num;
 Block accept_blo;
 bool isPrepare = false;
-int num_promise = 0;
 std::vector<Promise> proms;
 
 std::queue<WireMessage> events; // require lock
@@ -256,152 +255,231 @@ MsgBlock to_message(Block src) {
 // Function to process the event
 void *process(void *arg)
 {
-    int acceptedNum = 0;
-
-    WireMessage m;
-    pthread_mutex_lock(&e_lock);
-    m = events.front();
-    events.pop();
-    pthread_mutex_unlock(&e_lock);
+    int num_accepted = 0;
+    int num_promise = 0;
+    WireMessage m, response;
     std::string str_message;
-    buf[sizeof(WireMessage)];
+    char buf[sizeof(WireMessage)];
+    Block newBlock;
 
-    if (m.has_prepare())
-    {
-        m.prepare();
-        if (m.b_num().proc_id() == pid)
-        {
-            // Send prepare to all
-            // STUB
-        }
-        else
-        {
-            if (compare_ballot(m.b_num(), ballot_num))
-            {
-                ballot_num = m.b_num();
-                // Send promise back
-                // STUB
-            }
-        }
-    }
-    else if (m.has_promise())
-    {
-        m.promise();
-        if (m.b_num() == ballot_num)
-        {
-            if (num_promise < QUORUM_MAJORITY)
-            {
-                num_promise++;
-                proms.push_back(m);
-            }
-            else
-            {
-                if (m.ablock().tranxs().size() == 0)
-                {
-                    accept_blo = Block(queue);
-                }
-                else
-                {
-                    accept_blo = find_blo_with_highest_b(proms);
-                }
-                // send accept to all
-                // STUB
-            }
-        }
-    }
-    else if (m.has_accept())
-    {
-    }
-    else if (m.has_accpted())
-    {
-        acceptedNum++;
-        if (acceptedNum >= QUORUM_MAJORITY)
-        {
-            // Broadcast decide message
-            WireMessage response;
-            response.decide();
-            response.decide().set_b_num(m.accepted().b_num());
-            response.decide().set_block(m.accepted().block());
-            str_message = m.SerializeAsString();
+    while(!events.empty()){
 
-            memset(&cliaddr, 0, sizeof(cliaddr));
+        pthread_mutex_lock(&e_lock);
+        m = events.front();
+        events.pop();
+        pthread_mutex_unlock(&e_lock);
 
-            cliaddr.sin_family = AF_INET;
-            cliaddr.sin_addr.s_addr = server_ip;
-            for (int i = 0; i < QUORUM_SIZE; i++)
-            {
-                if (i == (pid + 1))
-                    continue;
-                cliaddr.sin_port = htons(port + i + 1);
-                int len = sizeof(cliaddr);
-                sleep(5);
-                sendto(sockfd, str_message.c_str(), sizeof(WireMessage), &cliaddr, &len);
-            }
-        }
-    }
-    else if (m.has_decide())
-    {
-        // Extract all the transactions andu update the balance if it is needed
-        Block newBlock = to_block(m.decide().block(), true);
-        bc.add_block(newBlock);
-    }
-    else if (m.has_restore())
-    {
-        if (m.restore().pid == pid)
+        if (m.has_prepare())
         {
-            if (m.restore().blocks().size() == 0)
+            if (m.prepare().b_num().proc_id() == pid)
             {
-                // Send the message out
-                for (int i = 0; i < QUORUM_SIZE; i++)
-                {
-                    if (CONNECT[i] == true)
-                        break;
-                }
+                // Boradcast prepare message
+                str_message = m.SerializeAsString();
+
                 memset(&cliaddr, 0, sizeof(cliaddr));
 
                 cliaddr.sin_family = AF_INET;
                 cliaddr.sin_addr.s_addr = server_ip;
-                cliaddr.sin_port = htons(port + i + 1);
+                for (int i = 0; i < QUORUM_SIZE; i++)
+                {
+                    if (i == (pid + 1))
+                        continue;
+                    cliaddr.sin_port = htons(port + i + 1);
+                    int len = sizeof(cliaddr);
+                    sleep(5);
+                    sendto(sockfd, str_message.c_str(), sizeof(WireMessage), &cliaddr, &len);
+                }
+            }
+            else
+            {
+                if (compare_ballot(m.prepare().b_num(), ballot_num))
+                {
+                    ballot_num = m.prepare().b_num();
+                    // Send promise back
+                    response.Clear();
+                    response.promise();
+                    response.promise().set_b_num(ballot_num);
+                    response.promise().set_ab_num(accept_num);
+                    response.promise().set_ablock(accept_blo);
+
+                    memset(&cliaddr, 0, sizeof(cliaddr));
+                    cliaddr.sin_family = AF_INET;
+                    cliaddr.sin_addr.s_addr = server_ip;
+                    cliaddr.sin_port = htons(port + m.prepare().pid());
+                    str_message = response.SerializeAsString();
+
+                    int len = sizeof(cliaddr);
+                    sendto(sockfd, str_message.c_str(), sizeof(WireMessage), &cliaddr, &len);
+                }
+            }
+        }
+        else if (m.has_promise())
+        {
+            if (m.promise().b_num() == ballot_num)
+            {
+                if (num_promise < QUORUM_MAJORITY)
+                {
+                    num_promise++;
+                    proms.push_back(m);
+                }
+                else
+                {
+                    if (m.promise().ablock().tranxs().size() == 0)
+                    {
+                        accept_blo = Block(queue);
+                        while(!queue.empty()) queue.pop_front();
+                        isPrepare = false;
+                    }
+                    else
+                    {
+                        accept_blo = find_blo_with_highest_b(proms);
+                        events.push()
+                    }
+                    // Broadcast accept message
+                    response.Clear();
+                    response.accept();
+                    response.accept().set_b_num(ballot_num);
+                    response.accept().set_block(accept_blo);
+                    str_message = response.SerializeAsString();
+
+                    memset(&cliaddr, 0, sizeof(cliaddr));
+
+                    cliaddr.sin_family = AF_INET;
+                    cliaddr.sin_addr.s_addr = server_ip;
+                    for (int i = 0; i < QUORUM_SIZE; i++)
+                    {
+                        if (i == (pid + 1))
+                            continue;
+                        cliaddr.sin_port = htons(port + i + 1);
+                        int len = sizeof(cliaddr);
+                        sleep(5);
+                        sendto(sockfd, str_message.c_str(), sizeof(WireMessage), &cliaddr, &len);
+                    }
+
+                    num_promise = 0;
+                    proms.clear();
+                }
+            }
+        }
+        else if (m.has_accept())
+        {
+            if(compare_ballot(m.accept().b_num(), ballot_num)){
+                accept_num = m.accept().b_num();
+                accept_blo = m.accept().block();
+                // Send accepted back
+                response.Clear();
+                response.accepted();
+                response.accepted().set_b_num(accept_num);
+                response.accepted().set_block(accept_blo);
+
+                memset(&cliaddr, 0, sizeof(cliaddr));
+                cliaddr.sin_family = AF_INET;
+                cliaddr.sin_addr.s_addr = server_ip;
+                cliaddr.sin_port = htons(port + m.accept(().pid());
+                str_message = response.SerializeAsString();
+
+                int len = sizeof(cliaddr);
+                sendto(sockfd, str_message.c_str(), sizeof(WireMessage), &cliaddr, &len);
+            }
+
+        }
+        else if (m.has_accpted())
+        {
+            if(m.accepted().b_num() == ballot_num){
+                num_accepted++;
+                if (num_accepted >= QUORUM_MAJORITY)
+                {
+                    // Broadcast decide message
+                    response.Clear();
+                    response.decide();
+                    response.decide().set_b_num(m.accepted().b_num());
+                    response.decide().set_block(m.accepted().block());
+                    str_message = m.SerializeAsString();
+
+                    memset(&cliaddr, 0, sizeof(cliaddr));
+
+                    cliaddr.sin_family = AF_INET;
+                    cliaddr.sin_addr.s_addr = server_ip;
+                    for (int i = 0; i < QUORUM_SIZE; i++)
+                    {
+                        if (i == (pid + 1))
+                            continue;
+                        cliaddr.sin_port = htons(port + i + 1);
+                        int len = sizeof(cliaddr);
+                        sleep(5);
+                        sendto(sockfd, str_message.c_str(), sizeof(WireMessage), &cliaddr, &len);
+                    }
+
+                    num_accepted = 0;
+                }
+            }
+        }
+        else if (m.has_decide())
+        {
+            // Extract all the transactions and update the balance if it is needed
+            newBlock = to_block(m.decide().block(), true);
+            bc.add_block(newBlock);
+            // update balance ??
+        }
+        else if (m.has_restore())
+        {
+            if (m.restore().pid == pid)
+            {
+                if (m.restore().blocks().size() == 0)
+                {
+                    // Send the message out
+                    for (int i = 0; i < QUORUM_SIZE; i++)
+                    {
+                        if (CONNECT[i] == true)
+                            break;
+                    }
+                    memset(&cliaddr, 0, sizeof(cliaddr));
+
+                    cliaddr.sin_family = AF_INET;
+                    cliaddr.sin_addr.s_addr = server_ip;
+                    cliaddr.sin_port = htons(port + i + 1);
+                    str_message = m.SerializeAsString();
+
+                    int len = sizeof(cliaddr);
+                    sendto(sockfd, str_message.c_str(), sizeof(WireMessage), &cliaddr, &len);
+                }
+                else
+                {
+                    // Add new blocks to blockchain
+                    for (int i = m.restore().depth() - bc.get_num_blocks - 1; i >= 0; i-) {
+                        newBlock = to_block(m.restore().blocks().at(i), true);
+                        bc.add_block(newBlock);
+                    }
+                }
+            }
+            else
+            {
+                // Send a copy of blocks that the sender does not have
+                Block* curr = bc;
+                int i = bc.get_num_blocks() - m.restore().depth();
+                m.restore().set_depth(bc.get_num_blocks());
+                while (i) {
+                    newBlock = to_message(*curr);
+                    m.restore().blocks().Add(newBlock);
+                }
+
+                // Send back to the sender
+                memset(&cliaddr, 0, sizeof(cliaddr));
+                cliaddr.sin_family = AF_INET;
+                cliaddr.sin_addr.s_addr = server_ip;
+                cliaddr.sin_port = htons(port + m.restore().pid());
                 str_message = m.SerializeAsString();
 
                 int len = sizeof(cliaddr);
                 sendto(sockfd, str_message.c_str(), sizeof(WireMessage), &cliaddr, &len);
             }
-            else
-            {
-                // Add new blocks to blockchain
-                for (int i = m.restore().depth() - bc.get_num_blocks - 1; i >= 0; i-) {
-                    Block newBlock = to_block(m.restore().blocks().at(i), true);
-                    bc.add_block(newBlock);
-                }
-            }
         }
         else
-        {
-            // Send a copy of blocks that the sender does not have
-            Block* curr = bc;
-            int i = bc.get_num_blocks() - m.restore().depth();
-            m.restore().set_depth(bc.get_num_blocks());
-            while (i) {
-                MsgBlock newBlock = to_message(*curr);
-                m.restore().blocks().Add(newBlock);
-            }
-
-            // Send back to the sender
-            memset(&cliaddr, 0, sizeof(cliaddr));
-            cliaddr.sin_family = AF_INET;
-            cliaddr.sin_addr.s_addr = server_ip;
-            cliaddr.sin_port = htons(port + m.restore().pid());
-            str_message = m.SerializeAsString();
-
-            int len = sizeof(cliaddr);
-            sendto(sockfd, str_message.c_str(), sizeof(WireMessage), &cliaddr, &len);
-        }
-    }
-    else
     {
         std::cout << "ERROR: Wrong message type!" << std::endl;
         exit(0);
+    }
+    
     }
 }
 
