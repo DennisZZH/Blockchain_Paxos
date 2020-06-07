@@ -1053,7 +1053,8 @@ class Promise :
 
   enum : int {
     kBNumFieldNumber = 1,
-    kPBNumFieldNumber = 2,
+    kAbNumFieldNumber = 2,
+    kAblockFieldNumber = 3,
   };
   // required .Ballot b_num = 1;
   bool has_b_num() const;
@@ -1070,19 +1071,34 @@ class Promise :
   ::Ballot* _internal_mutable_b_num();
   public:
 
-  // required .Ballot p_b_num = 2;
-  bool has_p_b_num() const;
+  // required .Ballot ab_num = 2;
+  bool has_ab_num() const;
   private:
-  bool _internal_has_p_b_num() const;
+  bool _internal_has_ab_num() const;
   public:
-  void clear_p_b_num();
-  const ::Ballot& p_b_num() const;
-  ::Ballot* release_p_b_num();
-  ::Ballot* mutable_p_b_num();
-  void set_allocated_p_b_num(::Ballot* p_b_num);
+  void clear_ab_num();
+  const ::Ballot& ab_num() const;
+  ::Ballot* release_ab_num();
+  ::Ballot* mutable_ab_num();
+  void set_allocated_ab_num(::Ballot* ab_num);
   private:
-  const ::Ballot& _internal_p_b_num() const;
-  ::Ballot* _internal_mutable_p_b_num();
+  const ::Ballot& _internal_ab_num() const;
+  ::Ballot* _internal_mutable_ab_num();
+  public:
+
+  // required .MsgBlock ablock = 3;
+  bool has_ablock() const;
+  private:
+  bool _internal_has_ablock() const;
+  public:
+  void clear_ablock();
+  const ::MsgBlock& ablock() const;
+  ::MsgBlock* release_ablock();
+  ::MsgBlock* mutable_ablock();
+  void set_allocated_ablock(::MsgBlock* ablock);
+  private:
+  const ::MsgBlock& _internal_ablock() const;
+  ::MsgBlock* _internal_mutable_ablock();
   public:
 
   // @@protoc_insertion_point(class_scope:Promise)
@@ -1096,7 +1112,8 @@ class Promise :
   ::PROTOBUF_NAMESPACE_ID::internal::HasBits<1> _has_bits_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   ::Ballot* b_num_;
-  ::Ballot* p_b_num_;
+  ::Ballot* ab_num_;
+  ::MsgBlock* ablock_;
   friend struct ::TableStruct_Msg_2eproto;
 };
 // -------------------------------------------------------------------
@@ -2385,64 +2402,124 @@ inline void Promise::set_allocated_b_num(::Ballot* b_num) {
   // @@protoc_insertion_point(field_set_allocated:Promise.b_num)
 }
 
-// required .Ballot p_b_num = 2;
-inline bool Promise::_internal_has_p_b_num() const {
+// required .Ballot ab_num = 2;
+inline bool Promise::_internal_has_ab_num() const {
   bool value = (_has_bits_[0] & 0x00000002u) != 0;
-  PROTOBUF_ASSUME(!value || p_b_num_ != nullptr);
+  PROTOBUF_ASSUME(!value || ab_num_ != nullptr);
   return value;
 }
-inline bool Promise::has_p_b_num() const {
-  return _internal_has_p_b_num();
+inline bool Promise::has_ab_num() const {
+  return _internal_has_ab_num();
 }
-inline void Promise::clear_p_b_num() {
-  if (p_b_num_ != nullptr) p_b_num_->Clear();
+inline void Promise::clear_ab_num() {
+  if (ab_num_ != nullptr) ab_num_->Clear();
   _has_bits_[0] &= ~0x00000002u;
 }
-inline const ::Ballot& Promise::_internal_p_b_num() const {
-  const ::Ballot* p = p_b_num_;
+inline const ::Ballot& Promise::_internal_ab_num() const {
+  const ::Ballot* p = ab_num_;
   return p != nullptr ? *p : *reinterpret_cast<const ::Ballot*>(
       &::_Ballot_default_instance_);
 }
-inline const ::Ballot& Promise::p_b_num() const {
-  // @@protoc_insertion_point(field_get:Promise.p_b_num)
-  return _internal_p_b_num();
+inline const ::Ballot& Promise::ab_num() const {
+  // @@protoc_insertion_point(field_get:Promise.ab_num)
+  return _internal_ab_num();
 }
-inline ::Ballot* Promise::release_p_b_num() {
-  // @@protoc_insertion_point(field_release:Promise.p_b_num)
+inline ::Ballot* Promise::release_ab_num() {
+  // @@protoc_insertion_point(field_release:Promise.ab_num)
   _has_bits_[0] &= ~0x00000002u;
-  ::Ballot* temp = p_b_num_;
-  p_b_num_ = nullptr;
+  ::Ballot* temp = ab_num_;
+  ab_num_ = nullptr;
   return temp;
 }
-inline ::Ballot* Promise::_internal_mutable_p_b_num() {
+inline ::Ballot* Promise::_internal_mutable_ab_num() {
   _has_bits_[0] |= 0x00000002u;
-  if (p_b_num_ == nullptr) {
+  if (ab_num_ == nullptr) {
     auto* p = CreateMaybeMessage<::Ballot>(GetArenaNoVirtual());
-    p_b_num_ = p;
+    ab_num_ = p;
   }
-  return p_b_num_;
+  return ab_num_;
 }
-inline ::Ballot* Promise::mutable_p_b_num() {
-  // @@protoc_insertion_point(field_mutable:Promise.p_b_num)
-  return _internal_mutable_p_b_num();
+inline ::Ballot* Promise::mutable_ab_num() {
+  // @@protoc_insertion_point(field_mutable:Promise.ab_num)
+  return _internal_mutable_ab_num();
 }
-inline void Promise::set_allocated_p_b_num(::Ballot* p_b_num) {
+inline void Promise::set_allocated_ab_num(::Ballot* ab_num) {
   ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaNoVirtual();
   if (message_arena == nullptr) {
-    delete p_b_num_;
+    delete ab_num_;
   }
-  if (p_b_num) {
+  if (ab_num) {
     ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena = nullptr;
     if (message_arena != submessage_arena) {
-      p_b_num = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, p_b_num, submessage_arena);
+      ab_num = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, ab_num, submessage_arena);
     }
     _has_bits_[0] |= 0x00000002u;
   } else {
     _has_bits_[0] &= ~0x00000002u;
   }
-  p_b_num_ = p_b_num;
-  // @@protoc_insertion_point(field_set_allocated:Promise.p_b_num)
+  ab_num_ = ab_num;
+  // @@protoc_insertion_point(field_set_allocated:Promise.ab_num)
+}
+
+// required .MsgBlock ablock = 3;
+inline bool Promise::_internal_has_ablock() const {
+  bool value = (_has_bits_[0] & 0x00000004u) != 0;
+  PROTOBUF_ASSUME(!value || ablock_ != nullptr);
+  return value;
+}
+inline bool Promise::has_ablock() const {
+  return _internal_has_ablock();
+}
+inline void Promise::clear_ablock() {
+  if (ablock_ != nullptr) ablock_->Clear();
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline const ::MsgBlock& Promise::_internal_ablock() const {
+  const ::MsgBlock* p = ablock_;
+  return p != nullptr ? *p : *reinterpret_cast<const ::MsgBlock*>(
+      &::_MsgBlock_default_instance_);
+}
+inline const ::MsgBlock& Promise::ablock() const {
+  // @@protoc_insertion_point(field_get:Promise.ablock)
+  return _internal_ablock();
+}
+inline ::MsgBlock* Promise::release_ablock() {
+  // @@protoc_insertion_point(field_release:Promise.ablock)
+  _has_bits_[0] &= ~0x00000004u;
+  ::MsgBlock* temp = ablock_;
+  ablock_ = nullptr;
+  return temp;
+}
+inline ::MsgBlock* Promise::_internal_mutable_ablock() {
+  _has_bits_[0] |= 0x00000004u;
+  if (ablock_ == nullptr) {
+    auto* p = CreateMaybeMessage<::MsgBlock>(GetArenaNoVirtual());
+    ablock_ = p;
+  }
+  return ablock_;
+}
+inline ::MsgBlock* Promise::mutable_ablock() {
+  // @@protoc_insertion_point(field_mutable:Promise.ablock)
+  return _internal_mutable_ablock();
+}
+inline void Promise::set_allocated_ablock(::MsgBlock* ablock) {
+  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaNoVirtual();
+  if (message_arena == nullptr) {
+    delete ablock_;
+  }
+  if (ablock) {
+    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena = nullptr;
+    if (message_arena != submessage_arena) {
+      ablock = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
+          message_arena, ablock, submessage_arena);
+    }
+    _has_bits_[0] |= 0x00000004u;
+  } else {
+    _has_bits_[0] &= ~0x00000004u;
+  }
+  ablock_ = ablock;
+  // @@protoc_insertion_point(field_set_allocated:Promise.ablock)
 }
 
 // -------------------------------------------------------------------

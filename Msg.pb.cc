@@ -20,7 +20,7 @@ extern PROTOBUF_INTERNAL_EXPORT_Msg_2eproto ::PROTOBUF_NAMESPACE_ID::internal::S
 extern PROTOBUF_INTERNAL_EXPORT_Msg_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<2> scc_info_Decide_Msg_2eproto;
 extern PROTOBUF_INTERNAL_EXPORT_Msg_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<1> scc_info_MsgBlock_Msg_2eproto;
 extern PROTOBUF_INTERNAL_EXPORT_Msg_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<1> scc_info_Prepare_Msg_2eproto;
-extern PROTOBUF_INTERNAL_EXPORT_Msg_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<1> scc_info_Promise_Msg_2eproto;
+extern PROTOBUF_INTERNAL_EXPORT_Msg_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<2> scc_info_Promise_Msg_2eproto;
 extern PROTOBUF_INTERNAL_EXPORT_Msg_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<1> scc_info_Restore_Msg_2eproto;
 extern PROTOBUF_INTERNAL_EXPORT_Msg_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_Txn_Msg_2eproto;
 class BallotDefaultTypeInternal {
@@ -171,9 +171,10 @@ static void InitDefaultsscc_info_Promise_Msg_2eproto() {
   ::Promise::InitAsDefaultInstance();
 }
 
-::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<1> scc_info_Promise_Msg_2eproto =
-    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 1, 0, InitDefaultsscc_info_Promise_Msg_2eproto}, {
-      &scc_info_Ballot_Msg_2eproto.base,}};
+::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<2> scc_info_Promise_Msg_2eproto =
+    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 2, 0, InitDefaultsscc_info_Promise_Msg_2eproto}, {
+      &scc_info_Ballot_Msg_2eproto.base,
+      &scc_info_MsgBlock_Msg_2eproto.base,}};
 
 static void InitDefaultsscc_info_Restore_Msg_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
@@ -284,9 +285,11 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_Msg_2eproto::offsets[] PROTOBU
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
   PROTOBUF_FIELD_OFFSET(::Promise, b_num_),
-  PROTOBUF_FIELD_OFFSET(::Promise, p_b_num_),
+  PROTOBUF_FIELD_OFFSET(::Promise, ab_num_),
+  PROTOBUF_FIELD_OFFSET(::Promise, ablock_),
   0,
   1,
+  2,
   PROTOBUF_FIELD_OFFSET(::Accept, _has_bits_),
   PROTOBUF_FIELD_OFFSET(::Accept, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -337,11 +340,11 @@ static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOB
   { 22, 30, sizeof(::MsgBlock)},
   { 33, 40, sizeof(::Restore)},
   { 42, 48, sizeof(::Prepare)},
-  { 49, 56, sizeof(::Promise)},
-  { 58, 65, sizeof(::Accept)},
-  { 67, 73, sizeof(::Accepted)},
-  { 74, 81, sizeof(::Decide)},
-  { 83, 95, sizeof(::WireMessage)},
+  { 49, 57, sizeof(::Promise)},
+  { 60, 67, sizeof(::Accept)},
+  { 69, 75, sizeof(::Accepted)},
+  { 76, 83, sizeof(::Decide)},
+  { 85, 97, sizeof(::WireMessage)},
 };
 
 static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] = {
@@ -364,18 +367,19 @@ const char descriptor_table_protodef_Msg_2eproto[] PROTOBUF_SECTION_VARIABLE(pro
   "\003 \002(\005\"=\n\010MsgBlock\022\r\n\005nonce\030\001 \002(\t\022\014\n\004hash"
   "\030\002 \002(\t\022\024\n\006tranxs\030\003 \003(\0132\004.Txn\"3\n\007Restore\022"
   "\r\n\005depth\030\001 \002(\005\022\031\n\006blocks\030\002 \003(\0132\t.MsgBloc"
-  "k\"!\n\007Prepare\022\026\n\005b_num\030\001 \002(\0132\007.Ballot\";\n\007"
-  "Promise\022\026\n\005b_num\030\001 \002(\0132\007.Ballot\022\030\n\007p_b_n"
-  "um\030\002 \002(\0132\007.Ballot\":\n\006Accept\022\026\n\005b_num\030\001 \002"
-  "(\0132\007.Ballot\022\030\n\005block\030\002 \002(\0132\t.MsgBlock\"\"\n"
-  "\010Accepted\022\026\n\005b_num\030\001 \002(\0132\007.Ballot\":\n\006Dec"
-  "ide\022\026\n\005b_num\030\001 \002(\0132\007.Ballot\022\030\n\005block\030\002 \002"
-  "(\0132\t.MsgBlock\"\311\001\n\013WireMessage\022\033\n\007prepare"
-  "\030\001 \001(\0132\010.PrepareH\000\022\033\n\007promise\030\002 \001(\0132\010.Pr"
-  "omiseH\000\022\031\n\006accept\030\003 \001(\0132\007.AcceptH\000\022\035\n\010ac"
-  "cepted\030\004 \001(\0132\t.AcceptedH\000\022\031\n\006decide\030\005 \001("
-  "\0132\007.DecideH\000\022\033\n\007restore\030\006 \001(\0132\010.RestoreH"
-  "\000B\016\n\014oneOfMessage"
+  "k\"!\n\007Prepare\022\026\n\005b_num\030\001 \002(\0132\007.Ballot\"U\n\007"
+  "Promise\022\026\n\005b_num\030\001 \002(\0132\007.Ballot\022\027\n\006ab_nu"
+  "m\030\002 \002(\0132\007.Ballot\022\031\n\006ablock\030\003 \002(\0132\t.MsgBl"
+  "ock\":\n\006Accept\022\026\n\005b_num\030\001 \002(\0132\007.Ballot\022\030\n"
+  "\005block\030\002 \002(\0132\t.MsgBlock\"\"\n\010Accepted\022\026\n\005b"
+  "_num\030\001 \002(\0132\007.Ballot\":\n\006Decide\022\026\n\005b_num\030\001"
+  " \002(\0132\007.Ballot\022\030\n\005block\030\002 \002(\0132\t.MsgBlock\""
+  "\311\001\n\013WireMessage\022\033\n\007prepare\030\001 \001(\0132\010.Prepa"
+  "reH\000\022\033\n\007promise\030\002 \001(\0132\010.PromiseH\000\022\031\n\006acc"
+  "ept\030\003 \001(\0132\007.AcceptH\000\022\035\n\010accepted\030\004 \001(\0132\t"
+  ".AcceptedH\000\022\031\n\006decide\030\005 \001(\0132\007.DecideH\000\022\033"
+  "\n\007restore\030\006 \001(\0132\010.RestoreH\000B\016\n\014oneOfMess"
+  "age"
   ;
 static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor_table_Msg_2eproto_deps[1] = {
 };
@@ -394,7 +398,7 @@ static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_Msg
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_Msg_2eproto_once;
 static bool descriptor_table_Msg_2eproto_initialized = false;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_Msg_2eproto = {
-  &descriptor_table_Msg_2eproto_initialized, descriptor_table_protodef_Msg_2eproto, "Msg.proto", 697,
+  &descriptor_table_Msg_2eproto_initialized, descriptor_table_protodef_Msg_2eproto, "Msg.proto", 723,
   &descriptor_table_Msg_2eproto_once, descriptor_table_Msg_2eproto_sccs, descriptor_table_Msg_2eproto_deps, 10, 0,
   schemas, file_default_instances, TableStruct_Msg_2eproto::offsets,
   file_level_metadata_Msg_2eproto, 10, file_level_enum_descriptors_Msg_2eproto, file_level_service_descriptors_Msg_2eproto,
@@ -1758,8 +1762,10 @@ void Prepare::InternalSwap(Prepare* other) {
 void Promise::InitAsDefaultInstance() {
   ::_Promise_default_instance_._instance.get_mutable()->b_num_ = const_cast< ::Ballot*>(
       ::Ballot::internal_default_instance());
-  ::_Promise_default_instance_._instance.get_mutable()->p_b_num_ = const_cast< ::Ballot*>(
+  ::_Promise_default_instance_._instance.get_mutable()->ab_num_ = const_cast< ::Ballot*>(
       ::Ballot::internal_default_instance());
+  ::_Promise_default_instance_._instance.get_mutable()->ablock_ = const_cast< ::MsgBlock*>(
+      ::MsgBlock::internal_default_instance());
 }
 class Promise::_Internal {
  public:
@@ -1768,9 +1774,13 @@ class Promise::_Internal {
   static void set_has_b_num(HasBits* has_bits) {
     (*has_bits)[0] |= 1u;
   }
-  static const ::Ballot& p_b_num(const Promise* msg);
-  static void set_has_p_b_num(HasBits* has_bits) {
+  static const ::Ballot& ab_num(const Promise* msg);
+  static void set_has_ab_num(HasBits* has_bits) {
     (*has_bits)[0] |= 2u;
+  }
+  static const ::MsgBlock& ablock(const Promise* msg);
+  static void set_has_ablock(HasBits* has_bits) {
+    (*has_bits)[0] |= 4u;
   }
 };
 
@@ -1779,8 +1789,12 @@ Promise::_Internal::b_num(const Promise* msg) {
   return *msg->b_num_;
 }
 const ::Ballot&
-Promise::_Internal::p_b_num(const Promise* msg) {
-  return *msg->p_b_num_;
+Promise::_Internal::ab_num(const Promise* msg) {
+  return *msg->ab_num_;
+}
+const ::MsgBlock&
+Promise::_Internal::ablock(const Promise* msg) {
+  return *msg->ablock_;
 }
 Promise::Promise()
   : ::PROTOBUF_NAMESPACE_ID::Message(), _internal_metadata_(nullptr) {
@@ -1797,10 +1811,15 @@ Promise::Promise(const Promise& from)
   } else {
     b_num_ = nullptr;
   }
-  if (from._internal_has_p_b_num()) {
-    p_b_num_ = new ::Ballot(*from.p_b_num_);
+  if (from._internal_has_ab_num()) {
+    ab_num_ = new ::Ballot(*from.ab_num_);
   } else {
-    p_b_num_ = nullptr;
+    ab_num_ = nullptr;
+  }
+  if (from._internal_has_ablock()) {
+    ablock_ = new ::MsgBlock(*from.ablock_);
+  } else {
+    ablock_ = nullptr;
   }
   // @@protoc_insertion_point(copy_constructor:Promise)
 }
@@ -1808,8 +1827,8 @@ Promise::Promise(const Promise& from)
 void Promise::SharedCtor() {
   ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&scc_info_Promise_Msg_2eproto.base);
   ::memset(&b_num_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&p_b_num_) -
-      reinterpret_cast<char*>(&b_num_)) + sizeof(p_b_num_));
+      reinterpret_cast<char*>(&ablock_) -
+      reinterpret_cast<char*>(&b_num_)) + sizeof(ablock_));
 }
 
 Promise::~Promise() {
@@ -1819,7 +1838,8 @@ Promise::~Promise() {
 
 void Promise::SharedDtor() {
   if (this != internal_default_instance()) delete b_num_;
-  if (this != internal_default_instance()) delete p_b_num_;
+  if (this != internal_default_instance()) delete ab_num_;
+  if (this != internal_default_instance()) delete ablock_;
 }
 
 void Promise::SetCachedSize(int size) const {
@@ -1838,14 +1858,18 @@ void Promise::Clear() {
   (void) cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
-  if (cached_has_bits & 0x00000003u) {
+  if (cached_has_bits & 0x00000007u) {
     if (cached_has_bits & 0x00000001u) {
       GOOGLE_DCHECK(b_num_ != nullptr);
       b_num_->Clear();
     }
     if (cached_has_bits & 0x00000002u) {
-      GOOGLE_DCHECK(p_b_num_ != nullptr);
-      p_b_num_->Clear();
+      GOOGLE_DCHECK(ab_num_ != nullptr);
+      ab_num_->Clear();
+    }
+    if (cached_has_bits & 0x00000004u) {
+      GOOGLE_DCHECK(ablock_ != nullptr);
+      ablock_->Clear();
     }
   }
   _has_bits_.Clear();
@@ -1867,10 +1891,17 @@ const char* Promise::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::in
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
-      // required .Ballot p_b_num = 2;
+      // required .Ballot ab_num = 2;
       case 2:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 18)) {
-          ptr = ctx->ParseMessage(_internal_mutable_p_b_num(), ptr);
+          ptr = ctx->ParseMessage(_internal_mutable_ab_num(), ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // required .MsgBlock ablock = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 26)) {
+          ptr = ctx->ParseMessage(_internal_mutable_ablock(), ptr);
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
@@ -1910,12 +1941,20 @@ failure:
         1, _Internal::b_num(this), target, stream);
   }
 
-  // required .Ballot p_b_num = 2;
+  // required .Ballot ab_num = 2;
   if (cached_has_bits & 0x00000002u) {
     target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
       InternalWriteMessage(
-        2, _Internal::p_b_num(this), target, stream);
+        2, _Internal::ab_num(this), target, stream);
+  }
+
+  // required .MsgBlock ablock = 3;
+  if (cached_has_bits & 0x00000004u) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(
+        3, _Internal::ablock(this), target, stream);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -1937,11 +1976,18 @@ size_t Promise::RequiredFieldsByteSizeFallback() const {
         *b_num_);
   }
 
-  if (_internal_has_p_b_num()) {
-    // required .Ballot p_b_num = 2;
+  if (_internal_has_ab_num()) {
+    // required .Ballot ab_num = 2;
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
-        *p_b_num_);
+        *ab_num_);
+  }
+
+  if (_internal_has_ablock()) {
+    // required .MsgBlock ablock = 3;
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        *ablock_);
   }
 
   return total_size;
@@ -1950,16 +1996,21 @@ size_t Promise::ByteSizeLong() const {
 // @@protoc_insertion_point(message_byte_size_start:Promise)
   size_t total_size = 0;
 
-  if (((_has_bits_[0] & 0x00000003) ^ 0x00000003) == 0) {  // All required fields are present.
+  if (((_has_bits_[0] & 0x00000007) ^ 0x00000007) == 0) {  // All required fields are present.
     // required .Ballot b_num = 1;
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
         *b_num_);
 
-    // required .Ballot p_b_num = 2;
+    // required .Ballot ab_num = 2;
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
-        *p_b_num_);
+        *ab_num_);
+
+    // required .MsgBlock ablock = 3;
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
+        *ablock_);
 
   } else {
     total_size += RequiredFieldsByteSizeFallback();
@@ -2000,12 +2051,15 @@ void Promise::MergeFrom(const Promise& from) {
   (void) cached_has_bits;
 
   cached_has_bits = from._has_bits_[0];
-  if (cached_has_bits & 0x00000003u) {
+  if (cached_has_bits & 0x00000007u) {
     if (cached_has_bits & 0x00000001u) {
       _internal_mutable_b_num()->::Ballot::MergeFrom(from._internal_b_num());
     }
     if (cached_has_bits & 0x00000002u) {
-      _internal_mutable_p_b_num()->::Ballot::MergeFrom(from._internal_p_b_num());
+      _internal_mutable_ab_num()->::Ballot::MergeFrom(from._internal_ab_num());
+    }
+    if (cached_has_bits & 0x00000004u) {
+      _internal_mutable_ablock()->::MsgBlock::MergeFrom(from._internal_ablock());
     }
   }
 }
@@ -2025,12 +2079,15 @@ void Promise::CopyFrom(const Promise& from) {
 }
 
 bool Promise::IsInitialized() const {
-  if ((_has_bits_[0] & 0x00000003) != 0x00000003) return false;
+  if ((_has_bits_[0] & 0x00000007) != 0x00000007) return false;
   if (_internal_has_b_num()) {
     if (!b_num_->IsInitialized()) return false;
   }
-  if (_internal_has_p_b_num()) {
-    if (!p_b_num_->IsInitialized()) return false;
+  if (_internal_has_ab_num()) {
+    if (!ab_num_->IsInitialized()) return false;
+  }
+  if (_internal_has_ablock()) {
+    if (!ablock_->IsInitialized()) return false;
   }
   return true;
 }
@@ -2040,7 +2097,8 @@ void Promise::InternalSwap(Promise* other) {
   _internal_metadata_.Swap(&other->_internal_metadata_);
   swap(_has_bits_[0], other->_has_bits_[0]);
   swap(b_num_, other->b_num_);
-  swap(p_b_num_, other->p_b_num_);
+  swap(ab_num_, other->ab_num_);
+  swap(ablock_, other->ablock_);
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata Promise::GetMetadata() const {
