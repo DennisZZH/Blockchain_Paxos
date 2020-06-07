@@ -143,7 +143,6 @@ void printBlockchain()
 // Set up the connections
 void connection_setup(int pid)
 {
-    port += pid;
     std::cout << "The port of the current process is " << port << "\n";
     if ((sockfd = socket(AF_INET, SOCK_DGRAM, 0)) < 0)
     {
@@ -155,7 +154,7 @@ void connection_setup(int pid)
 
     // Filling server information
     servaddr.sin_family = AF_INET;
-    servaddr.sin_port = htons(port);
+    servaddr.sin_port = htons(port + pid);
     servaddr.sin_addr.s_addr = server_ip;
 
     // Bind the socket
@@ -222,6 +221,8 @@ void *process(void *arg)
     m = events.front();
     events.pop();
     pthread_mutex_unlock(&e_lock);
+    std::string str_message;
+    buf[sizeof(WireMessage)];
 
     if(m.has_prepare()){
         m.prepare();
@@ -271,9 +272,14 @@ void *process(void *arg)
                 if (CONNECT[i] == true) break;
             }
             memset(&cliaddr, 0, sizeof(cliaddr));
-            cliaddr.sin_family    = AF_INET;
-            cliaddr.sin_addr.s_addr = INADDR_ANY; 
-            cliaddr.sin_port = htons(PORT);
+
+            cliaddr.sin_family = AF_INET;
+            cliaddr.sin_addr.s_addr = server_ip; 
+            cliaddr.sin_port = htons(port + i + 1);
+            str_message = m.SerializeAsString();
+
+            int len = sizeof(cliaddr);
+            sendto(sockfd, str_message.c_str(), sizeof(WireMessage), &cliaddr, &len);
         }
         else {
 
