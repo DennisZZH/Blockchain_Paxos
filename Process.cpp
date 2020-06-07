@@ -265,6 +265,19 @@ void *process(void *arg)
 
     }
     else if(m.has_restore()){
+        if (m.restore().blocks.size() == 0) {
+            // Send the message out
+            for (int i = 0; i < QUORUM_SIZE; i++) {
+                if (CONNECT[i] == true) break;
+            }
+            memset(&cliaddr, 0, sizeof(cliaddr));
+            cliaddr.sin_family    = AF_INET;
+            cliaddr.sin_addr.s_addr = INADDR_ANY; 
+            cliaddr.sin_port = htons(PORT);
+        }
+        else {
+
+        }
 
     }
     else{
