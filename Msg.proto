@@ -28,8 +28,9 @@ message	Prepare {
 }
 
 message	Promise {
-	required Ballot b_num = 1;
-    required Ballot p_b_num = 2;
+    required Ballot b_num = 1;
+    required Ballot ab_num = 2;
+    required MsgBlock ablock = 3;
 }
 
 message	Accept {
