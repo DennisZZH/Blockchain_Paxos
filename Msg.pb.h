@@ -910,10 +910,9 @@ class Prepare :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kBNumFieldNumber = 2,
-    kTypeFieldNumber = 1,
+    kBNumFieldNumber = 1,
   };
-  // required .Ballot b_num = 2;
+  // required .Ballot b_num = 1;
   bool has_b_num() const;
   private:
   bool _internal_has_b_num() const;
@@ -928,31 +927,14 @@ class Prepare :
   ::Ballot* _internal_mutable_b_num();
   public:
 
-  // required int32 type = 1;
-  bool has_type() const;
-  private:
-  bool _internal_has_type() const;
-  public:
-  void clear_type();
-  ::PROTOBUF_NAMESPACE_ID::int32 type() const;
-  void set_type(::PROTOBUF_NAMESPACE_ID::int32 value);
-  private:
-  ::PROTOBUF_NAMESPACE_ID::int32 _internal_type() const;
-  void _internal_set_type(::PROTOBUF_NAMESPACE_ID::int32 value);
-  public:
-
   // @@protoc_insertion_point(class_scope:Prepare)
  private:
   class _Internal;
-
-  // helper for ByteSizeLong()
-  size_t RequiredFieldsByteSizeFallback() const;
 
   ::PROTOBUF_NAMESPACE_ID::internal::InternalMetadataWithArena _internal_metadata_;
   ::PROTOBUF_NAMESPACE_ID::internal::HasBits<1> _has_bits_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   ::Ballot* b_num_;
-  ::PROTOBUF_NAMESPACE_ID::int32 type_;
   friend struct ::TableStruct_Msg_2eproto;
 };
 // -------------------------------------------------------------------
@@ -1070,11 +1052,10 @@ class Promise :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kBNumFieldNumber = 2,
-    kPBNumFieldNumber = 3,
-    kTypeFieldNumber = 1,
+    kBNumFieldNumber = 1,
+    kPBNumFieldNumber = 2,
   };
-  // required .Ballot b_num = 2;
+  // required .Ballot b_num = 1;
   bool has_b_num() const;
   private:
   bool _internal_has_b_num() const;
@@ -1089,7 +1070,7 @@ class Promise :
   ::Ballot* _internal_mutable_b_num();
   public:
 
-  // required .Ballot p_b_num = 3;
+  // required .Ballot p_b_num = 2;
   bool has_p_b_num() const;
   private:
   bool _internal_has_p_b_num() const;
@@ -1104,19 +1085,6 @@ class Promise :
   ::Ballot* _internal_mutable_p_b_num();
   public:
 
-  // required int32 type = 1;
-  bool has_type() const;
-  private:
-  bool _internal_has_type() const;
-  public:
-  void clear_type();
-  ::PROTOBUF_NAMESPACE_ID::int32 type() const;
-  void set_type(::PROTOBUF_NAMESPACE_ID::int32 value);
-  private:
-  ::PROTOBUF_NAMESPACE_ID::int32 _internal_type() const;
-  void _internal_set_type(::PROTOBUF_NAMESPACE_ID::int32 value);
-  public:
-
   // @@protoc_insertion_point(class_scope:Promise)
  private:
   class _Internal;
@@ -1129,7 +1097,6 @@ class Promise :
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   ::Ballot* b_num_;
   ::Ballot* p_b_num_;
-  ::PROTOBUF_NAMESPACE_ID::int32 type_;
   friend struct ::TableStruct_Msg_2eproto;
 };
 // -------------------------------------------------------------------
@@ -1247,11 +1214,10 @@ class Accept :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kBNumFieldNumber = 2,
-    kBlockFieldNumber = 3,
-    kTypeFieldNumber = 1,
+    kBNumFieldNumber = 1,
+    kBlockFieldNumber = 2,
   };
-  // required .Ballot b_num = 2;
+  // required .Ballot b_num = 1;
   bool has_b_num() const;
   private:
   bool _internal_has_b_num() const;
@@ -1266,7 +1232,7 @@ class Accept :
   ::Ballot* _internal_mutable_b_num();
   public:
 
-  // required .MsgBlock block = 3;
+  // required .MsgBlock block = 2;
   bool has_block() const;
   private:
   bool _internal_has_block() const;
@@ -1281,19 +1247,6 @@ class Accept :
   ::MsgBlock* _internal_mutable_block();
   public:
 
-  // required int32 type = 1;
-  bool has_type() const;
-  private:
-  bool _internal_has_type() const;
-  public:
-  void clear_type();
-  ::PROTOBUF_NAMESPACE_ID::int32 type() const;
-  void set_type(::PROTOBUF_NAMESPACE_ID::int32 value);
-  private:
-  ::PROTOBUF_NAMESPACE_ID::int32 _internal_type() const;
-  void _internal_set_type(::PROTOBUF_NAMESPACE_ID::int32 value);
-  public:
-
   // @@protoc_insertion_point(class_scope:Accept)
  private:
   class _Internal;
@@ -1306,7 +1259,6 @@ class Accept :
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   ::Ballot* b_num_;
   ::MsgBlock* block_;
-  ::PROTOBUF_NAMESPACE_ID::int32 type_;
   friend struct ::TableStruct_Msg_2eproto;
 };
 // -------------------------------------------------------------------
@@ -1424,10 +1376,9 @@ class Accepted :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kBNumFieldNumber = 2,
-    kTypeFieldNumber = 1,
+    kBNumFieldNumber = 1,
   };
-  // required .Ballot b_num = 2;
+  // required .Ballot b_num = 1;
   bool has_b_num() const;
   private:
   bool _internal_has_b_num() const;
@@ -1442,31 +1393,14 @@ class Accepted :
   ::Ballot* _internal_mutable_b_num();
   public:
 
-  // required int32 type = 1;
-  bool has_type() const;
-  private:
-  bool _internal_has_type() const;
-  public:
-  void clear_type();
-  ::PROTOBUF_NAMESPACE_ID::int32 type() const;
-  void set_type(::PROTOBUF_NAMESPACE_ID::int32 value);
-  private:
-  ::PROTOBUF_NAMESPACE_ID::int32 _internal_type() const;
-  void _internal_set_type(::PROTOBUF_NAMESPACE_ID::int32 value);
-  public:
-
   // @@protoc_insertion_point(class_scope:Accepted)
  private:
   class _Internal;
-
-  // helper for ByteSizeLong()
-  size_t RequiredFieldsByteSizeFallback() const;
 
   ::PROTOBUF_NAMESPACE_ID::internal::InternalMetadataWithArena _internal_metadata_;
   ::PROTOBUF_NAMESPACE_ID::internal::HasBits<1> _has_bits_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   ::Ballot* b_num_;
-  ::PROTOBUF_NAMESPACE_ID::int32 type_;
   friend struct ::TableStruct_Msg_2eproto;
 };
 // -------------------------------------------------------------------
@@ -1584,11 +1518,10 @@ class Decide :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kBNumFieldNumber = 2,
-    kBlockFieldNumber = 3,
-    kTypeFieldNumber = 1,
+    kBNumFieldNumber = 1,
+    kBlockFieldNumber = 2,
   };
-  // required .Ballot b_num = 2;
+  // required .Ballot b_num = 1;
   bool has_b_num() const;
   private:
   bool _internal_has_b_num() const;
@@ -1603,7 +1536,7 @@ class Decide :
   ::Ballot* _internal_mutable_b_num();
   public:
 
-  // required .MsgBlock block = 3;
+  // required .MsgBlock block = 2;
   bool has_block() const;
   private:
   bool _internal_has_block() const;
@@ -1618,19 +1551,6 @@ class Decide :
   ::MsgBlock* _internal_mutable_block();
   public:
 
-  // required int32 type = 1;
-  bool has_type() const;
-  private:
-  bool _internal_has_type() const;
-  public:
-  void clear_type();
-  ::PROTOBUF_NAMESPACE_ID::int32 type() const;
-  void set_type(::PROTOBUF_NAMESPACE_ID::int32 value);
-  private:
-  ::PROTOBUF_NAMESPACE_ID::int32 _internal_type() const;
-  void _internal_set_type(::PROTOBUF_NAMESPACE_ID::int32 value);
-  public:
-
   // @@protoc_insertion_point(class_scope:Decide)
  private:
   class _Internal;
@@ -1643,7 +1563,6 @@ class Decide :
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   ::Ballot* b_num_;
   ::MsgBlock* block_;
-  ::PROTOBUF_NAMESPACE_ID::int32 type_;
   friend struct ::TableStruct_Msg_2eproto;
 };
 // -------------------------------------------------------------------
@@ -2342,35 +2261,7 @@ Restore::blocks() const {
 
 // Prepare
 
-// required int32 type = 1;
-inline bool Prepare::_internal_has_type() const {
-  bool value = (_has_bits_[0] & 0x00000002u) != 0;
-  return value;
-}
-inline bool Prepare::has_type() const {
-  return _internal_has_type();
-}
-inline void Prepare::clear_type() {
-  type_ = 0;
-  _has_bits_[0] &= ~0x00000002u;
-}
-inline ::PROTOBUF_NAMESPACE_ID::int32 Prepare::_internal_type() const {
-  return type_;
-}
-inline ::PROTOBUF_NAMESPACE_ID::int32 Prepare::type() const {
-  // @@protoc_insertion_point(field_get:Prepare.type)
-  return _internal_type();
-}
-inline void Prepare::_internal_set_type(::PROTOBUF_NAMESPACE_ID::int32 value) {
-  _has_bits_[0] |= 0x00000002u;
-  type_ = value;
-}
-inline void Prepare::set_type(::PROTOBUF_NAMESPACE_ID::int32 value) {
-  _internal_set_type(value);
-  // @@protoc_insertion_point(field_set:Prepare.type)
-}
-
-// required .Ballot b_num = 2;
+// required .Ballot b_num = 1;
 inline bool Prepare::_internal_has_b_num() const {
   bool value = (_has_bits_[0] & 0x00000001u) != 0;
   PROTOBUF_ASSUME(!value || b_num_ != nullptr);
@@ -2434,35 +2325,7 @@ inline void Prepare::set_allocated_b_num(::Ballot* b_num) {
 
 // Promise
 
-// required int32 type = 1;
-inline bool Promise::_internal_has_type() const {
-  bool value = (_has_bits_[0] & 0x00000004u) != 0;
-  return value;
-}
-inline bool Promise::has_type() const {
-  return _internal_has_type();
-}
-inline void Promise::clear_type() {
-  type_ = 0;
-  _has_bits_[0] &= ~0x00000004u;
-}
-inline ::PROTOBUF_NAMESPACE_ID::int32 Promise::_internal_type() const {
-  return type_;
-}
-inline ::PROTOBUF_NAMESPACE_ID::int32 Promise::type() const {
-  // @@protoc_insertion_point(field_get:Promise.type)
-  return _internal_type();
-}
-inline void Promise::_internal_set_type(::PROTOBUF_NAMESPACE_ID::int32 value) {
-  _has_bits_[0] |= 0x00000004u;
-  type_ = value;
-}
-inline void Promise::set_type(::PROTOBUF_NAMESPACE_ID::int32 value) {
-  _internal_set_type(value);
-  // @@protoc_insertion_point(field_set:Promise.type)
-}
-
-// required .Ballot b_num = 2;
+// required .Ballot b_num = 1;
 inline bool Promise::_internal_has_b_num() const {
   bool value = (_has_bits_[0] & 0x00000001u) != 0;
   PROTOBUF_ASSUME(!value || b_num_ != nullptr);
@@ -2522,7 +2385,7 @@ inline void Promise::set_allocated_b_num(::Ballot* b_num) {
   // @@protoc_insertion_point(field_set_allocated:Promise.b_num)
 }
 
-// required .Ballot p_b_num = 3;
+// required .Ballot p_b_num = 2;
 inline bool Promise::_internal_has_p_b_num() const {
   bool value = (_has_bits_[0] & 0x00000002u) != 0;
   PROTOBUF_ASSUME(!value || p_b_num_ != nullptr);
@@ -2586,35 +2449,7 @@ inline void Promise::set_allocated_p_b_num(::Ballot* p_b_num) {
 
 // Accept
 
-// required int32 type = 1;
-inline bool Accept::_internal_has_type() const {
-  bool value = (_has_bits_[0] & 0x00000004u) != 0;
-  return value;
-}
-inline bool Accept::has_type() const {
-  return _internal_has_type();
-}
-inline void Accept::clear_type() {
-  type_ = 0;
-  _has_bits_[0] &= ~0x00000004u;
-}
-inline ::PROTOBUF_NAMESPACE_ID::int32 Accept::_internal_type() const {
-  return type_;
-}
-inline ::PROTOBUF_NAMESPACE_ID::int32 Accept::type() const {
-  // @@protoc_insertion_point(field_get:Accept.type)
-  return _internal_type();
-}
-inline void Accept::_internal_set_type(::PROTOBUF_NAMESPACE_ID::int32 value) {
-  _has_bits_[0] |= 0x00000004u;
-  type_ = value;
-}
-inline void Accept::set_type(::PROTOBUF_NAMESPACE_ID::int32 value) {
-  _internal_set_type(value);
-  // @@protoc_insertion_point(field_set:Accept.type)
-}
-
-// required .Ballot b_num = 2;
+// required .Ballot b_num = 1;
 inline bool Accept::_internal_has_b_num() const {
   bool value = (_has_bits_[0] & 0x00000001u) != 0;
   PROTOBUF_ASSUME(!value || b_num_ != nullptr);
@@ -2674,7 +2509,7 @@ inline void Accept::set_allocated_b_num(::Ballot* b_num) {
   // @@protoc_insertion_point(field_set_allocated:Accept.b_num)
 }
 
-// required .MsgBlock block = 3;
+// required .MsgBlock block = 2;
 inline bool Accept::_internal_has_block() const {
   bool value = (_has_bits_[0] & 0x00000002u) != 0;
   PROTOBUF_ASSUME(!value || block_ != nullptr);
@@ -2738,35 +2573,7 @@ inline void Accept::set_allocated_block(::MsgBlock* block) {
 
 // Accepted
 
-// required int32 type = 1;
-inline bool Accepted::_internal_has_type() const {
-  bool value = (_has_bits_[0] & 0x00000002u) != 0;
-  return value;
-}
-inline bool Accepted::has_type() const {
-  return _internal_has_type();
-}
-inline void Accepted::clear_type() {
-  type_ = 0;
-  _has_bits_[0] &= ~0x00000002u;
-}
-inline ::PROTOBUF_NAMESPACE_ID::int32 Accepted::_internal_type() const {
-  return type_;
-}
-inline ::PROTOBUF_NAMESPACE_ID::int32 Accepted::type() const {
-  // @@protoc_insertion_point(field_get:Accepted.type)
-  return _internal_type();
-}
-inline void Accepted::_internal_set_type(::PROTOBUF_NAMESPACE_ID::int32 value) {
-  _has_bits_[0] |= 0x00000002u;
-  type_ = value;
-}
-inline void Accepted::set_type(::PROTOBUF_NAMESPACE_ID::int32 value) {
-  _internal_set_type(value);
-  // @@protoc_insertion_point(field_set:Accepted.type)
-}
-
-// required .Ballot b_num = 2;
+// required .Ballot b_num = 1;
 inline bool Accepted::_internal_has_b_num() const {
   bool value = (_has_bits_[0] & 0x00000001u) != 0;
   PROTOBUF_ASSUME(!value || b_num_ != nullptr);
@@ -2830,35 +2637,7 @@ inline void Accepted::set_allocated_b_num(::Ballot* b_num) {
 
 // Decide
 
-// required int32 type = 1;
-inline bool Decide::_internal_has_type() const {
-  bool value = (_has_bits_[0] & 0x00000004u) != 0;
-  return value;
-}
-inline bool Decide::has_type() const {
-  return _internal_has_type();
-}
-inline void Decide::clear_type() {
-  type_ = 0;
-  _has_bits_[0] &= ~0x00000004u;
-}
-inline ::PROTOBUF_NAMESPACE_ID::int32 Decide::_internal_type() const {
-  return type_;
-}
-inline ::PROTOBUF_NAMESPACE_ID::int32 Decide::type() const {
-  // @@protoc_insertion_point(field_get:Decide.type)
-  return _internal_type();
-}
-inline void Decide::_internal_set_type(::PROTOBUF_NAMESPACE_ID::int32 value) {
-  _has_bits_[0] |= 0x00000004u;
-  type_ = value;
-}
-inline void Decide::set_type(::PROTOBUF_NAMESPACE_ID::int32 value) {
-  _internal_set_type(value);
-  // @@protoc_insertion_point(field_set:Decide.type)
-}
-
-// required .Ballot b_num = 2;
+// required .Ballot b_num = 1;
 inline bool Decide::_internal_has_b_num() const {
   bool value = (_has_bits_[0] & 0x00000001u) != 0;
   PROTOBUF_ASSUME(!value || b_num_ != nullptr);
@@ -2918,7 +2697,7 @@ inline void Decide::set_allocated_b_num(::Ballot* b_num) {
   // @@protoc_insertion_point(field_set_allocated:Decide.b_num)
 }
 
-// required .MsgBlock block = 3;
+// required .MsgBlock block = 2;
 inline bool Decide::_internal_has_block() const {
   bool value = (_has_bits_[0] & 0x00000002u) != 0;
   PROTOBUF_ASSUME(!value || block_ != nullptr);

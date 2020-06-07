@@ -276,19 +276,15 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_Msg_2eproto::offsets[] PROTOBU
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
-  PROTOBUF_FIELD_OFFSET(::Prepare, type_),
   PROTOBUF_FIELD_OFFSET(::Prepare, b_num_),
-  1,
   0,
   PROTOBUF_FIELD_OFFSET(::Promise, _has_bits_),
   PROTOBUF_FIELD_OFFSET(::Promise, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
-  PROTOBUF_FIELD_OFFSET(::Promise, type_),
   PROTOBUF_FIELD_OFFSET(::Promise, b_num_),
   PROTOBUF_FIELD_OFFSET(::Promise, p_b_num_),
-  2,
   0,
   1,
   PROTOBUF_FIELD_OFFSET(::Accept, _has_bits_),
@@ -296,10 +292,8 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_Msg_2eproto::offsets[] PROTOBU
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
-  PROTOBUF_FIELD_OFFSET(::Accept, type_),
   PROTOBUF_FIELD_OFFSET(::Accept, b_num_),
   PROTOBUF_FIELD_OFFSET(::Accept, block_),
-  2,
   0,
   1,
   PROTOBUF_FIELD_OFFSET(::Accepted, _has_bits_),
@@ -307,19 +301,15 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_Msg_2eproto::offsets[] PROTOBU
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
-  PROTOBUF_FIELD_OFFSET(::Accepted, type_),
   PROTOBUF_FIELD_OFFSET(::Accepted, b_num_),
-  1,
   0,
   PROTOBUF_FIELD_OFFSET(::Decide, _has_bits_),
   PROTOBUF_FIELD_OFFSET(::Decide, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
-  PROTOBUF_FIELD_OFFSET(::Decide, type_),
   PROTOBUF_FIELD_OFFSET(::Decide, b_num_),
   PROTOBUF_FIELD_OFFSET(::Decide, block_),
-  2,
   0,
   1,
   PROTOBUF_FIELD_OFFSET(::WireMessage, _has_bits_),
@@ -346,12 +336,12 @@ static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOB
   { 11, 19, sizeof(::Txn)},
   { 22, 30, sizeof(::MsgBlock)},
   { 33, 40, sizeof(::Restore)},
-  { 42, 49, sizeof(::Prepare)},
-  { 51, 59, sizeof(::Promise)},
-  { 62, 70, sizeof(::Accept)},
-  { 73, 80, sizeof(::Accepted)},
-  { 82, 90, sizeof(::Decide)},
-  { 93, 105, sizeof(::WireMessage)},
+  { 42, 48, sizeof(::Prepare)},
+  { 49, 56, sizeof(::Promise)},
+  { 58, 65, sizeof(::Accept)},
+  { 67, 73, sizeof(::Accepted)},
+  { 74, 81, sizeof(::Decide)},
+  { 83, 95, sizeof(::WireMessage)},
 };
 
 static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] = {
@@ -374,20 +364,18 @@ const char descriptor_table_protodef_Msg_2eproto[] PROTOBUF_SECTION_VARIABLE(pro
   "\003 \002(\005\"=\n\010MsgBlock\022\r\n\005nonce\030\001 \002(\t\022\014\n\004hash"
   "\030\002 \002(\t\022\024\n\006tranxs\030\003 \003(\0132\004.Txn\"3\n\007Restore\022"
   "\r\n\005depth\030\001 \002(\005\022\031\n\006blocks\030\002 \003(\0132\t.MsgBloc"
-  "k\"/\n\007Prepare\022\014\n\004type\030\001 \002(\005\022\026\n\005b_num\030\002 \002("
-  "\0132\007.Ballot\"I\n\007Promise\022\014\n\004type\030\001 \002(\005\022\026\n\005b"
-  "_num\030\002 \002(\0132\007.Ballot\022\030\n\007p_b_num\030\003 \002(\0132\007.B"
-  "allot\"H\n\006Accept\022\014\n\004type\030\001 \002(\005\022\026\n\005b_num\030\002"
-  " \002(\0132\007.Ballot\022\030\n\005block\030\003 \002(\0132\t.MsgBlock\""
-  "0\n\010Accepted\022\014\n\004type\030\001 \002(\005\022\026\n\005b_num\030\002 \002(\013"
-  "2\007.Ballot\"H\n\006Decide\022\014\n\004type\030\001 \002(\005\022\026\n\005b_n"
-  "um\030\002 \002(\0132\007.Ballot\022\030\n\005block\030\003 \002(\0132\t.MsgBl"
-  "ock\"\311\001\n\013WireMessage\022\033\n\007prepare\030\001 \001(\0132\010.P"
-  "repareH\000\022\033\n\007promise\030\002 \001(\0132\010.PromiseH\000\022\031\n"
-  "\006accept\030\003 \001(\0132\007.AcceptH\000\022\035\n\010accepted\030\004 \001"
-  "(\0132\t.AcceptedH\000\022\031\n\006decide\030\005 \001(\0132\007.Decide"
-  "H\000\022\033\n\007restore\030\006 \001(\0132\010.RestoreH\000B\016\n\014oneOf"
-  "Message"
+  "k\"!\n\007Prepare\022\026\n\005b_num\030\001 \002(\0132\007.Ballot\";\n\007"
+  "Promise\022\026\n\005b_num\030\001 \002(\0132\007.Ballot\022\030\n\007p_b_n"
+  "um\030\002 \002(\0132\007.Ballot\":\n\006Accept\022\026\n\005b_num\030\001 \002"
+  "(\0132\007.Ballot\022\030\n\005block\030\002 \002(\0132\t.MsgBlock\"\"\n"
+  "\010Accepted\022\026\n\005b_num\030\001 \002(\0132\007.Ballot\":\n\006Dec"
+  "ide\022\026\n\005b_num\030\001 \002(\0132\007.Ballot\022\030\n\005block\030\002 \002"
+  "(\0132\t.MsgBlock\"\311\001\n\013WireMessage\022\033\n\007prepare"
+  "\030\001 \001(\0132\010.PrepareH\000\022\033\n\007promise\030\002 \001(\0132\010.Pr"
+  "omiseH\000\022\031\n\006accept\030\003 \001(\0132\007.AcceptH\000\022\035\n\010ac"
+  "cepted\030\004 \001(\0132\t.AcceptedH\000\022\031\n\006decide\030\005 \001("
+  "\0132\007.DecideH\000\022\033\n\007restore\030\006 \001(\0132\010.RestoreH"
+  "\000B\016\n\014oneOfMessage"
   ;
 static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor_table_Msg_2eproto_deps[1] = {
 };
@@ -406,7 +394,7 @@ static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_Msg
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_Msg_2eproto_once;
 static bool descriptor_table_Msg_2eproto_initialized = false;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_Msg_2eproto = {
-  &descriptor_table_Msg_2eproto_initialized, descriptor_table_protodef_Msg_2eproto, "Msg.proto", 767,
+  &descriptor_table_Msg_2eproto_initialized, descriptor_table_protodef_Msg_2eproto, "Msg.proto", 697,
   &descriptor_table_Msg_2eproto_once, descriptor_table_Msg_2eproto_sccs, descriptor_table_Msg_2eproto_deps, 10, 0,
   schemas, file_default_instances, TableStruct_Msg_2eproto::offsets,
   file_level_metadata_Msg_2eproto, 10, file_level_enum_descriptors_Msg_2eproto, file_level_service_descriptors_Msg_2eproto,
@@ -1556,9 +1544,6 @@ void Prepare::InitAsDefaultInstance() {
 class Prepare::_Internal {
  public:
   using HasBits = decltype(std::declval<Prepare>()._has_bits_);
-  static void set_has_type(HasBits* has_bits) {
-    (*has_bits)[0] |= 2u;
-  }
   static const ::Ballot& b_num(const Prepare* msg);
   static void set_has_b_num(HasBits* has_bits) {
     (*has_bits)[0] |= 1u;
@@ -1584,15 +1569,12 @@ Prepare::Prepare(const Prepare& from)
   } else {
     b_num_ = nullptr;
   }
-  type_ = from.type_;
   // @@protoc_insertion_point(copy_constructor:Prepare)
 }
 
 void Prepare::SharedCtor() {
   ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&scc_info_Prepare_Msg_2eproto.base);
-  ::memset(&b_num_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&type_) -
-      reinterpret_cast<char*>(&b_num_)) + sizeof(type_));
+  b_num_ = nullptr;
 }
 
 Prepare::~Prepare() {
@@ -1624,7 +1606,6 @@ void Prepare::Clear() {
     GOOGLE_DCHECK(b_num_ != nullptr);
     b_num_->Clear();
   }
-  type_ = 0;
   _has_bits_.Clear();
   _internal_metadata_.Clear();
 }
@@ -1637,17 +1618,9 @@ const char* Prepare::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::in
     ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
     CHK_(ptr);
     switch (tag >> 3) {
-      // required int32 type = 1;
+      // required .Ballot b_num = 1;
       case 1:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 8)) {
-          _Internal::set_has_type(&has_bits);
-          type_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint(&ptr);
-          CHK_(ptr);
-        } else goto handle_unusual;
-        continue;
-      // required .Ballot b_num = 2;
-      case 2:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 18)) {
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 10)) {
           ptr = ctx->ParseMessage(_internal_mutable_b_num(), ptr);
           CHK_(ptr);
         } else goto handle_unusual;
@@ -1680,18 +1653,12 @@ failure:
   (void) cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
-  // required int32 type = 1;
-  if (cached_has_bits & 0x00000002u) {
-    target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(1, this->_internal_type(), target);
-  }
-
-  // required .Ballot b_num = 2;
+  // required .Ballot b_num = 1;
   if (cached_has_bits & 0x00000001u) {
     target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
       InternalWriteMessage(
-        2, _Internal::b_num(this), target, stream);
+        1, _Internal::b_num(this), target, stream);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -1702,43 +1669,15 @@ failure:
   return target;
 }
 
-size_t Prepare::RequiredFieldsByteSizeFallback() const {
-// @@protoc_insertion_point(required_fields_byte_size_fallback_start:Prepare)
-  size_t total_size = 0;
-
-  if (_internal_has_b_num()) {
-    // required .Ballot b_num = 2;
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
-        *b_num_);
-  }
-
-  if (_internal_has_type()) {
-    // required int32 type = 1;
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
-        this->_internal_type());
-  }
-
-  return total_size;
-}
 size_t Prepare::ByteSizeLong() const {
 // @@protoc_insertion_point(message_byte_size_start:Prepare)
   size_t total_size = 0;
 
-  if (((_has_bits_[0] & 0x00000003) ^ 0x00000003) == 0) {  // All required fields are present.
-    // required .Ballot b_num = 2;
+  // required .Ballot b_num = 1;
+  if (_internal_has_b_num()) {
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
         *b_num_);
-
-    // required int32 type = 1;
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
-        this->_internal_type());
-
-  } else {
-    total_size += RequiredFieldsByteSizeFallback();
   }
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
@@ -1775,15 +1714,8 @@ void Prepare::MergeFrom(const Prepare& from) {
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  cached_has_bits = from._has_bits_[0];
-  if (cached_has_bits & 0x00000003u) {
-    if (cached_has_bits & 0x00000001u) {
-      _internal_mutable_b_num()->::Ballot::MergeFrom(from._internal_b_num());
-    }
-    if (cached_has_bits & 0x00000002u) {
-      type_ = from.type_;
-    }
-    _has_bits_[0] |= cached_has_bits;
+  if (from._internal_has_b_num()) {
+    _internal_mutable_b_num()->::Ballot::MergeFrom(from._internal_b_num());
   }
 }
 
@@ -1802,7 +1734,7 @@ void Prepare::CopyFrom(const Prepare& from) {
 }
 
 bool Prepare::IsInitialized() const {
-  if ((_has_bits_[0] & 0x00000003) != 0x00000003) return false;
+  if ((_has_bits_[0] & 0x00000001) != 0x00000001) return false;
   if (_internal_has_b_num()) {
     if (!b_num_->IsInitialized()) return false;
   }
@@ -1814,7 +1746,6 @@ void Prepare::InternalSwap(Prepare* other) {
   _internal_metadata_.Swap(&other->_internal_metadata_);
   swap(_has_bits_[0], other->_has_bits_[0]);
   swap(b_num_, other->b_num_);
-  swap(type_, other->type_);
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata Prepare::GetMetadata() const {
@@ -1833,9 +1764,6 @@ void Promise::InitAsDefaultInstance() {
 class Promise::_Internal {
  public:
   using HasBits = decltype(std::declval<Promise>()._has_bits_);
-  static void set_has_type(HasBits* has_bits) {
-    (*has_bits)[0] |= 4u;
-  }
   static const ::Ballot& b_num(const Promise* msg);
   static void set_has_b_num(HasBits* has_bits) {
     (*has_bits)[0] |= 1u;
@@ -1874,15 +1802,14 @@ Promise::Promise(const Promise& from)
   } else {
     p_b_num_ = nullptr;
   }
-  type_ = from.type_;
   // @@protoc_insertion_point(copy_constructor:Promise)
 }
 
 void Promise::SharedCtor() {
   ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&scc_info_Promise_Msg_2eproto.base);
   ::memset(&b_num_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&type_) -
-      reinterpret_cast<char*>(&b_num_)) + sizeof(type_));
+      reinterpret_cast<char*>(&p_b_num_) -
+      reinterpret_cast<char*>(&b_num_)) + sizeof(p_b_num_));
 }
 
 Promise::~Promise() {
@@ -1921,7 +1848,6 @@ void Promise::Clear() {
       p_b_num_->Clear();
     }
   }
-  type_ = 0;
   _has_bits_.Clear();
   _internal_metadata_.Clear();
 }
@@ -1934,24 +1860,16 @@ const char* Promise::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::in
     ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
     CHK_(ptr);
     switch (tag >> 3) {
-      // required int32 type = 1;
+      // required .Ballot b_num = 1;
       case 1:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 8)) {
-          _Internal::set_has_type(&has_bits);
-          type_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint(&ptr);
-          CHK_(ptr);
-        } else goto handle_unusual;
-        continue;
-      // required .Ballot b_num = 2;
-      case 2:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 18)) {
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 10)) {
           ptr = ctx->ParseMessage(_internal_mutable_b_num(), ptr);
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
-      // required .Ballot p_b_num = 3;
-      case 3:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 26)) {
+      // required .Ballot p_b_num = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 18)) {
           ptr = ctx->ParseMessage(_internal_mutable_p_b_num(), ptr);
           CHK_(ptr);
         } else goto handle_unusual;
@@ -1984,26 +1902,20 @@ failure:
   (void) cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
-  // required int32 type = 1;
-  if (cached_has_bits & 0x00000004u) {
-    target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(1, this->_internal_type(), target);
-  }
-
-  // required .Ballot b_num = 2;
+  // required .Ballot b_num = 1;
   if (cached_has_bits & 0x00000001u) {
     target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
       InternalWriteMessage(
-        2, _Internal::b_num(this), target, stream);
+        1, _Internal::b_num(this), target, stream);
   }
 
-  // required .Ballot p_b_num = 3;
+  // required .Ballot p_b_num = 2;
   if (cached_has_bits & 0x00000002u) {
     target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
       InternalWriteMessage(
-        3, _Internal::p_b_num(this), target, stream);
+        2, _Internal::p_b_num(this), target, stream);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -2019,24 +1931,17 @@ size_t Promise::RequiredFieldsByteSizeFallback() const {
   size_t total_size = 0;
 
   if (_internal_has_b_num()) {
-    // required .Ballot b_num = 2;
+    // required .Ballot b_num = 1;
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
         *b_num_);
   }
 
   if (_internal_has_p_b_num()) {
-    // required .Ballot p_b_num = 3;
+    // required .Ballot p_b_num = 2;
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
         *p_b_num_);
-  }
-
-  if (_internal_has_type()) {
-    // required int32 type = 1;
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
-        this->_internal_type());
   }
 
   return total_size;
@@ -2045,21 +1950,16 @@ size_t Promise::ByteSizeLong() const {
 // @@protoc_insertion_point(message_byte_size_start:Promise)
   size_t total_size = 0;
 
-  if (((_has_bits_[0] & 0x00000007) ^ 0x00000007) == 0) {  // All required fields are present.
-    // required .Ballot b_num = 2;
+  if (((_has_bits_[0] & 0x00000003) ^ 0x00000003) == 0) {  // All required fields are present.
+    // required .Ballot b_num = 1;
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
         *b_num_);
 
-    // required .Ballot p_b_num = 3;
+    // required .Ballot p_b_num = 2;
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
         *p_b_num_);
-
-    // required int32 type = 1;
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
-        this->_internal_type());
 
   } else {
     total_size += RequiredFieldsByteSizeFallback();
@@ -2100,17 +2000,13 @@ void Promise::MergeFrom(const Promise& from) {
   (void) cached_has_bits;
 
   cached_has_bits = from._has_bits_[0];
-  if (cached_has_bits & 0x00000007u) {
+  if (cached_has_bits & 0x00000003u) {
     if (cached_has_bits & 0x00000001u) {
       _internal_mutable_b_num()->::Ballot::MergeFrom(from._internal_b_num());
     }
     if (cached_has_bits & 0x00000002u) {
       _internal_mutable_p_b_num()->::Ballot::MergeFrom(from._internal_p_b_num());
     }
-    if (cached_has_bits & 0x00000004u) {
-      type_ = from.type_;
-    }
-    _has_bits_[0] |= cached_has_bits;
   }
 }
 
@@ -2129,7 +2025,7 @@ void Promise::CopyFrom(const Promise& from) {
 }
 
 bool Promise::IsInitialized() const {
-  if ((_has_bits_[0] & 0x00000007) != 0x00000007) return false;
+  if ((_has_bits_[0] & 0x00000003) != 0x00000003) return false;
   if (_internal_has_b_num()) {
     if (!b_num_->IsInitialized()) return false;
   }
@@ -2145,7 +2041,6 @@ void Promise::InternalSwap(Promise* other) {
   swap(_has_bits_[0], other->_has_bits_[0]);
   swap(b_num_, other->b_num_);
   swap(p_b_num_, other->p_b_num_);
-  swap(type_, other->type_);
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata Promise::GetMetadata() const {
@@ -2164,9 +2059,6 @@ void Accept::InitAsDefaultInstance() {
 class Accept::_Internal {
  public:
   using HasBits = decltype(std::declval<Accept>()._has_bits_);
-  static void set_has_type(HasBits* has_bits) {
-    (*has_bits)[0] |= 4u;
-  }
   static const ::Ballot& b_num(const Accept* msg);
   static void set_has_b_num(HasBits* has_bits) {
     (*has_bits)[0] |= 1u;
@@ -2205,15 +2097,14 @@ Accept::Accept(const Accept& from)
   } else {
     block_ = nullptr;
   }
-  type_ = from.type_;
   // @@protoc_insertion_point(copy_constructor:Accept)
 }
 
 void Accept::SharedCtor() {
   ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&scc_info_Accept_Msg_2eproto.base);
   ::memset(&b_num_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&type_) -
-      reinterpret_cast<char*>(&b_num_)) + sizeof(type_));
+      reinterpret_cast<char*>(&block_) -
+      reinterpret_cast<char*>(&b_num_)) + sizeof(block_));
 }
 
 Accept::~Accept() {
@@ -2252,7 +2143,6 @@ void Accept::Clear() {
       block_->Clear();
     }
   }
-  type_ = 0;
   _has_bits_.Clear();
   _internal_metadata_.Clear();
 }
@@ -2265,24 +2155,16 @@ const char* Accept::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::int
     ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
     CHK_(ptr);
     switch (tag >> 3) {
-      // required int32 type = 1;
+      // required .Ballot b_num = 1;
       case 1:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 8)) {
-          _Internal::set_has_type(&has_bits);
-          type_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint(&ptr);
-          CHK_(ptr);
-        } else goto handle_unusual;
-        continue;
-      // required .Ballot b_num = 2;
-      case 2:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 18)) {
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 10)) {
           ptr = ctx->ParseMessage(_internal_mutable_b_num(), ptr);
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
-      // required .MsgBlock block = 3;
-      case 3:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 26)) {
+      // required .MsgBlock block = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 18)) {
           ptr = ctx->ParseMessage(_internal_mutable_block(), ptr);
           CHK_(ptr);
         } else goto handle_unusual;
@@ -2315,26 +2197,20 @@ failure:
   (void) cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
-  // required int32 type = 1;
-  if (cached_has_bits & 0x00000004u) {
-    target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(1, this->_internal_type(), target);
-  }
-
-  // required .Ballot b_num = 2;
+  // required .Ballot b_num = 1;
   if (cached_has_bits & 0x00000001u) {
     target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
       InternalWriteMessage(
-        2, _Internal::b_num(this), target, stream);
+        1, _Internal::b_num(this), target, stream);
   }
 
-  // required .MsgBlock block = 3;
+  // required .MsgBlock block = 2;
   if (cached_has_bits & 0x00000002u) {
     target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
       InternalWriteMessage(
-        3, _Internal::block(this), target, stream);
+        2, _Internal::block(this), target, stream);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -2350,24 +2226,17 @@ size_t Accept::RequiredFieldsByteSizeFallback() const {
   size_t total_size = 0;
 
   if (_internal_has_b_num()) {
-    // required .Ballot b_num = 2;
+    // required .Ballot b_num = 1;
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
         *b_num_);
   }
 
   if (_internal_has_block()) {
-    // required .MsgBlock block = 3;
+    // required .MsgBlock block = 2;
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
         *block_);
-  }
-
-  if (_internal_has_type()) {
-    // required int32 type = 1;
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
-        this->_internal_type());
   }
 
   return total_size;
@@ -2376,21 +2245,16 @@ size_t Accept::ByteSizeLong() const {
 // @@protoc_insertion_point(message_byte_size_start:Accept)
   size_t total_size = 0;
 
-  if (((_has_bits_[0] & 0x00000007) ^ 0x00000007) == 0) {  // All required fields are present.
-    // required .Ballot b_num = 2;
+  if (((_has_bits_[0] & 0x00000003) ^ 0x00000003) == 0) {  // All required fields are present.
+    // required .Ballot b_num = 1;
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
         *b_num_);
 
-    // required .MsgBlock block = 3;
+    // required .MsgBlock block = 2;
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
         *block_);
-
-    // required int32 type = 1;
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
-        this->_internal_type());
 
   } else {
     total_size += RequiredFieldsByteSizeFallback();
@@ -2431,17 +2295,13 @@ void Accept::MergeFrom(const Accept& from) {
   (void) cached_has_bits;
 
   cached_has_bits = from._has_bits_[0];
-  if (cached_has_bits & 0x00000007u) {
+  if (cached_has_bits & 0x00000003u) {
     if (cached_has_bits & 0x00000001u) {
       _internal_mutable_b_num()->::Ballot::MergeFrom(from._internal_b_num());
     }
     if (cached_has_bits & 0x00000002u) {
       _internal_mutable_block()->::MsgBlock::MergeFrom(from._internal_block());
     }
-    if (cached_has_bits & 0x00000004u) {
-      type_ = from.type_;
-    }
-    _has_bits_[0] |= cached_has_bits;
   }
 }
 
@@ -2460,7 +2320,7 @@ void Accept::CopyFrom(const Accept& from) {
 }
 
 bool Accept::IsInitialized() const {
-  if ((_has_bits_[0] & 0x00000007) != 0x00000007) return false;
+  if ((_has_bits_[0] & 0x00000003) != 0x00000003) return false;
   if (_internal_has_b_num()) {
     if (!b_num_->IsInitialized()) return false;
   }
@@ -2476,7 +2336,6 @@ void Accept::InternalSwap(Accept* other) {
   swap(_has_bits_[0], other->_has_bits_[0]);
   swap(b_num_, other->b_num_);
   swap(block_, other->block_);
-  swap(type_, other->type_);
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata Accept::GetMetadata() const {
@@ -2493,9 +2352,6 @@ void Accepted::InitAsDefaultInstance() {
 class Accepted::_Internal {
  public:
   using HasBits = decltype(std::declval<Accepted>()._has_bits_);
-  static void set_has_type(HasBits* has_bits) {
-    (*has_bits)[0] |= 2u;
-  }
   static const ::Ballot& b_num(const Accepted* msg);
   static void set_has_b_num(HasBits* has_bits) {
     (*has_bits)[0] |= 1u;
@@ -2521,15 +2377,12 @@ Accepted::Accepted(const Accepted& from)
   } else {
     b_num_ = nullptr;
   }
-  type_ = from.type_;
   // @@protoc_insertion_point(copy_constructor:Accepted)
 }
 
 void Accepted::SharedCtor() {
   ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&scc_info_Accepted_Msg_2eproto.base);
-  ::memset(&b_num_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&type_) -
-      reinterpret_cast<char*>(&b_num_)) + sizeof(type_));
+  b_num_ = nullptr;
 }
 
 Accepted::~Accepted() {
@@ -2561,7 +2414,6 @@ void Accepted::Clear() {
     GOOGLE_DCHECK(b_num_ != nullptr);
     b_num_->Clear();
   }
-  type_ = 0;
   _has_bits_.Clear();
   _internal_metadata_.Clear();
 }
@@ -2574,17 +2426,9 @@ const char* Accepted::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::i
     ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
     CHK_(ptr);
     switch (tag >> 3) {
-      // required int32 type = 1;
+      // required .Ballot b_num = 1;
       case 1:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 8)) {
-          _Internal::set_has_type(&has_bits);
-          type_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint(&ptr);
-          CHK_(ptr);
-        } else goto handle_unusual;
-        continue;
-      // required .Ballot b_num = 2;
-      case 2:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 18)) {
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 10)) {
           ptr = ctx->ParseMessage(_internal_mutable_b_num(), ptr);
           CHK_(ptr);
         } else goto handle_unusual;
@@ -2617,18 +2461,12 @@ failure:
   (void) cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
-  // required int32 type = 1;
-  if (cached_has_bits & 0x00000002u) {
-    target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(1, this->_internal_type(), target);
-  }
-
-  // required .Ballot b_num = 2;
+  // required .Ballot b_num = 1;
   if (cached_has_bits & 0x00000001u) {
     target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
       InternalWriteMessage(
-        2, _Internal::b_num(this), target, stream);
+        1, _Internal::b_num(this), target, stream);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -2639,43 +2477,15 @@ failure:
   return target;
 }
 
-size_t Accepted::RequiredFieldsByteSizeFallback() const {
-// @@protoc_insertion_point(required_fields_byte_size_fallback_start:Accepted)
-  size_t total_size = 0;
-
-  if (_internal_has_b_num()) {
-    // required .Ballot b_num = 2;
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
-        *b_num_);
-  }
-
-  if (_internal_has_type()) {
-    // required int32 type = 1;
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
-        this->_internal_type());
-  }
-
-  return total_size;
-}
 size_t Accepted::ByteSizeLong() const {
 // @@protoc_insertion_point(message_byte_size_start:Accepted)
   size_t total_size = 0;
 
-  if (((_has_bits_[0] & 0x00000003) ^ 0x00000003) == 0) {  // All required fields are present.
-    // required .Ballot b_num = 2;
+  // required .Ballot b_num = 1;
+  if (_internal_has_b_num()) {
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
         *b_num_);
-
-    // required int32 type = 1;
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
-        this->_internal_type());
-
-  } else {
-    total_size += RequiredFieldsByteSizeFallback();
   }
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
@@ -2712,15 +2522,8 @@ void Accepted::MergeFrom(const Accepted& from) {
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  cached_has_bits = from._has_bits_[0];
-  if (cached_has_bits & 0x00000003u) {
-    if (cached_has_bits & 0x00000001u) {
-      _internal_mutable_b_num()->::Ballot::MergeFrom(from._internal_b_num());
-    }
-    if (cached_has_bits & 0x00000002u) {
-      type_ = from.type_;
-    }
-    _has_bits_[0] |= cached_has_bits;
+  if (from._internal_has_b_num()) {
+    _internal_mutable_b_num()->::Ballot::MergeFrom(from._internal_b_num());
   }
 }
 
@@ -2739,7 +2542,7 @@ void Accepted::CopyFrom(const Accepted& from) {
 }
 
 bool Accepted::IsInitialized() const {
-  if ((_has_bits_[0] & 0x00000003) != 0x00000003) return false;
+  if ((_has_bits_[0] & 0x00000001) != 0x00000001) return false;
   if (_internal_has_b_num()) {
     if (!b_num_->IsInitialized()) return false;
   }
@@ -2751,7 +2554,6 @@ void Accepted::InternalSwap(Accepted* other) {
   _internal_metadata_.Swap(&other->_internal_metadata_);
   swap(_has_bits_[0], other->_has_bits_[0]);
   swap(b_num_, other->b_num_);
-  swap(type_, other->type_);
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata Accepted::GetMetadata() const {
@@ -2770,9 +2572,6 @@ void Decide::InitAsDefaultInstance() {
 class Decide::_Internal {
  public:
   using HasBits = decltype(std::declval<Decide>()._has_bits_);
-  static void set_has_type(HasBits* has_bits) {
-    (*has_bits)[0] |= 4u;
-  }
   static const ::Ballot& b_num(const Decide* msg);
   static void set_has_b_num(HasBits* has_bits) {
     (*has_bits)[0] |= 1u;
@@ -2811,15 +2610,14 @@ Decide::Decide(const Decide& from)
   } else {
     block_ = nullptr;
   }
-  type_ = from.type_;
   // @@protoc_insertion_point(copy_constructor:Decide)
 }
 
 void Decide::SharedCtor() {
   ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&scc_info_Decide_Msg_2eproto.base);
   ::memset(&b_num_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&type_) -
-      reinterpret_cast<char*>(&b_num_)) + sizeof(type_));
+      reinterpret_cast<char*>(&block_) -
+      reinterpret_cast<char*>(&b_num_)) + sizeof(block_));
 }
 
 Decide::~Decide() {
@@ -2858,7 +2656,6 @@ void Decide::Clear() {
       block_->Clear();
     }
   }
-  type_ = 0;
   _has_bits_.Clear();
   _internal_metadata_.Clear();
 }
@@ -2871,24 +2668,16 @@ const char* Decide::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::int
     ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
     CHK_(ptr);
     switch (tag >> 3) {
-      // required int32 type = 1;
+      // required .Ballot b_num = 1;
       case 1:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 8)) {
-          _Internal::set_has_type(&has_bits);
-          type_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint(&ptr);
-          CHK_(ptr);
-        } else goto handle_unusual;
-        continue;
-      // required .Ballot b_num = 2;
-      case 2:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 18)) {
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 10)) {
           ptr = ctx->ParseMessage(_internal_mutable_b_num(), ptr);
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
-      // required .MsgBlock block = 3;
-      case 3:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 26)) {
+      // required .MsgBlock block = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 18)) {
           ptr = ctx->ParseMessage(_internal_mutable_block(), ptr);
           CHK_(ptr);
         } else goto handle_unusual;
@@ -2921,26 +2710,20 @@ failure:
   (void) cached_has_bits;
 
   cached_has_bits = _has_bits_[0];
-  // required int32 type = 1;
-  if (cached_has_bits & 0x00000004u) {
-    target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(1, this->_internal_type(), target);
-  }
-
-  // required .Ballot b_num = 2;
+  // required .Ballot b_num = 1;
   if (cached_has_bits & 0x00000001u) {
     target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
       InternalWriteMessage(
-        2, _Internal::b_num(this), target, stream);
+        1, _Internal::b_num(this), target, stream);
   }
 
-  // required .MsgBlock block = 3;
+  // required .MsgBlock block = 2;
   if (cached_has_bits & 0x00000002u) {
     target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
       InternalWriteMessage(
-        3, _Internal::block(this), target, stream);
+        2, _Internal::block(this), target, stream);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -2956,24 +2739,17 @@ size_t Decide::RequiredFieldsByteSizeFallback() const {
   size_t total_size = 0;
 
   if (_internal_has_b_num()) {
-    // required .Ballot b_num = 2;
+    // required .Ballot b_num = 1;
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
         *b_num_);
   }
 
   if (_internal_has_block()) {
-    // required .MsgBlock block = 3;
+    // required .MsgBlock block = 2;
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
         *block_);
-  }
-
-  if (_internal_has_type()) {
-    // required int32 type = 1;
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
-        this->_internal_type());
   }
 
   return total_size;
@@ -2982,21 +2758,16 @@ size_t Decide::ByteSizeLong() const {
 // @@protoc_insertion_point(message_byte_size_start:Decide)
   size_t total_size = 0;
 
-  if (((_has_bits_[0] & 0x00000007) ^ 0x00000007) == 0) {  // All required fields are present.
-    // required .Ballot b_num = 2;
+  if (((_has_bits_[0] & 0x00000003) ^ 0x00000003) == 0) {  // All required fields are present.
+    // required .Ballot b_num = 1;
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
         *b_num_);
 
-    // required .MsgBlock block = 3;
+    // required .MsgBlock block = 2;
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
         *block_);
-
-    // required int32 type = 1;
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
-        this->_internal_type());
 
   } else {
     total_size += RequiredFieldsByteSizeFallback();
@@ -3037,17 +2808,13 @@ void Decide::MergeFrom(const Decide& from) {
   (void) cached_has_bits;
 
   cached_has_bits = from._has_bits_[0];
-  if (cached_has_bits & 0x00000007u) {
+  if (cached_has_bits & 0x00000003u) {
     if (cached_has_bits & 0x00000001u) {
       _internal_mutable_b_num()->::Ballot::MergeFrom(from._internal_b_num());
     }
     if (cached_has_bits & 0x00000002u) {
       _internal_mutable_block()->::MsgBlock::MergeFrom(from._internal_block());
     }
-    if (cached_has_bits & 0x00000004u) {
-      type_ = from.type_;
-    }
-    _has_bits_[0] |= cached_has_bits;
   }
 }
 
@@ -3066,7 +2833,7 @@ void Decide::CopyFrom(const Decide& from) {
 }
 
 bool Decide::IsInitialized() const {
-  if ((_has_bits_[0] & 0x00000007) != 0x00000007) return false;
+  if ((_has_bits_[0] & 0x00000003) != 0x00000003) return false;
   if (_internal_has_b_num()) {
     if (!b_num_->IsInitialized()) return false;
   }
@@ -3082,7 +2849,6 @@ void Decide::InternalSwap(Decide* other) {
   swap(_has_bits_[0], other->_has_bits_[0]);
   swap(b_num_, other->b_num_);
   swap(block_, other->block_);
-  swap(type_, other->type_);
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata Decide::GetMetadata() const {
