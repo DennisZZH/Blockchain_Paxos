@@ -376,7 +376,8 @@ void *process(void *arg)
                     else
                     {
                         accept_num = ballot_num;
-                        if (m.promise().ablock().tranxs().size() == 0)
+                        std::string txn = m.promise().ablock().tranxs();
+                        if (txn.length() == 0)
                         {
                             pthread_mutex_lock(&q_lock);
                             my_blo = Block(queue);
@@ -502,25 +503,25 @@ void *process(void *arg)
                     }
                 }
             }
-            // else if (m.type() == 5)
-            // {
-            //     // Extract all the transactions and update the balance if it is needed
-            //     std::cout << "Received " << m.DebugString();
-            //     newBlock = to_block(m.decide().block(), true);
-            //     bc.add_block(newBlock);
+            else if (m.type() == 5)
+            {
+                // Extract all the transactions and update the balance if it is needed
+                std::cout << "Received " << m.DebugString();
+                newBlock = to_block(m.decide().block(), true);
+                bc.add_block(newBlock);
 
-            //     if (isSendBack)
-            //     {
-            //         events.push_back(SendBack);
-            //         isSendBack = false;
-            //     }
-            // }
+                if (isSendBack)
+                {
+                    events.push_back(SendBack);
+                    isSendBack = false;
+                }
+            }
 
-            // else
-            // {
-            //     std::cout << "ERROR: Wrong message type!" << std::endl;
-            //     exit(0);
-            // }
+            else
+            {
+                std::cout << "ERROR: Wrong message type!" << std::endl;
+                exit(0);
+            }
         }
     }
 }

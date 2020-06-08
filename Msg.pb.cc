@@ -18,10 +18,9 @@ extern PROTOBUF_INTERNAL_EXPORT_Msg_2eproto ::PROTOBUF_NAMESPACE_ID::internal::S
 extern PROTOBUF_INTERNAL_EXPORT_Msg_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<2> scc_info_Accepted_Msg_2eproto;
 extern PROTOBUF_INTERNAL_EXPORT_Msg_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_Ballot_Msg_2eproto;
 extern PROTOBUF_INTERNAL_EXPORT_Msg_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<2> scc_info_Decide_Msg_2eproto;
-extern PROTOBUF_INTERNAL_EXPORT_Msg_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<1> scc_info_MsgBlock_Msg_2eproto;
+extern PROTOBUF_INTERNAL_EXPORT_Msg_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_MsgBlock_Msg_2eproto;
 extern PROTOBUF_INTERNAL_EXPORT_Msg_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<1> scc_info_Prepare_Msg_2eproto;
 extern PROTOBUF_INTERNAL_EXPORT_Msg_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<2> scc_info_Promise_Msg_2eproto;
-extern PROTOBUF_INTERNAL_EXPORT_Msg_2eproto ::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_Txn_Msg_2eproto;
 class BallotDefaultTypeInternal {
  public:
   ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<Ballot> _instance;
@@ -131,9 +130,8 @@ static void InitDefaultsscc_info_MsgBlock_Msg_2eproto() {
   ::MsgBlock::InitAsDefaultInstance();
 }
 
-::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<1> scc_info_MsgBlock_Msg_2eproto =
-    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 1, 0, InitDefaultsscc_info_MsgBlock_Msg_2eproto}, {
-      &scc_info_Txn_Msg_2eproto.base,}};
+::PROTOBUF_NAMESPACE_ID::internal::SCCInfo<0> scc_info_MsgBlock_Msg_2eproto =
+    {{ATOMIC_VAR_INIT(::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase::kUninitialized), 0, 0, InitDefaultsscc_info_MsgBlock_Msg_2eproto}, {}};
 
 static void InitDefaultsscc_info_Prepare_Msg_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
@@ -236,7 +234,7 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_Msg_2eproto::offsets[] PROTOBU
   PROTOBUF_FIELD_OFFSET(::MsgBlock, tranxs_),
   0,
   1,
-  ~0u,
+  2,
   PROTOBUF_FIELD_OFFSET(::Prepare, _has_bits_),
   PROTOBUF_FIELD_OFFSET(::Prepare, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -330,20 +328,20 @@ const char descriptor_table_protodef_Msg_2eproto[] PROTOBUF_SECTION_VARIABLE(pro
   "\n\tMsg.proto\"7\n\006Ballot\022\r\n\005seq_n\030\001 \002(\005\022\017\n\007"
   "proc_id\030\002 \002(\005\022\r\n\005depth\030\003 \002(\005\"7\n\003Txn\022\016\n\006s"
   "ender\030\001 \002(\005\022\020\n\010receiver\030\002 \002(\005\022\016\n\006amount\030"
-  "\003 \002(\005\"=\n\010MsgBlock\022\r\n\005nonce\030\001 \002(\t\022\014\n\004hash"
-  "\030\002 \002(\t\022\024\n\006tranxs\030\003 \003(\0132\004.Txn\"!\n\007Prepare\022"
-  "\026\n\005b_num\030\001 \002(\0132\007.Ballot\"U\n\007Promise\022\026\n\005b_"
-  "num\030\001 \002(\0132\007.Ballot\022\027\n\006ab_num\030\002 \002(\0132\007.Bal"
-  "lot\022\031\n\006ablock\030\003 \002(\0132\t.MsgBlock\"G\n\006Accept"
-  "\022\013\n\003pid\030\001 \002(\005\022\026\n\005b_num\030\002 \002(\0132\007.Ballot\022\030\n"
-  "\005block\030\003 \002(\0132\t.MsgBlock\"<\n\010Accepted\022\026\n\005b"
-  "_num\030\001 \002(\0132\007.Ballot\022\030\n\005block\030\002 \002(\0132\t.Msg"
-  "Block\":\n\006Decide\022\026\n\005b_num\030\001 \002(\0132\007.Ballot\022"
-  "\030\n\005block\030\002 \002(\0132\t.MsgBlock\"\240\001\n\013WireMessag"
-  "e\022\014\n\004type\030\001 \002(\005\022\031\n\007prepare\030\002 \001(\0132\010.Prepa"
-  "re\022\031\n\007promise\030\003 \001(\0132\010.Promise\022\027\n\006accept\030"
-  "\004 \001(\0132\007.Accept\022\033\n\010accepted\030\005 \001(\0132\t.Accep"
-  "ted\022\027\n\006decide\030\006 \001(\0132\007.Decide"
+  "\003 \002(\005\"7\n\010MsgBlock\022\r\n\005nonce\030\001 \002(\t\022\014\n\004hash"
+  "\030\002 \002(\t\022\016\n\006tranxs\030\003 \002(\t\"!\n\007Prepare\022\026\n\005b_n"
+  "um\030\001 \002(\0132\007.Ballot\"U\n\007Promise\022\026\n\005b_num\030\001 "
+  "\002(\0132\007.Ballot\022\027\n\006ab_num\030\002 \002(\0132\007.Ballot\022\031\n"
+  "\006ablock\030\003 \002(\0132\t.MsgBlock\"G\n\006Accept\022\013\n\003pi"
+  "d\030\001 \002(\005\022\026\n\005b_num\030\002 \002(\0132\007.Ballot\022\030\n\005block"
+  "\030\003 \002(\0132\t.MsgBlock\"<\n\010Accepted\022\026\n\005b_num\030\001"
+  " \002(\0132\007.Ballot\022\030\n\005block\030\002 \002(\0132\t.MsgBlock\""
+  ":\n\006Decide\022\026\n\005b_num\030\001 \002(\0132\007.Ballot\022\030\n\005blo"
+  "ck\030\002 \002(\0132\t.MsgBlock\"\240\001\n\013WireMessage\022\014\n\004t"
+  "ype\030\001 \002(\005\022\031\n\007prepare\030\002 \001(\0132\010.Prepare\022\031\n\007"
+  "promise\030\003 \001(\0132\010.Promise\022\027\n\006accept\030\004 \001(\0132"
+  "\007.Accept\022\033\n\010accepted\030\005 \001(\0132\t.Accepted\022\027\n"
+  "\006decide\030\006 \001(\0132\007.Decide"
   ;
 static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor_table_Msg_2eproto_deps[1] = {
 };
@@ -361,7 +359,7 @@ static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_Msg
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_Msg_2eproto_once;
 static bool descriptor_table_Msg_2eproto_initialized = false;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_Msg_2eproto = {
-  &descriptor_table_Msg_2eproto_initialized, descriptor_table_protodef_Msg_2eproto, "Msg.proto", 668,
+  &descriptor_table_Msg_2eproto_initialized, descriptor_table_protodef_Msg_2eproto, "Msg.proto", 662,
   &descriptor_table_Msg_2eproto_once, descriptor_table_Msg_2eproto_sccs, descriptor_table_Msg_2eproto_deps, 9, 0,
   schemas, file_default_instances, TableStruct_Msg_2eproto::offsets,
   file_level_metadata_Msg_2eproto, 9, file_level_enum_descriptors_Msg_2eproto, file_level_service_descriptors_Msg_2eproto,
@@ -967,6 +965,9 @@ class MsgBlock::_Internal {
   static void set_has_hash(HasBits* has_bits) {
     (*has_bits)[0] |= 2u;
   }
+  static void set_has_tranxs(HasBits* has_bits) {
+    (*has_bits)[0] |= 4u;
+  }
 };
 
 MsgBlock::MsgBlock()
@@ -977,8 +978,7 @@ MsgBlock::MsgBlock()
 MsgBlock::MsgBlock(const MsgBlock& from)
   : ::PROTOBUF_NAMESPACE_ID::Message(),
       _internal_metadata_(nullptr),
-      _has_bits_(from._has_bits_),
-      tranxs_(from.tranxs_) {
+      _has_bits_(from._has_bits_) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   nonce_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   if (from._internal_has_nonce()) {
@@ -988,6 +988,10 @@ MsgBlock::MsgBlock(const MsgBlock& from)
   if (from._internal_has_hash()) {
     hash_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.hash_);
   }
+  tranxs_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  if (from._internal_has_tranxs()) {
+    tranxs_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.tranxs_);
+  }
   // @@protoc_insertion_point(copy_constructor:MsgBlock)
 }
 
@@ -995,6 +999,7 @@ void MsgBlock::SharedCtor() {
   ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&scc_info_MsgBlock_Msg_2eproto.base);
   nonce_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   hash_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  tranxs_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
 
 MsgBlock::~MsgBlock() {
@@ -1005,6 +1010,7 @@ MsgBlock::~MsgBlock() {
 void MsgBlock::SharedDtor() {
   nonce_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   hash_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  tranxs_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
 
 void MsgBlock::SetCachedSize(int size) const {
@@ -1022,14 +1028,16 @@ void MsgBlock::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  tranxs_.Clear();
   cached_has_bits = _has_bits_[0];
-  if (cached_has_bits & 0x00000003u) {
+  if (cached_has_bits & 0x00000007u) {
     if (cached_has_bits & 0x00000001u) {
       nonce_.ClearNonDefaultToEmptyNoArena();
     }
     if (cached_has_bits & 0x00000002u) {
       hash_.ClearNonDefaultToEmptyNoArena();
+    }
+    if (cached_has_bits & 0x00000004u) {
+      tranxs_.ClearNonDefaultToEmptyNoArena();
     }
   }
   _has_bits_.Clear();
@@ -1066,16 +1074,15 @@ const char* MsgBlock::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::i
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
-      // repeated .Txn tranxs = 3;
+      // required string tranxs = 3;
       case 3:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 26)) {
-          ptr -= 1;
-          do {
-            ptr += 1;
-            ptr = ctx->ParseMessage(_internal_add_tranxs(), ptr);
-            CHK_(ptr);
-            if (!ctx->DataAvailable(ptr)) break;
-          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<26>(ptr));
+          auto str = _internal_mutable_tranxs();
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
+          #ifndef NDEBUG
+          ::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "MsgBlock.tranxs");
+          #endif  // !NDEBUG
+          CHK_(ptr);
         } else goto handle_unusual;
         continue;
       default: {
@@ -1126,12 +1133,14 @@ failure:
         2, this->_internal_hash(), target);
   }
 
-  // repeated .Txn tranxs = 3;
-  for (unsigned int i = 0,
-      n = static_cast<unsigned int>(this->_internal_tranxs_size()); i < n; i++) {
-    target = stream->EnsureSpace(target);
-    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
-      InternalWriteMessage(3, this->_internal_tranxs(i), target, stream);
+  // required string tranxs = 3;
+  if (cached_has_bits & 0x00000004u) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::VerifyUTF8StringNamedField(
+      this->_internal_tranxs().data(), static_cast<int>(this->_internal_tranxs().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SERIALIZE,
+      "MsgBlock.tranxs");
+    target = stream->WriteStringMaybeAliased(
+        3, this->_internal_tranxs(), target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -1160,13 +1169,20 @@ size_t MsgBlock::RequiredFieldsByteSizeFallback() const {
         this->_internal_hash());
   }
 
+  if (_internal_has_tranxs()) {
+    // required string tranxs = 3;
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_tranxs());
+  }
+
   return total_size;
 }
 size_t MsgBlock::ByteSizeLong() const {
 // @@protoc_insertion_point(message_byte_size_start:MsgBlock)
   size_t total_size = 0;
 
-  if (((_has_bits_[0] & 0x00000003) ^ 0x00000003) == 0) {  // All required fields are present.
+  if (((_has_bits_[0] & 0x00000007) ^ 0x00000007) == 0) {  // All required fields are present.
     // required string nonce = 1;
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
@@ -1177,19 +1193,17 @@ size_t MsgBlock::ByteSizeLong() const {
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
         this->_internal_hash());
 
+    // required string tranxs = 3;
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_tranxs());
+
   } else {
     total_size += RequiredFieldsByteSizeFallback();
   }
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
-
-  // repeated .Txn tranxs = 3;
-  total_size += 1UL * this->_internal_tranxs_size();
-  for (const auto& msg : this->tranxs_) {
-    total_size +=
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(msg);
-  }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     return ::PROTOBUF_NAMESPACE_ID::internal::ComputeUnknownFieldsSize(
@@ -1222,9 +1236,8 @@ void MsgBlock::MergeFrom(const MsgBlock& from) {
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  tranxs_.MergeFrom(from.tranxs_);
   cached_has_bits = from._has_bits_[0];
-  if (cached_has_bits & 0x00000003u) {
+  if (cached_has_bits & 0x00000007u) {
     if (cached_has_bits & 0x00000001u) {
       _has_bits_[0] |= 0x00000001u;
       nonce_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.nonce_);
@@ -1232,6 +1245,10 @@ void MsgBlock::MergeFrom(const MsgBlock& from) {
     if (cached_has_bits & 0x00000002u) {
       _has_bits_[0] |= 0x00000002u;
       hash_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.hash_);
+    }
+    if (cached_has_bits & 0x00000004u) {
+      _has_bits_[0] |= 0x00000004u;
+      tranxs_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.tranxs_);
     }
   }
 }
@@ -1251,8 +1268,7 @@ void MsgBlock::CopyFrom(const MsgBlock& from) {
 }
 
 bool MsgBlock::IsInitialized() const {
-  if ((_has_bits_[0] & 0x00000003) != 0x00000003) return false;
-  if (!::PROTOBUF_NAMESPACE_ID::internal::AllAreInitialized(tranxs_)) return false;
+  if ((_has_bits_[0] & 0x00000007) != 0x00000007) return false;
   return true;
 }
 
@@ -1260,10 +1276,11 @@ void MsgBlock::InternalSwap(MsgBlock* other) {
   using std::swap;
   _internal_metadata_.Swap(&other->_internal_metadata_);
   swap(_has_bits_[0], other->_has_bits_[0]);
-  tranxs_.InternalSwap(&other->tranxs_);
   nonce_.Swap(&other->nonce_, &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
     GetArenaNoVirtual());
   hash_.Swap(&other->hash_, &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+    GetArenaNoVirtual());
+  tranxs_.Swap(&other->tranxs_, &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
     GetArenaNoVirtual());
 }
 

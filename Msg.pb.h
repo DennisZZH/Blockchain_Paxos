@@ -554,28 +554,10 @@ class MsgBlock :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kTranxsFieldNumber = 3,
     kNonceFieldNumber = 1,
     kHashFieldNumber = 2,
+    kTranxsFieldNumber = 3,
   };
-  // repeated .Txn tranxs = 3;
-  int tranxs_size() const;
-  private:
-  int _internal_tranxs_size() const;
-  public:
-  void clear_tranxs();
-  ::Txn* mutable_tranxs(int index);
-  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Txn >*
-      mutable_tranxs();
-  private:
-  const ::Txn& _internal_tranxs(int index) const;
-  ::Txn* _internal_add_tranxs();
-  public:
-  const ::Txn& tranxs(int index) const;
-  ::Txn* add_tranxs();
-  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Txn >&
-      tranxs() const;
-
   // required string nonce = 1;
   bool has_nonce() const;
   private:
@@ -616,6 +598,26 @@ class MsgBlock :
   std::string* _internal_mutable_hash();
   public:
 
+  // required string tranxs = 3;
+  bool has_tranxs() const;
+  private:
+  bool _internal_has_tranxs() const;
+  public:
+  void clear_tranxs();
+  const std::string& tranxs() const;
+  void set_tranxs(const std::string& value);
+  void set_tranxs(std::string&& value);
+  void set_tranxs(const char* value);
+  void set_tranxs(const char* value, size_t size);
+  std::string* mutable_tranxs();
+  std::string* release_tranxs();
+  void set_allocated_tranxs(std::string* tranxs);
+  private:
+  const std::string& _internal_tranxs() const;
+  void _internal_set_tranxs(const std::string& value);
+  std::string* _internal_mutable_tranxs();
+  public:
+
   // @@protoc_insertion_point(class_scope:MsgBlock)
  private:
   class _Internal;
@@ -626,9 +628,9 @@ class MsgBlock :
   ::PROTOBUF_NAMESPACE_ID::internal::InternalMetadataWithArena _internal_metadata_;
   ::PROTOBUF_NAMESPACE_ID::internal::HasBits<1> _has_bits_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
-  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Txn > tranxs_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr nonce_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr hash_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr tranxs_;
   friend struct ::TableStruct_Msg_2eproto;
 };
 // -------------------------------------------------------------------
@@ -2007,43 +2009,75 @@ inline void MsgBlock::set_allocated_hash(std::string* hash) {
   // @@protoc_insertion_point(field_set_allocated:MsgBlock.hash)
 }
 
-// repeated .Txn tranxs = 3;
-inline int MsgBlock::_internal_tranxs_size() const {
-  return tranxs_.size();
+// required string tranxs = 3;
+inline bool MsgBlock::_internal_has_tranxs() const {
+  bool value = (_has_bits_[0] & 0x00000004u) != 0;
+  return value;
 }
-inline int MsgBlock::tranxs_size() const {
-  return _internal_tranxs_size();
+inline bool MsgBlock::has_tranxs() const {
+  return _internal_has_tranxs();
 }
 inline void MsgBlock::clear_tranxs() {
-  tranxs_.Clear();
+  tranxs_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  _has_bits_[0] &= ~0x00000004u;
 }
-inline ::Txn* MsgBlock::mutable_tranxs(int index) {
-  // @@protoc_insertion_point(field_mutable:MsgBlock.tranxs)
-  return tranxs_.Mutable(index);
-}
-inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Txn >*
-MsgBlock::mutable_tranxs() {
-  // @@protoc_insertion_point(field_mutable_list:MsgBlock.tranxs)
-  return &tranxs_;
-}
-inline const ::Txn& MsgBlock::_internal_tranxs(int index) const {
-  return tranxs_.Get(index);
-}
-inline const ::Txn& MsgBlock::tranxs(int index) const {
+inline const std::string& MsgBlock::tranxs() const {
   // @@protoc_insertion_point(field_get:MsgBlock.tranxs)
-  return _internal_tranxs(index);
+  return _internal_tranxs();
 }
-inline ::Txn* MsgBlock::_internal_add_tranxs() {
-  return tranxs_.Add();
+inline void MsgBlock::set_tranxs(const std::string& value) {
+  _internal_set_tranxs(value);
+  // @@protoc_insertion_point(field_set:MsgBlock.tranxs)
 }
-inline ::Txn* MsgBlock::add_tranxs() {
-  // @@protoc_insertion_point(field_add:MsgBlock.tranxs)
-  return _internal_add_tranxs();
+inline std::string* MsgBlock::mutable_tranxs() {
+  // @@protoc_insertion_point(field_mutable:MsgBlock.tranxs)
+  return _internal_mutable_tranxs();
 }
-inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::Txn >&
-MsgBlock::tranxs() const {
-  // @@protoc_insertion_point(field_list:MsgBlock.tranxs)
-  return tranxs_;
+inline const std::string& MsgBlock::_internal_tranxs() const {
+  return tranxs_.GetNoArena();
+}
+inline void MsgBlock::_internal_set_tranxs(const std::string& value) {
+  _has_bits_[0] |= 0x00000004u;
+  tranxs_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value);
+}
+inline void MsgBlock::set_tranxs(std::string&& value) {
+  _has_bits_[0] |= 0x00000004u;
+  tranxs_.SetNoArena(
+    &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:MsgBlock.tranxs)
+}
+inline void MsgBlock::set_tranxs(const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  _has_bits_[0] |= 0x00000004u;
+  tranxs_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:MsgBlock.tranxs)
+}
+inline void MsgBlock::set_tranxs(const char* value, size_t size) {
+  _has_bits_[0] |= 0x00000004u;
+  tranxs_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:MsgBlock.tranxs)
+}
+inline std::string* MsgBlock::_internal_mutable_tranxs() {
+  _has_bits_[0] |= 0x00000004u;
+  return tranxs_.MutableNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+inline std::string* MsgBlock::release_tranxs() {
+  // @@protoc_insertion_point(field_release:MsgBlock.tranxs)
+  if (!_internal_has_tranxs()) {
+    return nullptr;
+  }
+  _has_bits_[0] &= ~0x00000004u;
+  return tranxs_.ReleaseNonDefaultNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+inline void MsgBlock::set_allocated_tranxs(std::string* tranxs) {
+  if (tranxs != nullptr) {
+    _has_bits_[0] |= 0x00000004u;
+  } else {
+    _has_bits_[0] &= ~0x00000004u;
+  }
+  tranxs_.SetAllocatedNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), tranxs);
+  // @@protoc_insertion_point(field_set_allocated:MsgBlock.tranxs)
 }
 
 // -------------------------------------------------------------------

@@ -15,7 +15,7 @@ message	Txn {
 message	MsgBlock {
 	required string nonce = 1;
 	required string hash = 2;
-    repeated Txn tranxs = 3;
+    required string tranxs = 3;
 }
 
 message	Prepare {
