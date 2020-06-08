@@ -176,7 +176,7 @@ void *receiving(void *arg)
 
 bool compare_ballot(Ballot b1, Ballot b2)
 {
-    if (b1.depth() > b2.depth())
+    if (b1.depth() >= b2.depth())
     {
         if (b1.seq_n() > b2.seq_n())
             return true;
@@ -189,27 +189,31 @@ bool compare_ballot(Ballot b1, Ballot b2)
     return false;
 }
 
-std::vector<Transaction> Str_to_txns(std::string all_str){
+std::vector<Transaction> Str_to_txns(std::string all_str)
+{
     std::vector<Transaction> result;
     char copy[all_str.length() + 1];
     strcpy(copy, all_str.c_str());
     std::string txn_str;
     int sid, rid, amt;
-    char* token = strtok(copy, ";");
-    while(token != NULL){
+    char *token = strtok(copy, ";");
+    while (token != NULL)
+    {
         txn_str = std::string(token);
         sid = txn_str[0] - '0';
         rid = txn_str[1] - '0';
         amt = stoi(txn_str.substr(2, txn_str.length() - 2));
-        result.push_back(Transaction(sid,rid,amt));
+        result.push_back(Transaction(sid, rid, amt));
         token = strtok(NULL, ";");
-    }   
+    }
     return result;
 }
 
-std::string Txns_to_str(std::vector<Transaction> txns){
+std::string Txns_to_str(std::vector<Transaction> txns)
+{
     std::string txn_str = "", all_str = "";
-    for(int i = 0; i < txns.size(); i++){
+    for (int i = 0; i < txns.size(); i++)
+    {
         txn_str += std::to_string(txns[i].get_sid());
         txn_str += std::to_string(txns[i].get_rid());
         txn_str += std::to_string(txns[i].get_amt());
@@ -225,6 +229,16 @@ Block to_block(MsgBlock src, bool update)
 {
     std::vector<Transaction> trans_list;
     trans_list = Str_to_txns(src.tranxs());
+    if (update)
+    {
+        for (int i = 0; i < trans_list.size(); i++)
+        {
+            if (trans_list[i].get_rid() == pid)
+            {
+                balance += trans_list[i].get_amt();
+            }
+        }
+    }
     Block result(trans_list);
     return result;
 }
@@ -256,7 +270,6 @@ MsgBlock to_message(Block src)
     result.set_tranxs(trans_str);
     return result;
 }
-
 
 // Function to process the event
 void *process(void *arg)
@@ -300,6 +313,9 @@ void *process(void *arg)
                     // Boradcast prepare message
                     std::cout << "Broadcast " << m.DebugString();
                     str_message = m.SerializeAsString();
+                    ballot_num.set_proc_id(pid);
+                    ballot_num.set_seq_n(seq_num);
+                    ballot_num.set_depth(bc.get_num_blocks() + 1);
 
                     memset(&cliaddr, 0, sizeof(cliaddr));
 
@@ -325,6 +341,7 @@ void *process(void *arg)
                     myBallot = myPrepare->mutable_b_num();
                     myBallot->set_seq_n(++seq_num);
                     myBallot->set_depth(m.prepare().b_num().depth() + 1);
+                    myBallot->set_proc_id(pid);
                 }
                 else if (compare_ballot(m.prepare().b_num(), ballot_num))
                 {
@@ -377,14 +394,19 @@ void *process(void *arg)
                     if (num_promise < QUORUM_MAJORITY)
                     {
                         num_promise++;
-                        proms.push_back(m);
+                        std::string txn = m.promise().ablock().tranxs();
+                        if (txn.length() != 0)
+                        {
+                            // Push into vector if has transaction
+                            proms.push_back(m);
+                        }
                     }
                     else
                     {
                         accept_num = ballot_num;
-                        std::string txn = m.promise().ablock().tranxs();
-                        if (txn.length() == 0)
+                        if (proms.size() == 0)
                         {
+                            // Send its block
                             pthread_mutex_lock(&q_lock);
                             my_blo = Block(queue);
                             while (!queue.empty())
@@ -394,6 +416,7 @@ void *process(void *arg)
                         }
                         else
                         {
+                            // Send other's block
                             my_blo = find_blo_with_highest_b(proms);
                             isSendBack = true;
                         }
@@ -408,7 +431,6 @@ void *process(void *arg)
                         myAccept->set_pid(pid);
                         std::cout << "Broadcast " << response.DebugString();
                         str_message = response.SerializeAsString();
-                        
 
                         memset(&cliaddr, 0, sizeof(cliaddr));
 
@@ -482,6 +504,9 @@ void *process(void *arg)
 
                         memset(&cliaddr, 0, sizeof(cliaddr));
 
+                        newBlock = to_block(m.accepted().block(), true);
+                        bc.add_block(newBlock);
+
                         str_message = response.SerializeAsString();
 
                         std::cout << "Broadcast " << response.DebugString();
@@ -521,6 +546,8 @@ void *process(void *arg)
                     events.push_back(SendBack);
                     isSendBack = false;
                 }
+                accept_blo = Block();
+                accept_num.Clear();
             }
 
             else

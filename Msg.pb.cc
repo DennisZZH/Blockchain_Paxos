@@ -233,8 +233,8 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_Msg_2eproto::offsets[] PROTOBU
   PROTOBUF_FIELD_OFFSET(::MsgBlock, hash_),
   PROTOBUF_FIELD_OFFSET(::MsgBlock, tranxs_),
   0,
-  1,
   2,
+  1,
   PROTOBUF_FIELD_OFFSET(::Prepare, _has_bits_),
   PROTOBUF_FIELD_OFFSET(::Prepare, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -329,7 +329,7 @@ const char descriptor_table_protodef_Msg_2eproto[] PROTOBUF_SECTION_VARIABLE(pro
   "proc_id\030\002 \002(\005\022\r\n\005depth\030\003 \002(\005\"7\n\003Txn\022\016\n\006s"
   "ender\030\001 \002(\005\022\020\n\010receiver\030\002 \002(\005\022\016\n\006amount\030"
   "\003 \002(\005\"7\n\010MsgBlock\022\r\n\005nonce\030\001 \002(\t\022\014\n\004hash"
-  "\030\002 \002(\t\022\016\n\006tranxs\030\003 \002(\t\"!\n\007Prepare\022\026\n\005b_n"
+  "\030\003 \002(\t\022\016\n\006tranxs\030\002 \002(\t\"!\n\007Prepare\022\026\n\005b_n"
   "um\030\001 \002(\0132\007.Ballot\"U\n\007Promise\022\026\n\005b_num\030\001 "
   "\002(\0132\007.Ballot\022\027\n\006ab_num\030\002 \002(\0132\007.Ballot\022\031\n"
   "\006ablock\030\003 \002(\0132\t.MsgBlock\"G\n\006Accept\022\013\n\003pi"
@@ -963,10 +963,10 @@ class MsgBlock::_Internal {
     (*has_bits)[0] |= 1u;
   }
   static void set_has_hash(HasBits* has_bits) {
-    (*has_bits)[0] |= 2u;
+    (*has_bits)[0] |= 4u;
   }
   static void set_has_tranxs(HasBits* has_bits) {
-    (*has_bits)[0] |= 4u;
+    (*has_bits)[0] |= 2u;
   }
 };
 
@@ -984,13 +984,13 @@ MsgBlock::MsgBlock(const MsgBlock& from)
   if (from._internal_has_nonce()) {
     nonce_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.nonce_);
   }
-  hash_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
-  if (from._internal_has_hash()) {
-    hash_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.hash_);
-  }
   tranxs_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   if (from._internal_has_tranxs()) {
     tranxs_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.tranxs_);
+  }
+  hash_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  if (from._internal_has_hash()) {
+    hash_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.hash_);
   }
   // @@protoc_insertion_point(copy_constructor:MsgBlock)
 }
@@ -998,8 +998,8 @@ MsgBlock::MsgBlock(const MsgBlock& from)
 void MsgBlock::SharedCtor() {
   ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&scc_info_MsgBlock_Msg_2eproto.base);
   nonce_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
-  hash_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   tranxs_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  hash_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
 
 MsgBlock::~MsgBlock() {
@@ -1009,8 +1009,8 @@ MsgBlock::~MsgBlock() {
 
 void MsgBlock::SharedDtor() {
   nonce_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
-  hash_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   tranxs_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  hash_.DestroyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
 }
 
 void MsgBlock::SetCachedSize(int size) const {
@@ -1034,10 +1034,10 @@ void MsgBlock::Clear() {
       nonce_.ClearNonDefaultToEmptyNoArena();
     }
     if (cached_has_bits & 0x00000002u) {
-      hash_.ClearNonDefaultToEmptyNoArena();
+      tranxs_.ClearNonDefaultToEmptyNoArena();
     }
     if (cached_has_bits & 0x00000004u) {
-      tranxs_.ClearNonDefaultToEmptyNoArena();
+      hash_.ClearNonDefaultToEmptyNoArena();
     }
   }
   _has_bits_.Clear();
@@ -1063,24 +1063,24 @@ const char* MsgBlock::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::i
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
-      // required string hash = 2;
+      // required string tranxs = 2;
       case 2:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 18)) {
-          auto str = _internal_mutable_hash();
-          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
-          #ifndef NDEBUG
-          ::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "MsgBlock.hash");
-          #endif  // !NDEBUG
-          CHK_(ptr);
-        } else goto handle_unusual;
-        continue;
-      // required string tranxs = 3;
-      case 3:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 26)) {
           auto str = _internal_mutable_tranxs();
           ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
           #ifndef NDEBUG
           ::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "MsgBlock.tranxs");
+          #endif  // !NDEBUG
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // required string hash = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 26)) {
+          auto str = _internal_mutable_hash();
+          ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParser(str, ptr, ctx);
+          #ifndef NDEBUG
+          ::PROTOBUF_NAMESPACE_ID::internal::VerifyUTF8(str, "MsgBlock.hash");
           #endif  // !NDEBUG
           CHK_(ptr);
         } else goto handle_unusual;
@@ -1123,24 +1123,24 @@ failure:
         1, this->_internal_nonce(), target);
   }
 
-  // required string hash = 2;
+  // required string tranxs = 2;
   if (cached_has_bits & 0x00000002u) {
-    ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::VerifyUTF8StringNamedField(
-      this->_internal_hash().data(), static_cast<int>(this->_internal_hash().length()),
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SERIALIZE,
-      "MsgBlock.hash");
-    target = stream->WriteStringMaybeAliased(
-        2, this->_internal_hash(), target);
-  }
-
-  // required string tranxs = 3;
-  if (cached_has_bits & 0x00000004u) {
     ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::VerifyUTF8StringNamedField(
       this->_internal_tranxs().data(), static_cast<int>(this->_internal_tranxs().length()),
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SERIALIZE,
       "MsgBlock.tranxs");
     target = stream->WriteStringMaybeAliased(
-        3, this->_internal_tranxs(), target);
+        2, this->_internal_tranxs(), target);
+  }
+
+  // required string hash = 3;
+  if (cached_has_bits & 0x00000004u) {
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::VerifyUTF8StringNamedField(
+      this->_internal_hash().data(), static_cast<int>(this->_internal_hash().length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::SERIALIZE,
+      "MsgBlock.hash");
+    target = stream->WriteStringMaybeAliased(
+        3, this->_internal_hash(), target);
   }
 
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
@@ -1162,18 +1162,18 @@ size_t MsgBlock::RequiredFieldsByteSizeFallback() const {
         this->_internal_nonce());
   }
 
-  if (_internal_has_hash()) {
-    // required string hash = 2;
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
-        this->_internal_hash());
-  }
-
   if (_internal_has_tranxs()) {
-    // required string tranxs = 3;
+    // required string tranxs = 2;
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
         this->_internal_tranxs());
+  }
+
+  if (_internal_has_hash()) {
+    // required string hash = 3;
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_hash());
   }
 
   return total_size;
@@ -1188,15 +1188,15 @@ size_t MsgBlock::ByteSizeLong() const {
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
         this->_internal_nonce());
 
-    // required string hash = 2;
-    total_size += 1 +
-      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
-        this->_internal_hash());
-
-    // required string tranxs = 3;
+    // required string tranxs = 2;
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
         this->_internal_tranxs());
+
+    // required string hash = 3;
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+        this->_internal_hash());
 
   } else {
     total_size += RequiredFieldsByteSizeFallback();
@@ -1244,11 +1244,11 @@ void MsgBlock::MergeFrom(const MsgBlock& from) {
     }
     if (cached_has_bits & 0x00000002u) {
       _has_bits_[0] |= 0x00000002u;
-      hash_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.hash_);
+      tranxs_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.tranxs_);
     }
     if (cached_has_bits & 0x00000004u) {
       _has_bits_[0] |= 0x00000004u;
-      tranxs_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.tranxs_);
+      hash_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.hash_);
     }
   }
 }
@@ -1278,9 +1278,9 @@ void MsgBlock::InternalSwap(MsgBlock* other) {
   swap(_has_bits_[0], other->_has_bits_[0]);
   nonce_.Swap(&other->nonce_, &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
     GetArenaNoVirtual());
-  hash_.Swap(&other->hash_, &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
-    GetArenaNoVirtual());
   tranxs_.Swap(&other->tranxs_, &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+    GetArenaNoVirtual());
+  hash_.Swap(&other->hash_, &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
     GetArenaNoVirtual());
 }
 
