@@ -40,7 +40,7 @@ bool isSendBack = false;
 WireMessage SendBack;
 
 std::list<WireMessage> events; // require lock
-std::list<Transaction> queue;   // required lock
+std::list<Transaction> queue;  // required lock
 
 pthread_mutex_t e_lock, q_lock;
 
@@ -70,10 +70,12 @@ void moneyTransfer(int receiver, int amount)
             b->set_seq_n(ballot_num.seq_n());
             std::cout << "222\n";
             std::cout << "333\n";
+            std::cout << events.size() << "\n";
 
             pthread_mutex_lock(&e_lock);
             events.push_back(m);
             pthread_mutex_unlock(&e_lock);
+            std::cout << events.size() << "\n";
             std::cout << "444\n";
 
             isPrepare = true;
@@ -82,53 +84,6 @@ void moneyTransfer(int receiver, int amount)
         {
             std::cout << "Insufficient balance!\n";
         }
-    }
-}
-
-// Fail the link
-void failLink(int dst)
-{
-    CONNECT[dst - 1] = false;
-    // Send a message to tell the process to set the bool
-}
-
-// Fix the link
-void fixLink(int dst)
-{
-    CONNECT[dst - 1] = true;
-    // Push a restore message to the queue
-    WireMessage m;
-    Restore *r = new Restore();
-    r->set_depth(bc.get_num_blocks());
-    r->set_pid(pid);
-    m.set_allocated_restore(r);
-
-    // Push with lock/unlock
-    pthread_mutex_lock(&e_lock);
-    events.push_back(m);
-    pthread_mutex_unlock(&e_lock);
-}
-
-void failProccess()
-{
-    // Disconnect with all the processes
-    for (int i = 0; i < QUORUM_SIZE; i++)
-    {
-        CONNECT[i] = false;
-    }
-
-    for (int i = 0; i < QUORUM_SIZE; i++)
-    {
-        failLink(i + 1);
-    }
-
-    // Restore the process
-    std::string str;
-    std::cout << "Type anything to restore the process.\n";
-    std::cin >> str;
-    for (int i = 0; i < QUORUM_SIZE; i++)
-    {
-        fixLink(i + 1);
     }
 }
 
@@ -187,29 +142,23 @@ void connection_setup()
 // Function to receive messages and push it into the task queue
 void *receiving(void *arg)
 {
-    // The process this thread is listening
-    int *id = (int *)arg;
-
-    int left_size = sizeof(WireMessage), read_size = 0;
+    int read_size = 0;
     char buf[sizeof(WireMessage)];
     std::string str_WireMessage;
     WireMessage m;
     memset(&cliaddr, 0, sizeof(cliaddr));
     while (true)
     {
-        while (left_size > 0)
+        int len = sizeof(cliaddr);
+        read_size = recvfrom(sockfd, buf, sizeof(buf), MSG_WAITALL, (struct sockaddr *)&cliaddr, (socklen_t *)&len);
+        if (read_size < 0)
         {
-            int len = sizeof(cliaddr);
-            read_size = recvfrom(sockfd, buf, sizeof(buf), MSG_WAITALL, (struct sockaddr *)&cliaddr, (socklen_t*)&len);
-            if (read_size < 0)
-            {
-                std::cerr << "Error: Failed to receive message from P" << id << "\n";
-                exit(0);
-            }
-            left_size -= read_size;
-            str_WireMessage.append(buf);
-            bzero(buf, sizeof(buf));
+            std::cerr << "Error: Failed to receive message from P"
+                      << "\n";
+            exit(0);
         }
+        str_WireMessage.append(buf);
+        bzero(buf, sizeof(buf));
 
         m.ParseFromString(str_WireMessage);
 
@@ -299,14 +248,13 @@ void *process(void *arg)
     char buf[sizeof(WireMessage)];
     Block newBlock;
 
-    Prepare* myPrepare;
-    Promise* myPromise;
-    Accept* myAccept;
-    Accepted* myAccepted;
-    Decide* myDecide;
-    Ballot* myBallot;
-    MsgBlock* myBlock;
-
+    Prepare *myPrepare;
+    Promise *myPromise;
+    Accept *myAccept;
+    Accepted *myAccepted;
+    Decide *myDecide;
+    Ballot *myBallot;
+    MsgBlock *myBlock;
 
     while (true)
     {
@@ -317,6 +265,7 @@ void *process(void *arg)
             m = events.front();
             events.pop_front();
             pthread_mutex_unlock(&e_lock);
+            std::cout << events.size() << "\n";
             std::cout << "666\n";
 
             if (m.has_prepare())
@@ -324,7 +273,7 @@ void *process(void *arg)
                 std::cout << "777\n";
                 if (m.prepare().b_num().proc_id() == pid)
                 {
-                     std::cout << "888\n";
+                    std::cout << "888\n";
                     if (compare_ballot(ballot_num, m.prepare().b_num()))
                         continue;
 
@@ -336,15 +285,17 @@ void *process(void *arg)
 
                     cliaddr.sin_family = AF_INET;
                     cliaddr.sin_addr.s_addr = inet_addr(server_ip);
-                    for (int i = 0; i < QUORUM_SIZE; i++)
+                    for (int i = 1; i <= QUORUM_SIZE; i++)
                     {
-                        if (i == (pid + 1))
-                            continue;
-                        cliaddr.sin_port = htons(port + i + 1);
-                        sleep(2);
-                        sendto(sockfd, str_message.c_str(), sizeof(WireMessage), 0, (struct sockaddr *)&cliaddr, sizeof(cliaddr));
+                        if (i != pid)
+                        {
+                            std::cout << "Sending to P" << i << "\n";
+                            cliaddr.sin_port = htons(port + i);
+                            sleep(2);
+                            sendto(sockfd, str_message.c_str(), sizeof(WireMessage), 0, (struct sockaddr *)&cliaddr, sizeof(cliaddr));
+                        }
                     }
-
+                    std::cout << "Event size = " << events.size() << "\n";
                     // Clear num accepted and promise
                     num_accepted = 0;
                     num_promise = 0;
@@ -357,7 +308,7 @@ void *process(void *arg)
                 }
                 else if (compare_ballot(m.prepare().b_num(), ballot_num))
                 {
-                     std::cout << "999\n";
+                    std::cout << "999\n";
                     std::cout << "Received " << m.DebugString();
                     ballot_num = m.prepare().b_num();
                     // Send promise back
@@ -395,158 +346,158 @@ void *process(void *arg)
                     }
                 }
             }
-            else if (m.has_promise())
-            {
-                if (m.promise().b_num().depth() == ballot_num.depth() &&
-                    m.promise().b_num().seq_n() == ballot_num.seq_n() &&
-                    m.promise().b_num().proc_id() == ballot_num.proc_id())
-                {
-                    std::cout << "Received " << m.DebugString();
-                    if (num_promise < QUORUM_MAJORITY)
-                    {
-                        num_promise++;
-                        proms.push_back(m);
-                    }
-                    else
-                    {
-                        accept_num = ballot_num;
-                        if (m.promise().ablock().tranxs().size() == 0)
-                        {
-                            pthread_mutex_lock(&q_lock);
-                            my_blo = Block(queue);
-                            while (!queue.empty())
-                                queue.pop_front();
-                            pthread_mutex_unlock(&q_lock);
-                            isPrepare = false;
-                        }
-                        else
-                        {
-                            my_blo = find_blo_with_highest_b(proms);
-                            isSendBack = true;
-                        }
-                        // Broadcast accept message
-                        response.Clear();
-                        myAccept = response.mutable_accept();
-                        myBlock = myAccept->mutable_block();
-                        *myBlock = to_message(accept_blo);
-                        myBallot = myAccept->mutable_b_num();
-                        myBallot->CopyFrom(accept_num);
-                        myAccept->set_pid(pid);
-                        str_message = response.SerializeAsString();
+            // else if (m.has_promise())
+            // {
+            //     if (m.promise().b_num().depth() == ballot_num.depth() &&
+            //         m.promise().b_num().seq_n() == ballot_num.seq_n() &&
+            //         m.promise().b_num().proc_id() == ballot_num.proc_id())
+            //     {
+            //         std::cout << "Received " << m.DebugString();
+            //         if (num_promise < QUORUM_MAJORITY)
+            //         {
+            //             num_promise++;
+            //             proms.push_back(m);
+            //         }
+            //         else
+            //         {
+            //             accept_num = ballot_num;
+            //             if (m.promise().ablock().tranxs().size() == 0)
+            //             {
+            //                 pthread_mutex_lock(&q_lock);
+            //                 my_blo = Block(queue);
+            //                 while (!queue.empty())
+            //                     queue.pop_front();
+            //                 pthread_mutex_unlock(&q_lock);
+            //                 isPrepare = false;
+            //             }
+            //             else
+            //             {
+            //                 my_blo = find_blo_with_highest_b(proms);
+            //                 isSendBack = true;
+            //             }
+            //             // Broadcast accept message
+            //             response.Clear();
+            //             myAccept = response.mutable_accept();
+            //             myBlock = myAccept->mutable_block();
+            //             *myBlock = to_message(accept_blo);
+            //             myBallot = myAccept->mutable_b_num();
+            //             myBallot->CopyFrom(accept_num);
+            //             myAccept->set_pid(pid);
+            //             str_message = response.SerializeAsString();
 
-                        std::cout << "Broadcast " << response.DebugString();
+            //             std::cout << "Broadcast " << response.DebugString();
 
-                        memset(&cliaddr, 0, sizeof(cliaddr));
+            //             memset(&cliaddr, 0, sizeof(cliaddr));
 
-                        cliaddr.sin_family = AF_INET;
-                        cliaddr.sin_addr.s_addr = inet_addr(server_ip);
-                        for (int i = 0; i < QUORUM_SIZE; i++)
-                        {
-                            if (i == (pid + 1))
-                                continue;
-                            cliaddr.sin_port = htons(port + i + 1);
-                            int len = sizeof(cliaddr);
-                            sleep(2);
-                            sendto(sockfd, str_message.c_str(), sizeof(WireMessage), 0, (const sockaddr *) &cliaddr, len);
-                        }
+            //             cliaddr.sin_family = AF_INET;
+            //             cliaddr.sin_addr.s_addr = inet_addr(server_ip);
+            //             for (int i = 0; i < QUORUM_SIZE; i++)
+            //             {
+            //                 if (i == (pid - 1))
+            //                     continue;
+            //                 cliaddr.sin_port = htons(port + i + 1);
+            //                 int len = sizeof(cliaddr);
+            //                 sleep(2);
+            //                 sendto(sockfd, str_message.c_str(), sizeof(WireMessage), 0, (const sockaddr *) &cliaddr, len);
+            //             }
 
-                        num_promise = 0;
-                        proms.clear();
-                    }
-                }
-            }
-            else if (m.has_accept())
-            {
-                if (compare_ballot(m.accept().b_num(), ballot_num))
-                {
-                    std::cout << "Received " << m.DebugString();
-                    accept_num = m.accept().b_num();
-                    accept_blo = to_block(m.accept().block(), false);
-                    // Send accepted back
-                    response.Clear();
-                    myAccepted = response.mutable_accepted();
-                    myBallot = myAccepted->mutable_b_num();
-                    myBallot->CopyFrom(accept_num);
-                    myBlock = myAccepted->mutable_block();
-                    *myBlock = to_message(accept_blo);
+            //             num_promise = 0;
+            //             proms.clear();
+            //         }
+            //     }
+            // }
+            // else if (m.has_accept())
+            // {
+            //     if (compare_ballot(m.accept().b_num(), ballot_num))
+            //     {
+            //         std::cout << "Received " << m.DebugString();
+            //         accept_num = m.accept().b_num();
+            //         accept_blo = to_block(m.accept().block(), false);
+            //         // Send accepted back
+            //         response.Clear();
+            //         myAccepted = response.mutable_accepted();
+            //         myBallot = myAccepted->mutable_b_num();
+            //         myBallot->CopyFrom(accept_num);
+            //         myBlock = myAccepted->mutable_block();
+            //         *myBlock = to_message(accept_blo);
 
-                    memset(&cliaddr, 0, sizeof(cliaddr));
-                    cliaddr.sin_family = AF_INET;
-                    cliaddr.sin_addr.s_addr = inet_addr(server_ip);
-                    cliaddr.sin_port = htons(port + m.accept().pid());
-                    str_message = response.SerializeAsString();
+            //         memset(&cliaddr, 0, sizeof(cliaddr));
+            //         cliaddr.sin_family = AF_INET;
+            //         cliaddr.sin_addr.s_addr = inet_addr(server_ip);
+            //         cliaddr.sin_port = htons(port + m.accept().pid());
+            //         str_message = response.SerializeAsString();
 
-                    std::cout << "Send " << response.DebugString();
+            //         std::cout << "Send " << response.DebugString();
 
-                    int len = sizeof(cliaddr);
-                    sendto(sockfd, str_message.c_str(), sizeof(WireMessage), 0, (const sockaddr *)&cliaddr, len);
-                }
-            }
-            else if (m.has_accepted())
-            {
-                if (m.accepted().b_num().depth() == ballot_num.depth() &&
-                    m.accepted().b_num().seq_n() == ballot_num.seq_n() &&
-                    m.accepted().b_num().proc_id() == ballot_num.proc_id())
-                {
-                    std::cout << "Received " << m.DebugString();
-                    num_accepted++;
-                    if (num_accepted >= QUORUM_MAJORITY)
-                    {
-                        // Broadcast decide message
-                        response.Clear();
-                        myDecide = response.mutable_decide();
-                        myBlock = myDecide->mutable_block();
-                        myBlock->CopyFrom(m.accepted().block());
-                        myBallot = myDecide->mutable_b_num();
-                        myBallot->CopyFrom(m.accepted().b_num());
+            //         int len = sizeof(cliaddr);
+            //         sendto(sockfd, str_message.c_str(), sizeof(WireMessage), 0, (const sockaddr *)&cliaddr, len);
+            //     }
+            // }
+            // else if (m.has_accepted())
+            // {
+            //     if (m.accepted().b_num().depth() == ballot_num.depth() &&
+            //         m.accepted().b_num().seq_n() == ballot_num.seq_n() &&
+            //         m.accepted().b_num().proc_id() == ballot_num.proc_id())
+            //     {
+            //         std::cout << "Received " << m.DebugString();
+            //         num_accepted++;
+            //         if (num_accepted >= QUORUM_MAJORITY)
+            //         {
+            //             // Broadcast decide message
+            //             response.Clear();
+            //             myDecide = response.mutable_decide();
+            //             myBlock = myDecide->mutable_block();
+            //             myBlock->CopyFrom(m.accepted().block());
+            //             myBallot = myDecide->mutable_b_num();
+            //             myBallot->CopyFrom(m.accepted().b_num());
 
-                        memset(&cliaddr, 0, sizeof(cliaddr));
+            //             memset(&cliaddr, 0, sizeof(cliaddr));
 
-                        str_message = response.SerializeAsString();
+            //             str_message = response.SerializeAsString();
 
-                        std::cout << "Broadcast " << response.DebugString();
+            //             std::cout << "Broadcast " << response.DebugString();
 
-                        cliaddr.sin_family = AF_INET;
-                        cliaddr.sin_addr.s_addr = inet_addr(server_ip);
-                        for (int i = 0; i < QUORUM_SIZE; i++)
-                        {
-                            if (i == (pid + 1))
-                                continue;
-                            cliaddr.sin_port = htons(port + i + 1);
-                            int len = sizeof(cliaddr);
-                            sleep(2);
-                            sendto(sockfd, str_message.c_str(), sizeof(WireMessage), 0, (const sockaddr*)&cliaddr, len);
-                        }
+            //             cliaddr.sin_family = AF_INET;
+            //             cliaddr.sin_addr.s_addr = inet_addr(server_ip);
+            //             for (int i = 0; i < QUORUM_SIZE; i++)
+            //             {
+            //                 if (i == (pid - 1))
+            //                     continue;
+            //                 cliaddr.sin_port = htons(port + i + 1);
+            //                 int len = sizeof(cliaddr);
+            //                 sleep(2);
+            //                 sendto(sockfd, str_message.c_str(), sizeof(WireMessage), 0, (const sockaddr*)&cliaddr, len);
+            //             }
 
-                        num_accepted = 0;
+            //             num_accepted = 0;
 
-                        if (isSendBack)
-                        {
-                            events.push_back(SendBack);
-                            isSendBack = false;
-                        }
-                    }
-                }
-            }
-            else if (m.has_decide())
-            {
-                // Extract all the transactions and update the balance if it is needed
-                std::cout << "Received " << m.DebugString();
-                newBlock = to_block(m.decide().block(), true);
-                bc.add_block(newBlock);
+            //             if (isSendBack)
+            //             {
+            //                 events.push_back(SendBack);
+            //                 isSendBack = false;
+            //             }
+            //         }
+            //     }
+            // }
+            // else if (m.has_decide())
+            // {
+            //     // Extract all the transactions and update the balance if it is needed
+            //     std::cout << "Received " << m.DebugString();
+            //     newBlock = to_block(m.decide().block(), true);
+            //     bc.add_block(newBlock);
 
-                if (isSendBack)
-                {
-                    events.push_back(SendBack);
-                    isSendBack = false;
-                }
-            }
+            //     if (isSendBack)
+            //     {
+            //         events.push_back(SendBack);
+            //         isSendBack = false;
+            //     }
+            // }
 
-            else
-            {
-                std::cout << "ERROR: Wrong message type!" << std::endl;
-                exit(0);
-            }
+            // else
+            // {
+            //     std::cout << "ERROR: Wrong message type!" << std::endl;
+            //     exit(0);
+            // }
         }
     }
 }
@@ -576,11 +527,11 @@ int main()
     pthread_t comm, proc;
     pthread_create(&comm, NULL, receiving, (void *)&pid);
     pthread_create(&proc, NULL, process, NULL);
+    int job;
 
     while (true)
     {
-        int job;
-        std::cout << "What do you want to do?\n\t(0) Quit the session\n\t(1) New Money Transfer\n\t(2) Fail a link\n\t(3) Fix a link\n\t(4) Fail the process\n\t(5) Print blockchain\n\t(6) Print the balance\n\t(7) Print the pending transactions(queue)\n";
+        std::cout << "What do you want to do?\n\t(0) Quit the session\n\t(1) New Money Transfer\n\t(2) Print blockchain\n\t(3) Print the balance\n\t(4) Print the pending transactions(queue)\n";
         std::cin >> job;
 
         // Quit the session
@@ -598,48 +549,26 @@ int main()
             moneyTransfer(receiver, amount);
         }
 
-        // Fail a link
-        else if (job == 2)
-        {
-            int dst;
-            std::cout << "Which link you want to fail?\n";
-            std::cin >> dst;
-            failLink(dst);
-            std::cout << "You cannot communicate with P" << dst << " now\n";
-        }
-
-        // Fix a link
-        else if (job == 3)
-        {
-            int dst;
-            std::cout << "Which link you want to fix?\n";
-            std::cin >> dst;
-            fixLink(dst);
-            std::cout << "You can communicate with P" << dst << " now\n";
-        }
-
-        // Fail the process
-        else if (job == 4)
-        {
-            failProccess();
-        }
-
         // Print blockchain
-        else if (job == 5)
+        else if (job == 2)
         {
             printBlockchain();
         }
 
         // Print balance
-        else if (job == 6)
+        else if (job == 3)
         {
             printBalance();
         }
 
         // Print queue
-        else if (job == 7)
+        else if (job == 4)
         {
             printQueue();
+        }
+        else
+        {
+            std::cout << "Undefined job #\n";
         }
     }
 
