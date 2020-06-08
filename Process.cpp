@@ -289,49 +289,51 @@ void *process(void *arg)
     char buf[sizeof(WireMessage)];
     Block newBlock;
 
-    while (!events.empty())
+    while (true)
     {
-
-        pthread_mutex_lock(&e_lock);
-        m = events.front();
-        events.pop();
-        pthread_mutex_unlock(&e_lock);
-
-        if (m.has_prepare())
+        if (!events.empty())
         {
-            if (m.prepare().b_num().proc_id() == pid)
+            pthread_mutex_lock(&e_lock);
+            m = events.front();
+            events.pop();
+            pthread_mutex_unlock(&e_lock);
+
+            if (m.has_prepare())
             {
-                if(compare_ballot(ballot_num, m.prepare().b_num()) continue;
-
-                // Boradcast prepare message
-                str_message = m.SerializeAsString();
-
-                memset(&cliaddr, 0, sizeof(cliaddr));
-
-                cliaddr.sin_family = AF_INET;
-                cliaddr.sin_addr.s_addr = server_ip;
-                for (int i = 0; i < QUORUM_SIZE; i++)
+                if (m.prepare().b_num().proc_id() == pid)
                 {
-                    if (i == (pid + 1))
+                    if (compare_ballot(ballot_num, m.prepare().b_num()))
                         continue;
-                    cliaddr.sin_port = htons(port + i + 1);
-                    int len = sizeof(cliaddr);
-                    sleep(2);
-                    sendto(sockfd, str_message.c_str(), sizeof(WireMessage), &cliaddr, &len);
-                }
 
-                // Clear num accepted and promise
-                num_accepted = 0;
-                num_promise = 0;
-                // SendBack in case
-                SendBack = m;
-                SendBack.prepare().b_num().set_seq_n(++seq_num);
-                SendBack.prepare().b_num().set_depth(m.prepare().b_num().depth() + 1);
-            }
-            else
-            {
-                if (compare_ballot(m.prepare().b_num(), ballot_num))
+                    // Boradcast prepare message
+                    std::cout << "Broadcast " << m.DebugString();
+                    str_message = m.SerializeAsString();
+
+                    memset(&cliaddr, 0, sizeof(cliaddr));
+
+                    cliaddr.sin_family = AF_INET;
+                    cliaddr.sin_addr.s_addr = server_ip;
+                    for (int i = 0; i < QUORUM_SIZE; i++)
+                    {
+                        if (i == (pid + 1))
+                            continue;
+                        cliaddr.sin_port = htons(port + i + 1);
+                        int len = sizeof(cliaddr);
+                        sleep(2);
+                        sendto(sockfd, str_message.c_str(), sizeof(WireMessage), &cliaddr, &len);
+                    }
+
+                    // Clear num accepted and promise
+                    num_accepted = 0;
+                    num_promise = 0;
+                    // SendBack in case
+                    SendBack = m;
+                    SendBack.prepare().b_num().set_seq_n(++seq_num);
+                    SendBack.prepare().b_num().set_depth(m.prepare().b_num().depth() + 1);
+                }
+                else if (compare_ballot(m.prepare().b_num(), ballot_num))
                 {
+                    std::cout << "Received " << m.DebugString();
                     ballot_num = m.prepare().b_num();
                     // Send promise back
                     response.Clear();
@@ -343,11 +345,12 @@ void *process(void *arg)
                     memset(&cliaddr, 0, sizeof(cliaddr));
                     cliaddr.sin_family = AF_INET;
                     cliaddr.sin_addr.s_addr = server_ip;
-                    cliaddr.sin_port = htons(port + m.prepare().pid());
+                    cliaddr.sin_port = htons(port + m.prepare().b_num().proc_id());
                     str_message = response.SerializeAsString();
 
                     int len = sizeof(cliaddr);
                     sendto(sockfd, str_message.c_str(), sizeof(WireMessage), &cliaddr, &len);
+                    std::cout << "Send " << response.DebugString();
 
                     if (isPrepare)
                     {
@@ -357,136 +360,146 @@ void *process(void *arg)
                     }
                 }
             }
-        }
-        else if (m.has_promise())
-        {
-            if (m.promise().b_num() == ballot_num)
+            else if (m.has_promise())
             {
-                if (num_promise < QUORUM_MAJORITY)
+                if (m.promise().b_num() == ballot_num)
                 {
-                    num_promise++;
-                    proms.push_back(m);
-                }
-                else
-                {
-                    accept_num = ballot_num;
-                    if (m.promise().ablock().tranxs().size() == 0)
+                    std::cout << "Received " << m.DebugString();
+                    if (num_promise < QUORUM_MAJORITY)
                     {
-                        pthread_mutex_lock(&q_lock);
-                        my_blo = Block(queue);
-                        while (!queue.empty())
-                            queue.pop_front();
-                        pthread_mutex_unlock(&q_lock);
-                        isPrepare = false;
+                        num_promise++;
+                        proms.push_back(m);
                     }
                     else
                     {
-                        my_blo = find_blo_with_highest_b(proms);
-                        isSendBack = true;
+                        accept_num = ballot_num;
+                        if (m.promise().ablock().tranxs().size() == 0)
+                        {
+                            pthread_mutex_lock(&q_lock);
+                            my_blo = Block(queue);
+                            while (!queue.empty())
+                                queue.pop_front();
+                            pthread_mutex_unlock(&q_lock);
+                            isPrepare = false;
+                        }
+                        else
+                        {
+                            my_blo = find_blo_with_highest_b(proms);
+                            isSendBack = true;
+                        }
+                        // Broadcast accept message
+                        response.Clear();
+                        response.accept();
+                        response.accept().set_b_num(ballot_num);
+                        response.accept().set_block(to_message(accept_blo));
+                        str_message = response.SerializeAsString();
+
+                        std::cout << "Broadcast " << response.DebugString();
+
+                        memset(&cliaddr, 0, sizeof(cliaddr));
+
+                        cliaddr.sin_family = AF_INET;
+                        cliaddr.sin_addr.s_addr = server_ip;
+                        for (int i = 0; i < QUORUM_SIZE; i++)
+                        {
+                            if (i == (pid + 1))
+                                continue;
+                            cliaddr.sin_port = htons(port + i + 1);
+                            int len = sizeof(cliaddr);
+                            sleep(2);
+                            sendto(sockfd, str_message.c_str(), sizeof(WireMessage), &cliaddr, &len);
+                        }
+
+                        num_promise = 0;
+                        proms.clear();
                     }
-                    // Broadcast accept message
-                    response.Clear();
-                    response.accept();
-                    response.accept().set_b_num(ballot_num);
-                    response.accept().set_block(to_message(accept_blo));
-                    str_message = response.SerializeAsString();
-
-                    memset(&cliaddr, 0, sizeof(cliaddr));
-
-                    cliaddr.sin_family = AF_INET;
-                    cliaddr.sin_addr.s_addr = server_ip;
-                    for (int i = 0; i < QUORUM_SIZE; i++)
-                    {
-                        if (i == (pid + 1))
-                            continue;
-                        cliaddr.sin_port = htons(port + i + 1);
-                        int len = sizeof(cliaddr);
-                        sleep(2);
-                        sendto(sockfd, str_message.c_str(), sizeof(WireMessage), &cliaddr, &len);
-                    }
-
-                    num_promise = 0;
-                    proms.clear();
                 }
             }
-        }
-        else if (m.has_accept())
-        {
-            if (compare_ballot(m.accept().b_num(), ballot_num))
+            else if (m.has_accept())
             {
-                accept_num = m.accept().b_num();
-                accept_blo = m.accept().block();
-                // Send accepted back
-                response.Clear();
-                response.accepted();
-                response.accepted().set_b_num(accept_num);
-                response.accepted().set_block(to_message(accept_blo));
-
-                memset(&cliaddr, 0, sizeof(cliaddr));
-                cliaddr.sin_family = AF_INET;
-                cliaddr.sin_addr.s_addr = server_ip;
-                cliaddr.sin_port = htons(port + m.accept(().pid());
-                str_message = response.SerializeAsString();
-
-                int len = sizeof(cliaddr);
-                sendto(sockfd, str_message.c_str(), sizeof(WireMessage), &cliaddr, &len);
-            }
-        }
-        else if (m.has_accpted())
-        {
-            if (m.accepted().b_num() == ballot_num)
-            {
-                num_accepted++;
-                if (num_accepted >= QUORUM_MAJORITY)
+                if (compare_ballot(m.accept().b_num(), ballot_num))
                 {
-                    // Broadcast decide message
+                    std::cout << "Received " << m.DebugString();
+                    accept_num = m.accept().b_num();
+                    accept_blo = m.accept().block();
+                    // Send accepted back
                     response.Clear();
-                    response.decide();
-                    response.decide().set_b_num(m.accepted().b_num());
-                    response.decide().set_block(m.accepted().block());
-                    str_message = response.SerializeAsString();
+                    response.accepted();
+                    response.accepted().set_b_num(accept_num);
+                    response.accepted().set_block(to_message(accept_blo));
 
                     memset(&cliaddr, 0, sizeof(cliaddr));
-
                     cliaddr.sin_family = AF_INET;
                     cliaddr.sin_addr.s_addr = server_ip;
-                    for (int i = 0; i < QUORUM_SIZE; i++)
-                    {
-                        if (i == (pid + 1))
-                            continue;
-                        cliaddr.sin_port = htons(port + i + 1);
-                        int len = sizeof(cliaddr);
-                        sleep(2);
-                        sendto(sockfd, str_message.c_str(), sizeof(WireMessage), &cliaddr, &len);
-                    }
+                    cliaddr.sin_port = htons(port + m.accept().pid());
+                    str_message = response.SerializeAsString();
 
-                    num_accepted = 0;
+                    std::cout << "Send " << response.DebugString();
 
-                    if (isSendBack)
+                    int len = sizeof(cliaddr);
+                    sendto(sockfd, str_message.c_str(), sizeof(WireMessage), &cliaddr, &len);
+                }
+            }
+            else if (m.has_accpted())
+            {
+                if (m.accepted().b_num() == ballot_num)
+                {
+                    std::cout << "Received " << m.DebugString();
+                    num_accepted++;
+                    if (num_accepted >= QUORUM_MAJORITY)
                     {
-                        events.push(SendBack);
-                        isSendBack = false;
+                        // Broadcast decide message
+                        response.Clear();
+                        response.decide();
+                        response.decide().set_b_num(m.accepted().b_num());
+                        response.decide().set_block(m.accepted().block());
+                        str_message = response.SerializeAsString();
+
+                        memset(&cliaddr, 0, sizeof(cliaddr));
+
+                        std::cout << "Broadcast " << response.DebugString();
+
+                        cliaddr.sin_family = AF_INET;
+                        cliaddr.sin_addr.s_addr = server_ip;
+                        for (int i = 0; i < QUORUM_SIZE; i++)
+                        {
+                            if (i == (pid + 1))
+                                continue;
+                            cliaddr.sin_port = htons(port + i + 1);
+                            int len = sizeof(cliaddr);
+                            sleep(2);
+                            sendto(sockfd, str_message.c_str(), sizeof(WireMessage), &cliaddr, &len);
+                        }
+
+                        num_accepted = 0;
+
+                        if (isSendBack)
+                        {
+                            events.push(SendBack);
+                            isSendBack = false;
+                        }
                     }
                 }
             }
-        }
-        else if (m.has_decide())
-        {
-            // Extract all the transactions and update the balance if it is needed
-            newBlock = to_block(m.decide().block(), true);
-            bc.add_block(newBlock);
-
-            if (isSendBack)
+            else if (m.has_decide())
             {
-                events.push(SendBack);
-                isSendBack = false;
-            }
-        }
+                // Extract all the transactions and update the balance if it is needed
+                std::cout << "Received " << m.DebugString();
+                newBlock = to_block(m.decide().block(), true);
+                bc.add_block(newBlock);
 
-        else
-        {
-            std::cout << "ERROR: Wrong message type!" << std::endl;
-            exit(0);
+                if (isSendBack)
+                {
+                    events.push(SendBack);
+                    isSendBack = false;
+                }
+            }
+
+            else
+            {
+                std::cout << "ERROR: Wrong message type!" << std::endl;
+                exit(0);
+            }
         }
     }
 }
