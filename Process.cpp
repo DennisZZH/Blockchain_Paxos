@@ -235,7 +235,7 @@ Block find_blo_with_highest_b(std::vector<WireMessage> proms)
             maxb = proms[i];
         }
     }
-    Block result = to_message(maxb.promise().ablock());
+    Block result = to_block(maxb.promise().ablock());
     return result;
 }
 
