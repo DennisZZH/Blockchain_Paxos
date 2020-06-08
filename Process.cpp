@@ -189,30 +189,42 @@ bool compare_ballot(Ballot b1, Ballot b2)
     return false;
 }
 
-std::vector<Transaction> Str_to_txns(std::string str){
-
+std::vector<Transaction> Str_to_txns(std::string all_str){
+    std::vector<Transaction> result;
+    char copy[all_str.length() + 1];
+    strcpy(copy, all_str.c_str());
+    std::string txn_str;
+    int sid, rid, amt;
+    char* token = strtok(copy, ";");
+    while(token != NULL){
+        txn_str = std::string(token);
+        sid = txn_str[0] - '0';
+        rid = txn_str[1] - '0';
+        amt = stoi(txn_str.substr(2, txn_str.length() - 2));
+        result.push_back(Transaction(sid,rid,amt));
+        token = strtok(NULL, ";");
+    }   
+    return result;
 }
 
 std::string Txns_to_str(std::vector<Transaction> txns){
-    
+    std::string txn_str = "", all_str = "";
+    for(int i = 0; i < txns.size(); i++){
+        txn_str += std::to_string(txns[i].get_sid());
+        txn_str += std::to_string(txns[i].get_rid());
+        txn_str += std::to_string(txns[i].get_amt());
+        txn_str += ";";
+        all_str += txn_str;
+        txn_str = "";
+    }
+    return all_str;
 }
 
 // Set update to true if you want to update the receiver balance
 Block to_block(MsgBlock src, bool update)
 {
-    std::list<Transaction> trans_list;
-    for (int i = 0; i < src.tranxs_size(); i++)
-    {
-        int sender = src.tranxs().at(i).sender();
-        int receiver = src.tranxs().at(i).receiver();
-        int amount = src.tranxs().at(i).amount();
-        Transaction newTrans(sender, receiver, amount);
-        trans_list.push_back(newTrans);
-        if (update && receiver == pid)
-        {
-            balance += amount;
-        }
-    }
+    std::vector<Transaction> trans_list;
+    trans_list = Str_to_txns(src.tranxs());
     Block result(trans_list);
     return result;
 }
@@ -234,20 +246,14 @@ Block find_blo_with_highest_b(std::vector<WireMessage> proms)
 
 MsgBlock to_message(Block src)
 {
-    std::vector<Transaction> trans_list;
-    trans_list = src.get_txns();
+    std::vector<Transaction> trans_list = src.get_txns();
+    std::string trans_str = Txns_to_str(trans_list);
     std::string hash = src.get_hash();
     std::string nonce = src.get_nonce();
     MsgBlock result;
     result.set_hash(hash);
     result.set_nonce(nonce);
-    for (int i = 0; i < trans_list.size(); i++)
-    {
-        Txn *newTxn = result.add_tranxs();
-        newTxn->set_sender(trans_list[i].get_sid());
-        newTxn->set_receiver(trans_list[i].get_rid());
-        newTxn->set_amount(trans_list[i].get_amt());
-    }
+    result.set_tranxs(trans_str);
     return result;
 }
 

@@ -40,6 +40,12 @@ class Block{
             nonce = find_nonce();
             hash = "";
         };
+        Block(std::vector<Transaction> trans_vec){
+            prev = NULL;
+            txns = trans_vec;
+            nonce = find_nonce();
+            hash = "";
+        }
         Block(const Block &blo){
             prev = blo.prev;
             txns = blo.txns;
