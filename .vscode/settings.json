@@ -46,6 +46,7 @@
         "streambuf": "cpp",
         "typeinfo": "cpp"
     },
-    "C_Cpp.default.includePath": ["/usr/local/include",
+    "C_Cpp.default.includePath": ["${default}",
+        "/usr/local/include",
     "/Users/shihengwang/protobuf-3.11.4/"]
 }
