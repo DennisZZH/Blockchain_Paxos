@@ -18,12 +18,6 @@ message	MsgBlock {
     repeated Txn tranxs = 3;
 }
 
-message Restore {
-    required int32 depth = 1;
-    repeated MsgBlock blocks = 2;
-    required int32 pid = 3;
-}
-
 message	Prepare {
     required Ballot b_num = 1;
 }
@@ -35,9 +29,9 @@ message	Promise {
 }
 
 message	Accept {
-	required Ballot b_num = 1;
-    required MsgBlock block = 2;
-    required int32 pid = 3;
+    required int32 pid = 1;
+	required Ballot b_num = 2;
+    required MsgBlock block = 3;
 }
 		
 message	Accepted {
@@ -57,6 +51,5 @@ message WireMessage {
         Accept accept = 3;
         Accepted accepted = 4;
         Decide decide = 5;
-        Restore restore = 6;
     }
 }

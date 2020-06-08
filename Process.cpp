@@ -377,9 +377,9 @@ void *process(void *arg)
                         response.Clear();
                         myAccept = response.mutable_accept();
                         myBlock = myAccept->mutable_block();
-                        *myBlock = to_message(accept_blo);
+                        myBlock->CopyFrom(to_message(my_blo));
                         myBallot = myAccept->mutable_b_num();
-                        myBallot->CopyFrom(accept_num);
+                        myBallot->CopyFrom(ballot_num);
                         myAccept->set_pid(pid);
                         str_message = response.SerializeAsString();
 
@@ -394,10 +394,9 @@ void *process(void *arg)
                             if (i != pid)
                             {
                                 std::cout << "Sending to P" << i << "\n";
-                                cliaddr.sin_port = htons(port + i + 1);
-                                int len = sizeof(cliaddr);
+                                cliaddr.sin_port = htons(port + i);
                                 sleep(2);
-                                sendto(sockfd, str_message.c_str(), sizeof(WireMessage), 0, (const sockaddr *)&cliaddr, len);
+                                sendto(sockfd, str_message.c_str(), sizeof(WireMessage), 0, (const sockaddr *)&cliaddr, sizeof(cliaddr));
                             }
                         }
 
@@ -406,33 +405,33 @@ void *process(void *arg)
                     }
                 }
             }
-            // else if (m.has_accept())
-            // {
-            //     if (compare_ballot(m.accept().b_num(), ballot_num))
-            //     {
-            //         std::cout << "Received " << m.DebugString();
-            //         accept_num = m.accept().b_num();
-            //         accept_blo = to_block(m.accept().block(), false);
-            //         // Send accepted back
-            //         response.Clear();
-            //         myAccepted = response.mutable_accepted();
-            //         myBallot = myAccepted->mutable_b_num();
-            //         myBallot->CopyFrom(accept_num);
-            //         myBlock = myAccepted->mutable_block();
-            //         *myBlock = to_message(accept_blo);
+            else if (m.has_accept())
+            {
+                if (compare_ballot(m.accept().b_num(), ballot_num) || (m.accept().b_num().depth() == ballot_num.depth() && m.accept().b_num().seq_n() == ballot_num.seq_n() && m.accept().b_num().proc_id() == ballot_num.proc_id()))
+                {
+                    std::cout << "Received " << m.DebugString();
+                    accept_num = m.accept().b_num();
+                    accept_blo = to_block(m.accept().block(), false);
+                    // Send accepted back
+                    response.Clear();
+                    myAccepted = response.mutable_accepted();
+                    myBallot = myAccepted->mutable_b_num();
+                    myBallot->CopyFrom(accept_num);
+                    myBlock = myAccepted->mutable_block();
+                    myBlock->CopyFrom(to_message(accept_blo));
 
-            //         memset(&cliaddr, 0, sizeof(cliaddr));
-            //         cliaddr.sin_family = AF_INET;
-            //         cliaddr.sin_addr.s_addr = inet_addr(server_ip);
-            //         cliaddr.sin_port = htons(port + m.accept().pid());
-            //         str_message = response.SerializeAsString();
+                    memset(&cliaddr, 0, sizeof(cliaddr));
+                    cliaddr.sin_family = AF_INET;
+                    cliaddr.sin_addr.s_addr = inet_addr(server_ip);
+                    std::cout << "Sending to P" << m.accept().pid() << "\n";
+                    cliaddr.sin_port = htons(port + m.accept().pid());
+                    str_message = response.SerializeAsString();
 
-            //         std::cout << "Send " << response.DebugString();
+                    std::cout << "Send " << response.DebugString();
 
-            //         int len = sizeof(cliaddr);
-            //         sendto(sockfd, str_message.c_str(), sizeof(WireMessage), 0, (const sockaddr *)&cliaddr, len);
-            //     }
-            // }
+                    sendto(sockfd, str_message.c_str(), sizeof(WireMessage), 0, (const sockaddr *)&cliaddr, sizeof(cliaddr));
+                }
+            }
             // else if (m.has_accepted())
             // {
             //     if (m.accepted().b_num().depth() == ballot_num.depth() &&
