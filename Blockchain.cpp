@@ -106,6 +106,8 @@ void Blockchain::print_block_chain(){
 		std::cout<<"	";
 		i->print_block();
 	}
-	std::cout<<"	";
-	head->print_block();
+	if(head != NULL){
+		std::cout<<"	";
+		head->print_block();
+	}
 }

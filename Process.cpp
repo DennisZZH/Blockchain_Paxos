@@ -189,6 +189,14 @@ bool compare_ballot(Ballot b1, Ballot b2)
     return false;
 }
 
+std::vector<Transaction> Str_to_txns(std::string str){
+
+}
+
+std::string Txns_to_str(std::vector<Transaction> txns){
+    
+}
+
 // Set update to true if you want to update the receiver balance
 Block to_block(MsgBlock src, bool update)
 {
@@ -242,6 +250,7 @@ MsgBlock to_message(Block src)
     }
     return result;
 }
+
 
 // Function to process the event
 void *process(void *arg)
