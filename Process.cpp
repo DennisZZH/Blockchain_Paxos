@@ -60,7 +60,7 @@ void moneyTransfer(int receiver, int amount)
             ballot_num.set_depth(bc.get_num_blocks() + 1);
 
             WireMessage m;
-            Prepare* p = new Prepare();
+            Prepare *p = new Prepare();
             p->set_allocated_b_num(&ballot_num);
             m.set_allocated_prepare(p);
 
@@ -90,7 +90,7 @@ void fixLink(int dst)
     CONNECT[dst - 1] = true;
     // Push a restore message to the queue
     WireMessage m;
-    Restore* r = new Restore();
+    Restore *r = new Restore();
     r->set_depth(bc.get_num_blocks());
     r->set_pid(pid);
     m.set_allocated_restore(r);
@@ -150,7 +150,7 @@ void printBlockchain()
 }
 
 // Set up the connections
-void connection_setup(int pid)
+void connection_setup()
 {
     std::cout << "The port of the current process is " << port << "\n";
     if ((sockfd = socket(AF_INET, SOCK_DGRAM, 0)) < 0)
@@ -164,10 +164,10 @@ void connection_setup(int pid)
     // Filling server information
     servaddr.sin_family = AF_INET;
     servaddr.sin_port = htons(port + pid);
-    servaddr.sin_addr.s_addr = server_ip;
+    servaddr.sin_addr.s_addr = (in_addr_t)server_ip;
 
     // Bind the socket
-    if (bind(sockfd, (const sturct sockaddr *)&servaddr, sizeof(servaddr)) < 0)
+    if (bind(sockfd, (const struct sockaddr *)&servaddr, sizeof(servaddr)) < 0)
     {
         std::cerr << "Socket bind failed!\n";
         exit(0);
@@ -186,12 +186,13 @@ void *receiving(void *arg)
     char buf[sizeof(WireMessage)];
     std::string str_WireMessage;
     WireMessage m;
-    memset(&cliaddr, 0 sizeof(cliaddr));
+    memset(&cliaddr, 0, sizeof(cliaddr));
     while (true)
     {
         while (left_size > 0)
         {
-            read_size = recvfrom(sockfd, buf, sizeof(buf), &cliaddr, sizeof(cliaddr));
+            int len = sizeof(cliaddr);
+            read_size = recvfrom(sockfd, buf, sizeof(buf), MSG_WAITALL, (struct sockaddr *)&cliaddr, (socklen_t *)&len);
             if (read_size < 0)
             {
                 std::cerr << "Error: Failed to receive message from P" << id << "\n";
@@ -237,7 +238,7 @@ Block find_blo_with_highest_b(std::vector<WireMessage> proms)
             maxb = proms[i];
         }
     }
-    Block result = to_block(maxb.promise().ablock());
+    Block result = to_block(maxb.promise().ablock(), false);
     return result;
 }
 
@@ -245,11 +246,11 @@ Block find_blo_with_highest_b(std::vector<WireMessage> proms)
 Block to_block(MsgBlock src, bool update)
 {
     std::list<Transaction> trans_list;
-    for (int i = 0; i < src.trax().size(); i++)
+    for (int i = 0; i < src.tranxs_size(); i++)
     {
-        int sender = src.trax().at(i).sender();
-        int receiver = src.trax().at(i).receiver();
-        int amount = src.trax().at(i).amount();
+        int sender = src.tranxs().at(i).sender();
+        int receiver = src.tranxs().at(i).receiver();
+        int amount = src.tranxs().at(i).amount();
         Transaction newTrans(sender, receiver, amount);
         trans_list.push_back(newTrans);
         if (update && receiver == pid)
@@ -265,18 +266,17 @@ MsgBlock to_message(Block src)
 {
     std::vector<Transaction> trans_list;
     trans_list = src.get_txns();
-    int hash = src.get_hash();
-    int nonce = src.get_nonce();
+    std::string hash = src.get_hash();
+    std::string nonce = src.get_nonce();
     MsgBlock result;
     result.set_hash(hash);
     result.set_nonce(nonce);
     for (int i = 0; i < trans_list.size(); i++)
     {
-        Txn newTxn;
-        newTxn.set_sender(trans_list[i].get_sid());
-        newTxn.set_receiver(trans_list[i].get_rid());
-        newTxn.set_amount(trans_list[i].get_amt());
-        result.trax().Add(newTxn);
+        Txn *newTxn = result.add_tranxs();
+        newTxn->set_sender(trans_list[i].get_sid());
+        newTxn->set_receiver(trans_list[i].get_rid());
+        newTxn->set_amount(trans_list[i].get_amt());
     }
     return result;
 }
@@ -314,7 +314,7 @@ void *process(void *arg)
                     memset(&cliaddr, 0, sizeof(cliaddr));
 
                     cliaddr.sin_family = AF_INET;
-                    cliaddr.sin_addr.s_addr = server_ip;
+                    cliaddr.sin_addr.s_addr = (in_addr_t)server_ip;
                     for (int i = 0; i < QUORUM_SIZE; i++)
                     {
                         if (i == (pid + 1))
@@ -322,16 +322,19 @@ void *process(void *arg)
                         cliaddr.sin_port = htons(port + i + 1);
                         int len = sizeof(cliaddr);
                         sleep(2);
-                        sendto(sockfd, str_message.c_str(), sizeof(WireMessage), &cliaddr, &len);
+                        sendto(sockfd, str_message.c_str(), sizeof(WireMessage), MSG_CONFIRM, (struct sockaddr *)&cliaddr, (socklen_t)&len);
                     }
 
                     // Clear num accepted and promise
                     num_accepted = 0;
                     num_promise = 0;
                     // SendBack in case
-                    SendBack = m;
-                    SendBack.prepare().b_num().set_seq_n(++seq_num);
-                    SendBack.prepare().b_num().set_depth(m.prepare().b_num().depth() + 1);
+                    Ballot *b = new Ballot();
+                    b->set_seq_n(++seq_num);
+                    b->set_depth(m.prepare().b_num().depth() + 1);
+                    Prepare *p = new Prepare();
+                    p->set_allocated_b_num(b);
+                    SendBack.set_allocated_prepare(p);
                 }
                 else if (compare_ballot(m.prepare().b_num(), ballot_num))
                 {
@@ -339,19 +342,20 @@ void *process(void *arg)
                     ballot_num = m.prepare().b_num();
                     // Send promise back
                     response.Clear();
-                    response.promise();
-                    response.promise().set_b_num(ballot_num);
-                    response.promise().set_ab_num(accept_num);
-                    response.promise().set_ablock(to_message(accept_blo));
+                    Promise *p = new Promise();
+                    p->set_allocated_b_num(&ballot_num);
+                    p->set_allocated_ab_num(&accept_num);
+                    p->set_allocated_ablock(&(to_message(accept_blo)));
+                    response.set_allocated_promise(p);
 
                     memset(&cliaddr, 0, sizeof(cliaddr));
                     cliaddr.sin_family = AF_INET;
-                    cliaddr.sin_addr.s_addr = server_ip;
+                    cliaddr.sin_addr.s_addr = (in_addr_t)server_ip;
                     cliaddr.sin_port = htons(port + m.prepare().b_num().proc_id());
                     str_message = response.SerializeAsString();
 
                     int len = sizeof(cliaddr);
-                    sendto(sockfd, str_message.c_str(), sizeof(WireMessage), &cliaddr, &len);
+                    sendto(sockfd, str_message.c_str(), sizeof(WireMessage), MSG_CONFIRM, (const sockaddr *)&cliaddr, (socklen_t)&len);
                     std::cout << "Send " << response.DebugString();
 
                     if (isPrepare)
@@ -364,7 +368,9 @@ void *process(void *arg)
             }
             else if (m.has_promise())
             {
-                if (m.promise().b_num() == ballot_num)
+                if (m.promise().b_num().depth() == ballot_num.depth() &&
+                    m.promise().b_num().seq_n() == ballot_num.seq_n() &&
+                    m.promise().b_num().proc_id() == ballot_num.proc_id())
                 {
                     std::cout << "Received " << m.DebugString();
                     if (num_promise < QUORUM_MAJORITY)
@@ -391,17 +397,19 @@ void *process(void *arg)
                         }
                         // Broadcast accept message
                         response.Clear();
-                        response.accept();
-                        response.accept().set_b_num(ballot_num);
-                        response.accept().set_block(to_message(accept_blo));
                         str_message = response.SerializeAsString();
+                        Accept *a = new Accept();
+                        a->set_allocated_b_num(&ballot_num);
+                        a->set_allocated_block(&(to_message(accept_blo)));
+                        a->set_pid(pid);
+                        response.set_allocated_accept(a);
 
                         std::cout << "Broadcast " << response.DebugString();
 
                         memset(&cliaddr, 0, sizeof(cliaddr));
 
                         cliaddr.sin_family = AF_INET;
-                        cliaddr.sin_addr.s_addr = server_ip;
+                        cliaddr.sin_addr.s_addr = (in_addr_t)server_ip;
                         for (int i = 0; i < QUORUM_SIZE; i++)
                         {
                             if (i == (pid + 1))
@@ -426,25 +434,28 @@ void *process(void *arg)
                     accept_blo = m.accept().block();
                     // Send accepted back
                     response.Clear();
-                    response.accepted();
-                    response.accepted().set_b_num(accept_num);
-                    response.accepted().set_block(to_message(accept_blo));
+                    Accepted *a = new Accepted();
+                    a->set_allocated_b_num(&accept_num);
+                    a->set_allocated_block(&(to_message(accept_blo)));
+                    response.set_allocated_accepted(a);
 
                     memset(&cliaddr, 0, sizeof(cliaddr));
                     cliaddr.sin_family = AF_INET;
-                    cliaddr.sin_addr.s_addr = server_ip;
+                    cliaddr.sin_addr.s_addr = (in_addr_t)server_ip;
                     cliaddr.sin_port = htons(port + m.accept().pid());
                     str_message = response.SerializeAsString();
 
                     std::cout << "Send " << response.DebugString();
 
                     int len = sizeof(cliaddr);
-                    sendto(sockfd, str_message.c_str(), sizeof(WireMessage), &cliaddr, &len);
+                    sendto(sockfd, str_message.c_str(), sizeof(WireMessage), MSG_CONFIRM, (const sockaddr *)&cliaddr, (socklen_t)&len);
                 }
             }
-            else if (m.has_accpted())
+            else if (m.has_accepted())
             {
-                if (m.accepted().b_num() == ballot_num)
+                if (m.accepted().b_num().depth() == ballot_num.depth() &&
+                    m.accepted().b_num().seq_n() == ballot_num.seq_n() &&
+                    m.accepted().b_num().proc_id() == ballot_num.proc_id())
                 {
                     std::cout << "Received " << m.DebugString();
                     num_accepted++;
@@ -452,17 +463,20 @@ void *process(void *arg)
                     {
                         // Broadcast decide message
                         response.Clear();
-                        response.decide();
-                        response.decide().set_b_num(m.accepted().b_num());
-                        response.decide().set_block(m.accepted().block());
                         str_message = response.SerializeAsString();
+                        Decide *d = new Decide();
+                        MsgBlock b = m.accepted().block();
+                        Ballot num = m.accepted().b_num();
+                        d->set_allocated_block(&b);
+                        d->set_allocated_b_num(&num);
+                        response.set_allocated_decide(d);
 
                         memset(&cliaddr, 0, sizeof(cliaddr));
 
                         std::cout << "Broadcast " << response.DebugString();
 
                         cliaddr.sin_family = AF_INET;
-                        cliaddr.sin_addr.s_addr = server_ip;
+                        cliaddr.sin_addr.s_addr = (in_addr_t)server_ip;
                         for (int i = 0; i < QUORUM_SIZE; i++)
                         {
                             if (i == (pid + 1))
@@ -470,7 +484,7 @@ void *process(void *arg)
                             cliaddr.sin_port = htons(port + i + 1);
                             int len = sizeof(cliaddr);
                             sleep(2);
-                            sendto(sockfd, str_message.c_str(), sizeof(WireMessage), &cliaddr, &len);
+                            sendto(sockfd, str_message.c_str(), sizeof(WireMessage), MSG_CONFIRM, (const sockaddr*)&cliaddr, (socklen_t)&len);
                         }
 
                         num_accepted = 0;

@@ -300,8 +300,10 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_Msg_2eproto::offsets[] PROTOBU
   ~0u,  // no _weak_field_map_
   PROTOBUF_FIELD_OFFSET(::Accept, b_num_),
   PROTOBUF_FIELD_OFFSET(::Accept, block_),
+  PROTOBUF_FIELD_OFFSET(::Accept, pid_),
   0,
   1,
+  2,
   PROTOBUF_FIELD_OFFSET(::Accepted, _has_bits_),
   PROTOBUF_FIELD_OFFSET(::Accepted, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -346,10 +348,10 @@ static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOB
   { 33, 41, sizeof(::Restore)},
   { 44, 50, sizeof(::Prepare)},
   { 51, 59, sizeof(::Promise)},
-  { 62, 69, sizeof(::Accept)},
-  { 71, 78, sizeof(::Accepted)},
-  { 80, 87, sizeof(::Decide)},
-  { 89, 101, sizeof(::WireMessage)},
+  { 62, 70, sizeof(::Accept)},
+  { 73, 80, sizeof(::Accepted)},
+  { 82, 89, sizeof(::Decide)},
+  { 91, 103, sizeof(::WireMessage)},
 };
 
 static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] = {
@@ -375,17 +377,17 @@ const char descriptor_table_protodef_Msg_2eproto[] PROTOBUF_SECTION_VARIABLE(pro
   "k\022\013\n\003pid\030\003 \002(\005\"!\n\007Prepare\022\026\n\005b_num\030\001 \002(\013"
   "2\007.Ballot\"U\n\007Promise\022\026\n\005b_num\030\001 \002(\0132\007.Ba"
   "llot\022\027\n\006ab_num\030\002 \002(\0132\007.Ballot\022\031\n\006ablock\030"
-  "\003 \002(\0132\t.MsgBlock\":\n\006Accept\022\026\n\005b_num\030\001 \002("
-  "\0132\007.Ballot\022\030\n\005block\030\002 \002(\0132\t.MsgBlock\"<\n\010"
-  "Accepted\022\026\n\005b_num\030\001 \002(\0132\007.Ballot\022\030\n\005bloc"
-  "k\030\002 \002(\0132\t.MsgBlock\":\n\006Decide\022\026\n\005b_num\030\001 "
-  "\002(\0132\007.Ballot\022\030\n\005block\030\002 \002(\0132\t.MsgBlock\"\311"
-  "\001\n\013WireMessage\022\033\n\007prepare\030\001 \001(\0132\010.Prepar"
-  "eH\000\022\033\n\007promise\030\002 \001(\0132\010.PromiseH\000\022\031\n\006acce"
-  "pt\030\003 \001(\0132\007.AcceptH\000\022\035\n\010accepted\030\004 \001(\0132\t."
-  "AcceptedH\000\022\031\n\006decide\030\005 \001(\0132\007.DecideH\000\022\033\n"
-  "\007restore\030\006 \001(\0132\010.RestoreH\000B\016\n\014oneOfMessa"
-  "ge"
+  "\003 \002(\0132\t.MsgBlock\"G\n\006Accept\022\026\n\005b_num\030\001 \002("
+  "\0132\007.Ballot\022\030\n\005block\030\002 \002(\0132\t.MsgBlock\022\013\n\003"
+  "pid\030\003 \002(\005\"<\n\010Accepted\022\026\n\005b_num\030\001 \002(\0132\007.B"
+  "allot\022\030\n\005block\030\002 \002(\0132\t.MsgBlock\":\n\006Decid"
+  "e\022\026\n\005b_num\030\001 \002(\0132\007.Ballot\022\030\n\005block\030\002 \002(\013"
+  "2\t.MsgBlock\"\311\001\n\013WireMessage\022\033\n\007prepare\030\001"
+  " \001(\0132\010.PrepareH\000\022\033\n\007promise\030\002 \001(\0132\010.Prom"
+  "iseH\000\022\031\n\006accept\030\003 \001(\0132\007.AcceptH\000\022\035\n\010acce"
+  "pted\030\004 \001(\0132\t.AcceptedH\000\022\031\n\006decide\030\005 \001(\0132"
+  "\007.DecideH\000\022\033\n\007restore\030\006 \001(\0132\010.RestoreH\000B"
+  "\016\n\014oneOfMessage"
   ;
 static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor_table_Msg_2eproto_deps[1] = {
 };
@@ -404,7 +406,7 @@ static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_Msg
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_Msg_2eproto_once;
 static bool descriptor_table_Msg_2eproto_initialized = false;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_Msg_2eproto = {
-  &descriptor_table_Msg_2eproto_initialized, descriptor_table_protodef_Msg_2eproto, "Msg.proto", 762,
+  &descriptor_table_Msg_2eproto_initialized, descriptor_table_protodef_Msg_2eproto, "Msg.proto", 775,
   &descriptor_table_Msg_2eproto_once, descriptor_table_Msg_2eproto_sccs, descriptor_table_Msg_2eproto_deps, 10, 0,
   schemas, file_default_instances, TableStruct_Msg_2eproto::offsets,
   file_level_metadata_Msg_2eproto, 10, file_level_enum_descriptors_Msg_2eproto, file_level_service_descriptors_Msg_2eproto,
@@ -2193,6 +2195,9 @@ class Accept::_Internal {
   static void set_has_block(HasBits* has_bits) {
     (*has_bits)[0] |= 2u;
   }
+  static void set_has_pid(HasBits* has_bits) {
+    (*has_bits)[0] |= 4u;
+  }
 };
 
 const ::Ballot&
@@ -2223,14 +2228,15 @@ Accept::Accept(const Accept& from)
   } else {
     block_ = nullptr;
   }
+  pid_ = from.pid_;
   // @@protoc_insertion_point(copy_constructor:Accept)
 }
 
 void Accept::SharedCtor() {
   ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&scc_info_Accept_Msg_2eproto.base);
   ::memset(&b_num_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&block_) -
-      reinterpret_cast<char*>(&b_num_)) + sizeof(block_));
+      reinterpret_cast<char*>(&pid_) -
+      reinterpret_cast<char*>(&b_num_)) + sizeof(pid_));
 }
 
 Accept::~Accept() {
@@ -2269,6 +2275,7 @@ void Accept::Clear() {
       block_->Clear();
     }
   }
+  pid_ = 0;
   _has_bits_.Clear();
   _internal_metadata_.Clear();
 }
@@ -2292,6 +2299,14 @@ const char* Accept::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::int
       case 2:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 18)) {
           ptr = ctx->ParseMessage(_internal_mutable_block(), ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // required int32 pid = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 24)) {
+          _Internal::set_has_pid(&has_bits);
+          pid_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint(&ptr);
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
@@ -2339,6 +2354,12 @@ failure:
         2, _Internal::block(this), target, stream);
   }
 
+  // required int32 pid = 3;
+  if (cached_has_bits & 0x00000004u) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(3, this->_internal_pid(), target);
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields(), target, stream);
@@ -2365,13 +2386,20 @@ size_t Accept::RequiredFieldsByteSizeFallback() const {
         *block_);
   }
 
+  if (_internal_has_pid()) {
+    // required int32 pid = 3;
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
+        this->_internal_pid());
+  }
+
   return total_size;
 }
 size_t Accept::ByteSizeLong() const {
 // @@protoc_insertion_point(message_byte_size_start:Accept)
   size_t total_size = 0;
 
-  if (((_has_bits_[0] & 0x00000003) ^ 0x00000003) == 0) {  // All required fields are present.
+  if (((_has_bits_[0] & 0x00000007) ^ 0x00000007) == 0) {  // All required fields are present.
     // required .Ballot b_num = 1;
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
@@ -2381,6 +2409,11 @@ size_t Accept::ByteSizeLong() const {
     total_size += 1 +
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
         *block_);
+
+    // required int32 pid = 3;
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
+        this->_internal_pid());
 
   } else {
     total_size += RequiredFieldsByteSizeFallback();
@@ -2421,13 +2454,17 @@ void Accept::MergeFrom(const Accept& from) {
   (void) cached_has_bits;
 
   cached_has_bits = from._has_bits_[0];
-  if (cached_has_bits & 0x00000003u) {
+  if (cached_has_bits & 0x00000007u) {
     if (cached_has_bits & 0x00000001u) {
       _internal_mutable_b_num()->::Ballot::MergeFrom(from._internal_b_num());
     }
     if (cached_has_bits & 0x00000002u) {
       _internal_mutable_block()->::MsgBlock::MergeFrom(from._internal_block());
     }
+    if (cached_has_bits & 0x00000004u) {
+      pid_ = from.pid_;
+    }
+    _has_bits_[0] |= cached_has_bits;
   }
 }
 
@@ -2446,7 +2483,7 @@ void Accept::CopyFrom(const Accept& from) {
 }
 
 bool Accept::IsInitialized() const {
-  if ((_has_bits_[0] & 0x00000003) != 0x00000003) return false;
+  if ((_has_bits_[0] & 0x00000007) != 0x00000007) return false;
   if (_internal_has_b_num()) {
     if (!b_num_->IsInitialized()) return false;
   }
@@ -2462,6 +2499,7 @@ void Accept::InternalSwap(Accept* other) {
   swap(_has_bits_[0], other->_has_bits_[0]);
   swap(b_num_, other->b_num_);
   swap(block_, other->block_);
+  swap(pid_, other->pid_);
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata Accept::GetMetadata() const {

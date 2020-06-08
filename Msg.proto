@@ -37,6 +37,7 @@ message	Promise {
 message	Accept {
 	required Ballot b_num = 1;
     required MsgBlock block = 2;
+    required int32 pid = 3;
 }
 		
 message	Accepted {

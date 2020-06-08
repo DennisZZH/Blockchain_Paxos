@@ -1251,6 +1251,7 @@ class Accept :
   enum : int {
     kBNumFieldNumber = 1,
     kBlockFieldNumber = 2,
+    kPidFieldNumber = 3,
   };
   // required .Ballot b_num = 1;
   bool has_b_num() const;
@@ -1282,6 +1283,19 @@ class Accept :
   ::MsgBlock* _internal_mutable_block();
   public:
 
+  // required int32 pid = 3;
+  bool has_pid() const;
+  private:
+  bool _internal_has_pid() const;
+  public:
+  void clear_pid();
+  ::PROTOBUF_NAMESPACE_ID::int32 pid() const;
+  void set_pid(::PROTOBUF_NAMESPACE_ID::int32 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::int32 _internal_pid() const;
+  void _internal_set_pid(::PROTOBUF_NAMESPACE_ID::int32 value);
+  public:
+
   // @@protoc_insertion_point(class_scope:Accept)
  private:
   class _Internal;
@@ -1294,6 +1308,7 @@ class Accept :
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   ::Ballot* b_num_;
   ::MsgBlock* block_;
+  ::PROTOBUF_NAMESPACE_ID::int32 pid_;
   friend struct ::TableStruct_Msg_2eproto;
 };
 // -------------------------------------------------------------------
@@ -2710,6 +2725,34 @@ inline void Accept::set_allocated_block(::MsgBlock* block) {
   }
   block_ = block;
   // @@protoc_insertion_point(field_set_allocated:Accept.block)
+}
+
+// required int32 pid = 3;
+inline bool Accept::_internal_has_pid() const {
+  bool value = (_has_bits_[0] & 0x00000004u) != 0;
+  return value;
+}
+inline bool Accept::has_pid() const {
+  return _internal_has_pid();
+}
+inline void Accept::clear_pid() {
+  pid_ = 0;
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 Accept::_internal_pid() const {
+  return pid_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 Accept::pid() const {
+  // @@protoc_insertion_point(field_get:Accept.pid)
+  return _internal_pid();
+}
+inline void Accept::_internal_set_pid(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _has_bits_[0] |= 0x00000004u;
+  pid_ = value;
+}
+inline void Accept::set_pid(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _internal_set_pid(value);
+  // @@protoc_insertion_point(field_set:Accept.pid)
 }
 
 // -------------------------------------------------------------------
