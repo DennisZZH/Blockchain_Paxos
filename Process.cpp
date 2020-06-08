@@ -60,14 +60,21 @@ void moneyTransfer(int receiver, int amount)
             ballot_num.set_seq_n(++seq_num);
             ballot_num.set_depth(bc.get_num_blocks() + 1);
 
+            std::cout << "000\n";
             WireMessage m;
-            Prepare *p = new Prepare();
-            p->set_allocated_b_num(&ballot_num);
-            m.set_allocated_prepare(p);
+            Prepare *p = m.mutable_prepare();
+            Ballot *b = p->mutable_b_num();
+            std::cout << "111\n";
+            b->set_depth(ballot_num.depth());
+            b->set_proc_id(ballot_num.proc_id());
+            b->set_seq_n(ballot_num.seq_n());
+            std::cout << "222\n";
+            std::cout << "333\n";
 
             pthread_mutex_lock(&e_lock);
             events.push(m);
             pthread_mutex_unlock(&e_lock);
+            std::cout << "444\n";
 
             isPrepare = true;
         }
@@ -153,7 +160,7 @@ void printBlockchain()
 // Set up the connections
 void connection_setup()
 {
-    std::cout << "The port of the current process is " << port << "\n";
+    std::cout << "The port of the current process is " << port + pid << "\n";
     if ((sockfd = socket(AF_INET, SOCK_DGRAM, 0)) < 0)
     {
         std::cerr << "Socket creation failed!\n";
@@ -305,13 +312,16 @@ void *process(void *arg)
     {
         if (!events.empty())
         {
+            std::cout << "555\n";
             pthread_mutex_lock(&e_lock);
             m = events.front();
             events.pop();
             pthread_mutex_unlock(&e_lock);
+            std::cout << "666\n";
 
             if (m.has_prepare())
             {
+                std::cout << "777\n";
                 if (m.prepare().b_num().proc_id() == pid)
                 {
                     if (compare_ballot(ballot_num, m.prepare().b_num()))
@@ -338,12 +348,11 @@ void *process(void *arg)
                     num_accepted = 0;
                     num_promise = 0;
                     // SendBack in case
-                    myBallot = new Ballot();
+                    SendBack.Clear();
+                    myPrepare = SendBack.mutable_prepare();
+                    myBallot = myPrepare->mutable_b_num();
                     myBallot->set_seq_n(++seq_num);
                     myBallot->set_depth(m.prepare().b_num().depth() + 1);
-                    myPrepare = new Prepare();
-                    myPrepare->set_allocated_b_num(myBallot);
-                    SendBack.set_allocated_prepare(myPrepare);
                 }
                 else if (compare_ballot(m.prepare().b_num(), ballot_num))
                 {
@@ -351,13 +360,20 @@ void *process(void *arg)
                     ballot_num = m.prepare().b_num();
                     // Send promise back
                     response.Clear();
-                    myPromise = new Promise();
-                    myPromise->set_allocated_b_num(&ballot_num);
-                    myPromise->set_allocated_ab_num(&accept_num);
-                    myBlock = new MsgBlock();
+                    myPromise = response.mutable_promise();
+                    // Set acceptedBlock
+                    myBlock = myPromise->mutable_ablock();
                     *myBlock = to_message(accept_blo);
-                    myPromise->set_allocated_ablock(myBlock);
-                    response.set_allocated_promise(myPromise);
+                    // Set leader's ballot
+                    myBallot = myPromise->mutable_b_num();
+                    myBallot->set_seq_n(ballot_num.seq_n());
+                    myBallot->set_depth(ballot_num.depth());
+                    myBallot->set_proc_id(ballot_num.proc_id());
+                    // Set acceptedBal
+                    myBallot = myPromise->mutable_ab_num();
+                    myBallot->set_proc_id(accept_num.proc_id());
+                    myBallot->set_seq_n(accept_num.seq_n());
+                    myBallot->set_depth(accept_num.depth());
 
                     memset(&cliaddr, 0, sizeof(cliaddr));
                     cliaddr.sin_family = AF_INET;
@@ -408,14 +424,13 @@ void *process(void *arg)
                         }
                         // Broadcast accept message
                         response.Clear();
-                        str_message = response.SerializeAsString();
-                        myAccept = new Accept();
-                        myAccept->set_allocated_b_num(&ballot_num);
-                        myBlock = new MsgBlock();
+                        myAccept = response.mutable_accept();
+                        myBlock = myAccept->mutable_block();
                         *myBlock = to_message(accept_blo);
-                        myAccept->set_allocated_block(myBlock);
+                        myBallot = myAccept->mutable_b_num();
+                        myBallot->CopyFrom(accept_num);
                         myAccept->set_pid(pid);
-                        response.set_allocated_accept(myAccept);
+                        str_message = response.SerializeAsString();
 
                         std::cout << "Broadcast " << response.DebugString();
 
@@ -447,12 +462,11 @@ void *process(void *arg)
                     accept_blo = to_block(m.accept().block(), false);
                     // Send accepted back
                     response.Clear();
-                    myAccepted = new Accepted();
-                    myAccepted->set_allocated_b_num(&accept_num);
-                    myBlock = new MsgBlock();
+                    myAccepted = response.mutable_accepted();
+                    myBallot = myAccepted->mutable_b_num();
+                    myBallot->CopyFrom(accept_num);
+                    myBlock = myAccepted->mutable_block();
                     *myBlock = to_message(accept_blo);
-                    myAccepted->set_allocated_block(myBlock);
-                    response.set_allocated_accepted(myAccepted);
 
                     memset(&cliaddr, 0, sizeof(cliaddr));
                     cliaddr.sin_family = AF_INET;
@@ -478,17 +492,15 @@ void *process(void *arg)
                     {
                         // Broadcast decide message
                         response.Clear();
-                        str_message = response.SerializeAsString();
-                        myDecide = new Decide();
-                        myBlock = new MsgBlock();
-                        *myBlock = m.accepted().block();
-                        myBallot = new Ballot();
-                        *myBallot = m.accepted().b_num();
-                        myDecide->set_allocated_block(myBlock);
-                        myDecide->set_allocated_b_num(myBallot);
-                        response.set_allocated_decide(myDecide);
+                        myDecide = response.mutable_decide();
+                        myBlock = myDecide->mutable_block();
+                        myBlock->CopyFrom(m.accepted().block());
+                        myBallot = myDecide->mutable_b_num();
+                        myBallot->CopyFrom(m.accepted().b_num());
 
                         memset(&cliaddr, 0, sizeof(cliaddr));
+
+                        str_message = response.SerializeAsString();
 
                         std::cout << "Broadcast " << response.DebugString();
 
@@ -540,7 +552,6 @@ void *process(void *arg)
 // Main function
 int main()
 {
-    int pid;
     std::cout << "Process #: ";
     std::cin >> pid;
     std::cout << "\n";
