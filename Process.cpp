@@ -280,7 +280,7 @@ void *process(void *arg)
                         continue;
 
                     // Boradcast prepare message
-                    std::cout << "Broadcast " << m.prepare().DebugString();
+                    std::cout << "Broadcast " << m.DebugString();
                     str_message = m.SerializeAsString();
 
                     memset(&cliaddr, 0, sizeof(cliaddr));
@@ -338,7 +338,7 @@ void *process(void *arg)
 
                     int len = sizeof(cliaddr);
                     sendto(sockfd, str_message.c_str(), sizeof(WireMessage), 0, (const sockaddr *)&cliaddr, len);
-                    std::cout << "Send " << response.promise().DebugString();
+                    std::cout << "Send " << response.DebugString();
 
                     if (isPrepare)
                     {
@@ -355,7 +355,7 @@ void *process(void *arg)
                     m.promise().b_num().seq_n() == ballot_num.seq_n() &&
                     m.promise().b_num().proc_id() == ballot_num.proc_id())
                 {
-                    std::cout << "Received " << m.promise().DebugString();
+                    std::cout << "Received " << m.DebugString();
                     if (num_promise < QUORUM_MAJORITY)
                     {
                         num_promise++;
@@ -389,7 +389,7 @@ void *process(void *arg)
                         myAccept->set_pid(pid);
                         str_message = response.SerializeAsString();
 
-                        std::cout << "Broadcast " << response.accept().DebugString();
+                        std::cout << "Broadcast " << response.DebugString();
 
                         memset(&cliaddr, 0, sizeof(cliaddr));
 
@@ -416,7 +416,7 @@ void *process(void *arg)
             {
                 if (compare_ballot(m.accept().b_num(), ballot_num) || (m.accept().b_num().depth() == ballot_num.depth() && m.accept().b_num().seq_n() == ballot_num.seq_n() && m.accept().b_num().proc_id() == ballot_num.proc_id()))
                 {
-                    std::cout << "Received " << m.accept().DebugString();
+                    std::cout << "Received " << m.DebugString();
                     accept_num = m.accept().b_num();
                     accept_blo = to_block(m.accept().block(), false);
                     // Send accepted back
@@ -448,7 +448,7 @@ void *process(void *arg)
                     m.accepted().b_num().seq_n() == ballot_num.seq_n() &&
                     m.accepted().b_num().proc_id() == ballot_num.proc_id())
                 {
-                    std::cout << "Received " << m.accepted().DebugString();
+                    std::cout << "Received " << m.DebugString();
                     num_accepted++;
                     if (num_accepted >= QUORUM_MAJORITY)
                     {
@@ -465,7 +465,7 @@ void *process(void *arg)
 
                         str_message = response.SerializeAsString();
 
-                        std::cout << "Broadcast " << response.decide().DebugString();
+                        std::cout << "Broadcast " << response.DebugString();
 
                         cliaddr.sin_family = AF_INET;
                         cliaddr.sin_addr.s_addr = inet_addr(server_ip);
