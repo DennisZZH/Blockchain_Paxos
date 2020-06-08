@@ -62,6 +62,7 @@ void moneyTransfer(int receiver, int amount)
 
             std::cout << "000\n";
             WireMessage m;
+            m.set_type(1);
             Prepare *p = m.mutable_prepare();
             Ballot *b = p->mutable_b_num();
             std::cout << "111\n";
@@ -260,8 +261,6 @@ void *process(void *arg)
     while (true)
     {
         m.Clear();
-        m.clear_oneOfMessage();
-        response.clear_oneOfMessage();
         if (!events.empty())
         {
             std::cout << "555\n";
@@ -272,7 +271,7 @@ void *process(void *arg)
             std::cout << events.size() << "\n";
             std::cout << "666\n";
 
-            if (m.has_prepare())
+            if (m.type() == 1)
             {
                 std::cout << "777\n";
                 if (m.prepare().b_num().proc_id() == pid)
@@ -281,7 +280,7 @@ void *process(void *arg)
                         continue;
 
                     // Boradcast prepare message
-                    std::cout << "Broadcast " << m.DebugString();
+                    std::cout << "Broadcast " << m.prepare().DebugString();
                     str_message = m.SerializeAsString();
 
                     memset(&cliaddr, 0, sizeof(cliaddr));
@@ -303,6 +302,7 @@ void *process(void *arg)
                     num_promise = 0;
                     // SendBack in case
                     SendBack.Clear();
+                    SendBack.set_type(1);
                     myPrepare = SendBack.mutable_prepare();
                     myBallot = myPrepare->mutable_b_num();
                     myBallot->set_seq_n(++seq_num);
@@ -314,10 +314,11 @@ void *process(void *arg)
                     ballot_num = m.prepare().b_num();
                     // Send promise back
                     response.Clear();
+                    response.set_type(2);
                     myPromise = response.mutable_promise();
                     // Set acceptedBlock
                     myBlock = myPromise->mutable_ablock();
-                    *myBlock = to_message(accept_blo);
+                    myBlock->CopyFrom(to_message(accept_blo));
                     // Set leader's ballot
                     myBallot = myPromise->mutable_b_num();
                     myBallot->set_seq_n(ballot_num.seq_n());
@@ -337,7 +338,7 @@ void *process(void *arg)
 
                     int len = sizeof(cliaddr);
                     sendto(sockfd, str_message.c_str(), sizeof(WireMessage), 0, (const sockaddr *)&cliaddr, len);
-                    std::cout << "Send " << response.DebugString();
+                    std::cout << "Send " << response.promise().DebugString();
 
                     if (isPrepare)
                     {
@@ -347,13 +348,14 @@ void *process(void *arg)
                     }
                 }
             }
-            else if (m.has_promise())
+            // Upon receiving promise
+            else if (m.type() == 2)
             {
                 if (m.promise().b_num().depth() == ballot_num.depth() &&
                     m.promise().b_num().seq_n() == ballot_num.seq_n() &&
                     m.promise().b_num().proc_id() == ballot_num.proc_id())
                 {
-                    std::cout << "Received " << m.DebugString();
+                    std::cout << "Received " << m.promise().DebugString();
                     if (num_promise < QUORUM_MAJORITY)
                     {
                         num_promise++;
@@ -378,6 +380,7 @@ void *process(void *arg)
                         }
                         // Broadcast accept message
                         response.Clear();
+                        response.set_type(3);
                         myAccept = response.mutable_accept();
                         myBlock = myAccept->mutable_block();
                         myBlock->CopyFrom(to_message(my_blo));
@@ -386,7 +389,7 @@ void *process(void *arg)
                         myAccept->set_pid(pid);
                         str_message = response.SerializeAsString();
 
-                        std::cout << "Broadcast " << response.DebugString();
+                        std::cout << "Broadcast " << response.accept().DebugString();
 
                         memset(&cliaddr, 0, sizeof(cliaddr));
 
@@ -408,15 +411,17 @@ void *process(void *arg)
                     }
                 }
             }
-            else if (m.has_accept())
+            // Upon receiving accept
+            else if (m.type() == 3)
             {
                 if (compare_ballot(m.accept().b_num(), ballot_num) || (m.accept().b_num().depth() == ballot_num.depth() && m.accept().b_num().seq_n() == ballot_num.seq_n() && m.accept().b_num().proc_id() == ballot_num.proc_id()))
                 {
-                    std::cout << "Received " << m.DebugString();
+                    std::cout << "Received " << m.accept().DebugString();
                     accept_num = m.accept().b_num();
                     accept_blo = to_block(m.accept().block(), false);
                     // Send accepted back
                     response.Clear();
+                    response.set_type(4);
                     myAccepted = response.mutable_accepted();
                     myBallot = myAccepted->mutable_b_num();
                     myBallot->CopyFrom(accept_num);
@@ -436,18 +441,20 @@ void *process(void *arg)
                     sendto(sockfd, str_message.c_str(), sizeof(WireMessage), 0, (const sockaddr *)&cliaddr, sizeof(cliaddr));
                 }
             }
-            else if (m.has_accepted())
+            // Upon receiving accepted
+            else if (m.type() == 4)
             {
                 if (m.accepted().b_num().depth() == ballot_num.depth() &&
                     m.accepted().b_num().seq_n() == ballot_num.seq_n() &&
                     m.accepted().b_num().proc_id() == ballot_num.proc_id())
                 {
-                    std::cout << "Received " << m.DebugString();
+                    std::cout << "Received " << m.accepted().DebugString();
                     num_accepted++;
                     if (num_accepted >= QUORUM_MAJORITY)
                     {
                         // Broadcast decide message
                         response.Clear();
+                        response.set_type(5);
                         myDecide = response.mutable_decide();
                         myBlock = myDecide->mutable_block();
                         myBlock->CopyFrom(m.accepted().block());
@@ -458,7 +465,7 @@ void *process(void *arg)
 
                         str_message = response.SerializeAsString();
 
-                        std::cout << "Broadcast " << response.DebugString();
+                        std::cout << "Broadcast " << response.decide().DebugString();
 
                         cliaddr.sin_family = AF_INET;
                         cliaddr.sin_addr.s_addr = inet_addr(server_ip);
@@ -483,7 +490,7 @@ void *process(void *arg)
                     }
                 }
             }
-            // else if (m.has_decide())
+            // else if (m.type() == 5)
             // {
             //     // Extract all the transactions and update the balance if it is needed
             //     std::cout << "Received " << m.DebugString();
