@@ -57,11 +57,6 @@ class DecideDefaultTypeInternal {
 class WireMessageDefaultTypeInternal {
  public:
   ::PROTOBUF_NAMESPACE_ID::internal::ExplicitlyConstructed<WireMessage> _instance;
-  const ::Prepare* prepare_;
-  const ::Promise* promise_;
-  const ::Accept* accept_;
-  const ::Accepted* accepted_;
-  const ::Decide* decide_;
 } _WireMessage_default_instance_;
 static void InitDefaultsscc_info_Accept_Msg_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
@@ -292,21 +287,20 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_Msg_2eproto::offsets[] PROTOBU
   PROTOBUF_FIELD_OFFSET(::WireMessage, _has_bits_),
   PROTOBUF_FIELD_OFFSET(::WireMessage, _internal_metadata_),
   ~0u,  // no _extensions_
-  PROTOBUF_FIELD_OFFSET(::WireMessage, _oneof_case_[0]),
+  ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
   PROTOBUF_FIELD_OFFSET(::WireMessage, type_),
-  offsetof(::WireMessageDefaultTypeInternal, prepare_),
-  offsetof(::WireMessageDefaultTypeInternal, promise_),
-  offsetof(::WireMessageDefaultTypeInternal, accept_),
-  offsetof(::WireMessageDefaultTypeInternal, accepted_),
-  offsetof(::WireMessageDefaultTypeInternal, decide_),
-  PROTOBUF_FIELD_OFFSET(::WireMessage, oneOfMessage_),
+  PROTOBUF_FIELD_OFFSET(::WireMessage, prepare_),
+  PROTOBUF_FIELD_OFFSET(::WireMessage, promise_),
+  PROTOBUF_FIELD_OFFSET(::WireMessage, accept_),
+  PROTOBUF_FIELD_OFFSET(::WireMessage, accepted_),
+  PROTOBUF_FIELD_OFFSET(::WireMessage, decide_),
+  5,
   0,
-  ~0u,
-  ~0u,
-  ~0u,
-  ~0u,
-  ~0u,
+  1,
+  2,
+  3,
+  4,
 };
 static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
   { 0, 8, sizeof(::Ballot)},
@@ -317,7 +311,7 @@ static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOB
   { 51, 59, sizeof(::Accept)},
   { 62, 69, sizeof(::Accepted)},
   { 71, 78, sizeof(::Decide)},
-  { 80, 92, sizeof(::WireMessage)},
+  { 80, 91, sizeof(::WireMessage)},
 };
 
 static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] = {
@@ -345,12 +339,11 @@ const char descriptor_table_protodef_Msg_2eproto[] PROTOBUF_SECTION_VARIABLE(pro
   "\005block\030\003 \002(\0132\t.MsgBlock\"<\n\010Accepted\022\026\n\005b"
   "_num\030\001 \002(\0132\007.Ballot\022\030\n\005block\030\002 \002(\0132\t.Msg"
   "Block\":\n\006Decide\022\026\n\005b_num\030\001 \002(\0132\007.Ballot\022"
-  "\030\n\005block\030\002 \002(\0132\t.MsgBlock\"\272\001\n\013WireMessag"
-  "e\022\014\n\004type\030\001 \002(\005\022\033\n\007prepare\030\002 \001(\0132\010.Prepa"
-  "reH\000\022\033\n\007promise\030\003 \001(\0132\010.PromiseH\000\022\031\n\006acc"
-  "ept\030\004 \001(\0132\007.AcceptH\000\022\035\n\010accepted\030\005 \001(\0132\t"
-  ".AcceptedH\000\022\031\n\006decide\030\006 \001(\0132\007.DecideH\000B\016"
-  "\n\014oneOfMessage"
+  "\030\n\005block\030\002 \002(\0132\t.MsgBlock\"\240\001\n\013WireMessag"
+  "e\022\014\n\004type\030\001 \002(\005\022\031\n\007prepare\030\002 \001(\0132\010.Prepa"
+  "re\022\031\n\007promise\030\003 \001(\0132\010.Promise\022\027\n\006accept\030"
+  "\004 \001(\0132\007.Accept\022\033\n\010accepted\030\005 \001(\0132\t.Accep"
+  "ted\022\027\n\006decide\030\006 \001(\0132\007.Decide"
   ;
 static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor_table_Msg_2eproto_deps[1] = {
 };
@@ -368,7 +361,7 @@ static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_Msg
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_Msg_2eproto_once;
 static bool descriptor_table_Msg_2eproto_initialized = false;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_Msg_2eproto = {
-  &descriptor_table_Msg_2eproto_initialized, descriptor_table_protodef_Msg_2eproto, "Msg.proto", 694,
+  &descriptor_table_Msg_2eproto_initialized, descriptor_table_protodef_Msg_2eproto, "Msg.proto", 668,
   &descriptor_table_Msg_2eproto_once, descriptor_table_Msg_2eproto_sccs, descriptor_table_Msg_2eproto_deps, 9, 0,
   schemas, file_default_instances, TableStruct_Msg_2eproto::offsets,
   file_level_metadata_Msg_2eproto, 9, file_level_enum_descriptors_Msg_2eproto, file_level_service_descriptors_Msg_2eproto,
@@ -2770,119 +2763,64 @@ void Decide::InternalSwap(Decide* other) {
 // ===================================================================
 
 void WireMessage::InitAsDefaultInstance() {
-  ::_WireMessage_default_instance_.prepare_ = const_cast< ::Prepare*>(
+  ::_WireMessage_default_instance_._instance.get_mutable()->prepare_ = const_cast< ::Prepare*>(
       ::Prepare::internal_default_instance());
-  ::_WireMessage_default_instance_.promise_ = const_cast< ::Promise*>(
+  ::_WireMessage_default_instance_._instance.get_mutable()->promise_ = const_cast< ::Promise*>(
       ::Promise::internal_default_instance());
-  ::_WireMessage_default_instance_.accept_ = const_cast< ::Accept*>(
+  ::_WireMessage_default_instance_._instance.get_mutable()->accept_ = const_cast< ::Accept*>(
       ::Accept::internal_default_instance());
-  ::_WireMessage_default_instance_.accepted_ = const_cast< ::Accepted*>(
+  ::_WireMessage_default_instance_._instance.get_mutable()->accepted_ = const_cast< ::Accepted*>(
       ::Accepted::internal_default_instance());
-  ::_WireMessage_default_instance_.decide_ = const_cast< ::Decide*>(
+  ::_WireMessage_default_instance_._instance.get_mutable()->decide_ = const_cast< ::Decide*>(
       ::Decide::internal_default_instance());
 }
 class WireMessage::_Internal {
  public:
   using HasBits = decltype(std::declval<WireMessage>()._has_bits_);
   static void set_has_type(HasBits* has_bits) {
-    (*has_bits)[0] |= 1u;
+    (*has_bits)[0] |= 32u;
   }
   static const ::Prepare& prepare(const WireMessage* msg);
+  static void set_has_prepare(HasBits* has_bits) {
+    (*has_bits)[0] |= 1u;
+  }
   static const ::Promise& promise(const WireMessage* msg);
+  static void set_has_promise(HasBits* has_bits) {
+    (*has_bits)[0] |= 2u;
+  }
   static const ::Accept& accept(const WireMessage* msg);
+  static void set_has_accept(HasBits* has_bits) {
+    (*has_bits)[0] |= 4u;
+  }
   static const ::Accepted& accepted(const WireMessage* msg);
+  static void set_has_accepted(HasBits* has_bits) {
+    (*has_bits)[0] |= 8u;
+  }
   static const ::Decide& decide(const WireMessage* msg);
+  static void set_has_decide(HasBits* has_bits) {
+    (*has_bits)[0] |= 16u;
+  }
 };
 
 const ::Prepare&
 WireMessage::_Internal::prepare(const WireMessage* msg) {
-  return *msg->oneOfMessage_.prepare_;
+  return *msg->prepare_;
 }
 const ::Promise&
 WireMessage::_Internal::promise(const WireMessage* msg) {
-  return *msg->oneOfMessage_.promise_;
+  return *msg->promise_;
 }
 const ::Accept&
 WireMessage::_Internal::accept(const WireMessage* msg) {
-  return *msg->oneOfMessage_.accept_;
+  return *msg->accept_;
 }
 const ::Accepted&
 WireMessage::_Internal::accepted(const WireMessage* msg) {
-  return *msg->oneOfMessage_.accepted_;
+  return *msg->accepted_;
 }
 const ::Decide&
 WireMessage::_Internal::decide(const WireMessage* msg) {
-  return *msg->oneOfMessage_.decide_;
-}
-void WireMessage::set_allocated_prepare(::Prepare* prepare) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaNoVirtual();
-  clear_oneOfMessage();
-  if (prepare) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena = nullptr;
-    if (message_arena != submessage_arena) {
-      prepare = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, prepare, submessage_arena);
-    }
-    set_has_prepare();
-    oneOfMessage_.prepare_ = prepare;
-  }
-  // @@protoc_insertion_point(field_set_allocated:WireMessage.prepare)
-}
-void WireMessage::set_allocated_promise(::Promise* promise) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaNoVirtual();
-  clear_oneOfMessage();
-  if (promise) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena = nullptr;
-    if (message_arena != submessage_arena) {
-      promise = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, promise, submessage_arena);
-    }
-    set_has_promise();
-    oneOfMessage_.promise_ = promise;
-  }
-  // @@protoc_insertion_point(field_set_allocated:WireMessage.promise)
-}
-void WireMessage::set_allocated_accept(::Accept* accept) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaNoVirtual();
-  clear_oneOfMessage();
-  if (accept) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena = nullptr;
-    if (message_arena != submessage_arena) {
-      accept = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, accept, submessage_arena);
-    }
-    set_has_accept();
-    oneOfMessage_.accept_ = accept;
-  }
-  // @@protoc_insertion_point(field_set_allocated:WireMessage.accept)
-}
-void WireMessage::set_allocated_accepted(::Accepted* accepted) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaNoVirtual();
-  clear_oneOfMessage();
-  if (accepted) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena = nullptr;
-    if (message_arena != submessage_arena) {
-      accepted = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, accepted, submessage_arena);
-    }
-    set_has_accepted();
-    oneOfMessage_.accepted_ = accepted;
-  }
-  // @@protoc_insertion_point(field_set_allocated:WireMessage.accepted)
-}
-void WireMessage::set_allocated_decide(::Decide* decide) {
-  ::PROTOBUF_NAMESPACE_ID::Arena* message_arena = GetArenaNoVirtual();
-  clear_oneOfMessage();
-  if (decide) {
-    ::PROTOBUF_NAMESPACE_ID::Arena* submessage_arena = nullptr;
-    if (message_arena != submessage_arena) {
-      decide = ::PROTOBUF_NAMESPACE_ID::internal::GetOwnedMessage(
-          message_arena, decide, submessage_arena);
-    }
-    set_has_decide();
-    oneOfMessage_.decide_ = decide;
-  }
-  // @@protoc_insertion_point(field_set_allocated:WireMessage.decide)
+  return *msg->decide_;
 }
 WireMessage::WireMessage()
   : ::PROTOBUF_NAMESPACE_ID::Message(), _internal_metadata_(nullptr) {
@@ -2894,40 +2832,40 @@ WireMessage::WireMessage(const WireMessage& from)
       _internal_metadata_(nullptr),
       _has_bits_(from._has_bits_) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
-  type_ = from.type_;
-  clear_has_oneOfMessage();
-  switch (from.oneOfMessage_case()) {
-    case kPrepare: {
-      _internal_mutable_prepare()->::Prepare::MergeFrom(from._internal_prepare());
-      break;
-    }
-    case kPromise: {
-      _internal_mutable_promise()->::Promise::MergeFrom(from._internal_promise());
-      break;
-    }
-    case kAccept: {
-      _internal_mutable_accept()->::Accept::MergeFrom(from._internal_accept());
-      break;
-    }
-    case kAccepted: {
-      _internal_mutable_accepted()->::Accepted::MergeFrom(from._internal_accepted());
-      break;
-    }
-    case kDecide: {
-      _internal_mutable_decide()->::Decide::MergeFrom(from._internal_decide());
-      break;
-    }
-    case ONEOFMESSAGE_NOT_SET: {
-      break;
-    }
+  if (from._internal_has_prepare()) {
+    prepare_ = new ::Prepare(*from.prepare_);
+  } else {
+    prepare_ = nullptr;
   }
+  if (from._internal_has_promise()) {
+    promise_ = new ::Promise(*from.promise_);
+  } else {
+    promise_ = nullptr;
+  }
+  if (from._internal_has_accept()) {
+    accept_ = new ::Accept(*from.accept_);
+  } else {
+    accept_ = nullptr;
+  }
+  if (from._internal_has_accepted()) {
+    accepted_ = new ::Accepted(*from.accepted_);
+  } else {
+    accepted_ = nullptr;
+  }
+  if (from._internal_has_decide()) {
+    decide_ = new ::Decide(*from.decide_);
+  } else {
+    decide_ = nullptr;
+  }
+  type_ = from.type_;
   // @@protoc_insertion_point(copy_constructor:WireMessage)
 }
 
 void WireMessage::SharedCtor() {
   ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&scc_info_WireMessage_Msg_2eproto.base);
-  type_ = 0;
-  clear_has_oneOfMessage();
+  ::memset(&prepare_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&type_) -
+      reinterpret_cast<char*>(&prepare_)) + sizeof(type_));
 }
 
 WireMessage::~WireMessage() {
@@ -2936,9 +2874,11 @@ WireMessage::~WireMessage() {
 }
 
 void WireMessage::SharedDtor() {
-  if (has_oneOfMessage()) {
-    clear_oneOfMessage();
-  }
+  if (this != internal_default_instance()) delete prepare_;
+  if (this != internal_default_instance()) delete promise_;
+  if (this != internal_default_instance()) delete accept_;
+  if (this != internal_default_instance()) delete accepted_;
+  if (this != internal_default_instance()) delete decide_;
 }
 
 void WireMessage::SetCachedSize(int size) const {
@@ -2950,45 +2890,36 @@ const WireMessage& WireMessage::default_instance() {
 }
 
 
-void WireMessage::clear_oneOfMessage() {
-// @@protoc_insertion_point(one_of_clear_start:WireMessage)
-  switch (oneOfMessage_case()) {
-    case kPrepare: {
-      delete oneOfMessage_.prepare_;
-      break;
-    }
-    case kPromise: {
-      delete oneOfMessage_.promise_;
-      break;
-    }
-    case kAccept: {
-      delete oneOfMessage_.accept_;
-      break;
-    }
-    case kAccepted: {
-      delete oneOfMessage_.accepted_;
-      break;
-    }
-    case kDecide: {
-      delete oneOfMessage_.decide_;
-      break;
-    }
-    case ONEOFMESSAGE_NOT_SET: {
-      break;
-    }
-  }
-  _oneof_case_[0] = ONEOFMESSAGE_NOT_SET;
-}
-
-
 void WireMessage::Clear() {
 // @@protoc_insertion_point(message_clear_start:WireMessage)
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
+  cached_has_bits = _has_bits_[0];
+  if (cached_has_bits & 0x0000001fu) {
+    if (cached_has_bits & 0x00000001u) {
+      GOOGLE_DCHECK(prepare_ != nullptr);
+      prepare_->Clear();
+    }
+    if (cached_has_bits & 0x00000002u) {
+      GOOGLE_DCHECK(promise_ != nullptr);
+      promise_->Clear();
+    }
+    if (cached_has_bits & 0x00000004u) {
+      GOOGLE_DCHECK(accept_ != nullptr);
+      accept_->Clear();
+    }
+    if (cached_has_bits & 0x00000008u) {
+      GOOGLE_DCHECK(accepted_ != nullptr);
+      accepted_->Clear();
+    }
+    if (cached_has_bits & 0x00000010u) {
+      GOOGLE_DCHECK(decide_ != nullptr);
+      decide_->Clear();
+    }
+  }
   type_ = 0;
-  clear_oneOfMessage();
   _has_bits_.Clear();
   _internal_metadata_.Clear();
 }
@@ -3073,49 +3004,51 @@ failure:
 
   cached_has_bits = _has_bits_[0];
   // required int32 type = 1;
-  if (cached_has_bits & 0x00000001u) {
+  if (cached_has_bits & 0x00000020u) {
     target = stream->EnsureSpace(target);
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(1, this->_internal_type(), target);
   }
 
-  switch (oneOfMessage_case()) {
-    case kPrepare: {
-      target = stream->EnsureSpace(target);
-      target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
-        InternalWriteMessage(
-          2, _Internal::prepare(this), target, stream);
-      break;
-    }
-    case kPromise: {
-      target = stream->EnsureSpace(target);
-      target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
-        InternalWriteMessage(
-          3, _Internal::promise(this), target, stream);
-      break;
-    }
-    case kAccept: {
-      target = stream->EnsureSpace(target);
-      target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
-        InternalWriteMessage(
-          4, _Internal::accept(this), target, stream);
-      break;
-    }
-    case kAccepted: {
-      target = stream->EnsureSpace(target);
-      target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
-        InternalWriteMessage(
-          5, _Internal::accepted(this), target, stream);
-      break;
-    }
-    case kDecide: {
-      target = stream->EnsureSpace(target);
-      target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
-        InternalWriteMessage(
-          6, _Internal::decide(this), target, stream);
-      break;
-    }
-    default: ;
+  // optional .Prepare prepare = 2;
+  if (cached_has_bits & 0x00000001u) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(
+        2, _Internal::prepare(this), target, stream);
   }
+
+  // optional .Promise promise = 3;
+  if (cached_has_bits & 0x00000002u) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(
+        3, _Internal::promise(this), target, stream);
+  }
+
+  // optional .Accept accept = 4;
+  if (cached_has_bits & 0x00000004u) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(
+        4, _Internal::accept(this), target, stream);
+  }
+
+  // optional .Accepted accepted = 5;
+  if (cached_has_bits & 0x00000008u) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(
+        5, _Internal::accepted(this), target, stream);
+  }
+
+  // optional .Decide decide = 6;
+  if (cached_has_bits & 0x00000010u) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+      InternalWriteMessage(
+        6, _Internal::decide(this), target, stream);
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields(), target, stream);
@@ -3138,45 +3071,43 @@ size_t WireMessage::ByteSizeLong() const {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
-  switch (oneOfMessage_case()) {
+  cached_has_bits = _has_bits_[0];
+  if (cached_has_bits & 0x0000001fu) {
     // optional .Prepare prepare = 2;
-    case kPrepare: {
+    if (cached_has_bits & 0x00000001u) {
       total_size += 1 +
         ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
-          *oneOfMessage_.prepare_);
-      break;
+          *prepare_);
     }
+
     // optional .Promise promise = 3;
-    case kPromise: {
+    if (cached_has_bits & 0x00000002u) {
       total_size += 1 +
         ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
-          *oneOfMessage_.promise_);
-      break;
+          *promise_);
     }
+
     // optional .Accept accept = 4;
-    case kAccept: {
+    if (cached_has_bits & 0x00000004u) {
       total_size += 1 +
         ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
-          *oneOfMessage_.accept_);
-      break;
+          *accept_);
     }
+
     // optional .Accepted accepted = 5;
-    case kAccepted: {
+    if (cached_has_bits & 0x00000008u) {
       total_size += 1 +
         ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
-          *oneOfMessage_.accepted_);
-      break;
+          *accepted_);
     }
+
     // optional .Decide decide = 6;
-    case kDecide: {
+    if (cached_has_bits & 0x00000010u) {
       total_size += 1 +
         ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
-          *oneOfMessage_.decide_);
-      break;
+          *decide_);
     }
-    case ONEOFMESSAGE_NOT_SET: {
-      break;
-    }
+
   }
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     return ::PROTOBUF_NAMESPACE_ID::internal::ComputeUnknownFieldsSize(
@@ -3209,33 +3140,27 @@ void WireMessage::MergeFrom(const WireMessage& from) {
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
-  if (from._internal_has_type()) {
-    _internal_set_type(from._internal_type());
-  }
-  switch (from.oneOfMessage_case()) {
-    case kPrepare: {
+  cached_has_bits = from._has_bits_[0];
+  if (cached_has_bits & 0x0000003fu) {
+    if (cached_has_bits & 0x00000001u) {
       _internal_mutable_prepare()->::Prepare::MergeFrom(from._internal_prepare());
-      break;
     }
-    case kPromise: {
+    if (cached_has_bits & 0x00000002u) {
       _internal_mutable_promise()->::Promise::MergeFrom(from._internal_promise());
-      break;
     }
-    case kAccept: {
+    if (cached_has_bits & 0x00000004u) {
       _internal_mutable_accept()->::Accept::MergeFrom(from._internal_accept());
-      break;
     }
-    case kAccepted: {
+    if (cached_has_bits & 0x00000008u) {
       _internal_mutable_accepted()->::Accepted::MergeFrom(from._internal_accepted());
-      break;
     }
-    case kDecide: {
+    if (cached_has_bits & 0x00000010u) {
       _internal_mutable_decide()->::Decide::MergeFrom(from._internal_decide());
-      break;
     }
-    case ONEOFMESSAGE_NOT_SET: {
-      break;
+    if (cached_has_bits & 0x00000020u) {
+      type_ = from.type_;
     }
+    _has_bits_[0] |= cached_has_bits;
   }
 }
 
@@ -3254,41 +3179,21 @@ void WireMessage::CopyFrom(const WireMessage& from) {
 }
 
 bool WireMessage::IsInitialized() const {
-  if ((_has_bits_[0] & 0x00000001) != 0x00000001) return false;
-  switch (oneOfMessage_case()) {
-    case kPrepare: {
-      if (has_prepare()) {
-        if (!this->prepare().IsInitialized()) return false;
-      }
-      break;
-    }
-    case kPromise: {
-      if (has_promise()) {
-        if (!this->promise().IsInitialized()) return false;
-      }
-      break;
-    }
-    case kAccept: {
-      if (has_accept()) {
-        if (!this->accept().IsInitialized()) return false;
-      }
-      break;
-    }
-    case kAccepted: {
-      if (has_accepted()) {
-        if (!this->accepted().IsInitialized()) return false;
-      }
-      break;
-    }
-    case kDecide: {
-      if (has_decide()) {
-        if (!this->decide().IsInitialized()) return false;
-      }
-      break;
-    }
-    case ONEOFMESSAGE_NOT_SET: {
-      break;
-    }
+  if ((_has_bits_[0] & 0x00000020) != 0x00000020) return false;
+  if (_internal_has_prepare()) {
+    if (!prepare_->IsInitialized()) return false;
+  }
+  if (_internal_has_promise()) {
+    if (!promise_->IsInitialized()) return false;
+  }
+  if (_internal_has_accept()) {
+    if (!accept_->IsInitialized()) return false;
+  }
+  if (_internal_has_accepted()) {
+    if (!accepted_->IsInitialized()) return false;
+  }
+  if (_internal_has_decide()) {
+    if (!decide_->IsInitialized()) return false;
   }
   return true;
 }
@@ -3297,9 +3202,12 @@ void WireMessage::InternalSwap(WireMessage* other) {
   using std::swap;
   _internal_metadata_.Swap(&other->_internal_metadata_);
   swap(_has_bits_[0], other->_has_bits_[0]);
+  swap(prepare_, other->prepare_);
+  swap(promise_, other->promise_);
+  swap(accept_, other->accept_);
+  swap(accepted_, other->accepted_);
+  swap(decide_, other->decide_);
   swap(type_, other->type_);
-  swap(oneOfMessage_, other->oneOfMessage_);
-  swap(_oneof_case_[0], other->_oneof_case_[0]);
 }
 
 ::PROTOBUF_NAMESPACE_ID::Metadata WireMessage::GetMetadata() const {
