@@ -211,10 +211,14 @@ void *receiving(void *arg)
 
 bool compare_ballot(Ballot b1, Ballot b2)
 {
-    if(b1.depth() > b2.depth()){
-        if(b1.seq_n() > b2.seq_n()) return true;
-        else if(b1.seq_n() == b2.seq_n()){
-            if(b1.proc_id() > b2.proc_id()) return true;
+    if (b1.depth() > b2.depth())
+    {
+        if (b1.seq_n() > b2.seq_n())
+            return true;
+        else if (b1.seq_n() == b2.seq_n())
+        {
+            if (b1.proc_id() > b2.proc_id())
+                return true;
         }
     }
     return false;
@@ -222,10 +226,17 @@ bool compare_ballot(Ballot b1, Ballot b2)
 
 Block find_blo_with_highest_b(std::vector<WireMessage> proms)
 {
-    Block maxb = proms[0].promise().ablock();
-    for(int i = 0; i < proms.size() - 1; i++){
-        if(proms[i+1].)
+    WireMessage maxb = proms[0];
+    for (int i = 0; i < proms.size() - 1; i++)
+    {
+        if (compare_ballot(proms[i + 1].promise().ab_num(), maxb.promise().ab_num()))
+        {
+            // Update maxb
+            maxb = proms[i];
+        }
     }
+    Block result = to_message(maxb.promise().ablock());
+    return result;
 }
 
 // Set update to true if you want to update the receiver balance
