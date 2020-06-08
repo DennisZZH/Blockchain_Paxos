@@ -25,7 +25,12 @@ class Transaction{
 
 class Block{
     public:
-        Block();
+        Block(){
+            prev = NULL;
+            nonce = "";
+            hash = "";
+            h = "";
+        };
         Block(std::list<Transaction> trans_list){
             prev = NULL;
             while(!trans_list.empty()){
