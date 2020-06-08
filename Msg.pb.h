@@ -1499,11 +1499,11 @@ class WireMessage :
   static const WireMessage& default_instance();
 
   enum OneOfMessageCase {
-    kPrepare = 1,
-    kPromise = 2,
-    kAccept = 3,
-    kAccepted = 6,
-    kDecide = 5,
+    kPrepare = 2,
+    kPromise = 3,
+    kAccept = 4,
+    kAccepted = 5,
+    kDecide = 6,
     ONEOFMESSAGE_NOT_SET = 0,
   };
 
@@ -1577,13 +1577,27 @@ class WireMessage :
   // accessors -------------------------------------------------------
 
   enum : int {
-    kPrepareFieldNumber = 1,
-    kPromiseFieldNumber = 2,
-    kAcceptFieldNumber = 3,
-    kAcceptedFieldNumber = 6,
-    kDecideFieldNumber = 5,
+    kTypeFieldNumber = 1,
+    kPrepareFieldNumber = 2,
+    kPromiseFieldNumber = 3,
+    kAcceptFieldNumber = 4,
+    kAcceptedFieldNumber = 5,
+    kDecideFieldNumber = 6,
   };
-  // optional .Prepare prepare = 1;
+  // required int32 type = 1;
+  bool has_type() const;
+  private:
+  bool _internal_has_type() const;
+  public:
+  void clear_type();
+  ::PROTOBUF_NAMESPACE_ID::int32 type() const;
+  void set_type(::PROTOBUF_NAMESPACE_ID::int32 value);
+  private:
+  ::PROTOBUF_NAMESPACE_ID::int32 _internal_type() const;
+  void _internal_set_type(::PROTOBUF_NAMESPACE_ID::int32 value);
+  public:
+
+  // optional .Prepare prepare = 2;
   bool has_prepare() const;
   private:
   bool _internal_has_prepare() const;
@@ -1598,7 +1612,7 @@ class WireMessage :
   ::Prepare* _internal_mutable_prepare();
   public:
 
-  // optional .Promise promise = 2;
+  // optional .Promise promise = 3;
   bool has_promise() const;
   private:
   bool _internal_has_promise() const;
@@ -1613,7 +1627,7 @@ class WireMessage :
   ::Promise* _internal_mutable_promise();
   public:
 
-  // optional .Accept accept = 3;
+  // optional .Accept accept = 4;
   bool has_accept() const;
   private:
   bool _internal_has_accept() const;
@@ -1628,7 +1642,7 @@ class WireMessage :
   ::Accept* _internal_mutable_accept();
   public:
 
-  // optional .Accepted accepted = 6;
+  // optional .Accepted accepted = 5;
   bool has_accepted() const;
   private:
   bool _internal_has_accepted() const;
@@ -1643,7 +1657,7 @@ class WireMessage :
   ::Accepted* _internal_mutable_accepted();
   public:
 
-  // optional .Decide decide = 5;
+  // optional .Decide decide = 6;
   bool has_decide() const;
   private:
   bool _internal_has_decide() const;
@@ -1675,6 +1689,7 @@ class WireMessage :
   ::PROTOBUF_NAMESPACE_ID::internal::InternalMetadataWithArena _internal_metadata_;
   ::PROTOBUF_NAMESPACE_ID::internal::HasBits<1> _has_bits_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  ::PROTOBUF_NAMESPACE_ID::int32 type_;
   union OneOfMessageUnion {
     OneOfMessageUnion() {}
     ::Prepare* prepare_;
@@ -2707,7 +2722,35 @@ inline void Decide::set_allocated_block(::MsgBlock* block) {
 
 // WireMessage
 
-// optional .Prepare prepare = 1;
+// required int32 type = 1;
+inline bool WireMessage::_internal_has_type() const {
+  bool value = (_has_bits_[0] & 0x00000001u) != 0;
+  return value;
+}
+inline bool WireMessage::has_type() const {
+  return _internal_has_type();
+}
+inline void WireMessage::clear_type() {
+  type_ = 0;
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 WireMessage::_internal_type() const {
+  return type_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 WireMessage::type() const {
+  // @@protoc_insertion_point(field_get:WireMessage.type)
+  return _internal_type();
+}
+inline void WireMessage::_internal_set_type(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _has_bits_[0] |= 0x00000001u;
+  type_ = value;
+}
+inline void WireMessage::set_type(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _internal_set_type(value);
+  // @@protoc_insertion_point(field_set:WireMessage.type)
+}
+
+// optional .Prepare prepare = 2;
 inline bool WireMessage::_internal_has_prepare() const {
   return oneOfMessage_case() == kPrepare;
 }
@@ -2757,7 +2800,7 @@ inline ::Prepare* WireMessage::mutable_prepare() {
   return _internal_mutable_prepare();
 }
 
-// optional .Promise promise = 2;
+// optional .Promise promise = 3;
 inline bool WireMessage::_internal_has_promise() const {
   return oneOfMessage_case() == kPromise;
 }
@@ -2807,7 +2850,7 @@ inline ::Promise* WireMessage::mutable_promise() {
   return _internal_mutable_promise();
 }
 
-// optional .Accept accept = 3;
+// optional .Accept accept = 4;
 inline bool WireMessage::_internal_has_accept() const {
   return oneOfMessage_case() == kAccept;
 }
@@ -2857,7 +2900,7 @@ inline ::Accept* WireMessage::mutable_accept() {
   return _internal_mutable_accept();
 }
 
-// optional .Accepted accepted = 6;
+// optional .Accepted accepted = 5;
 inline bool WireMessage::_internal_has_accepted() const {
   return oneOfMessage_case() == kAccepted;
 }
@@ -2907,7 +2950,7 @@ inline ::Accepted* WireMessage::mutable_accepted() {
   return _internal_mutable_accepted();
 }
 
-// optional .Decide decide = 5;
+// optional .Decide decide = 6;
 inline bool WireMessage::_internal_has_decide() const {
   return oneOfMessage_case() == kDecide;
 }

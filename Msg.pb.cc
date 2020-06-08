@@ -294,12 +294,14 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_Msg_2eproto::offsets[] PROTOBU
   ~0u,  // no _extensions_
   PROTOBUF_FIELD_OFFSET(::WireMessage, _oneof_case_[0]),
   ~0u,  // no _weak_field_map_
+  PROTOBUF_FIELD_OFFSET(::WireMessage, type_),
   offsetof(::WireMessageDefaultTypeInternal, prepare_),
   offsetof(::WireMessageDefaultTypeInternal, promise_),
   offsetof(::WireMessageDefaultTypeInternal, accept_),
   offsetof(::WireMessageDefaultTypeInternal, accepted_),
   offsetof(::WireMessageDefaultTypeInternal, decide_),
   PROTOBUF_FIELD_OFFSET(::WireMessage, oneOfMessage_),
+  0,
   ~0u,
   ~0u,
   ~0u,
@@ -315,7 +317,7 @@ static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOB
   { 51, 59, sizeof(::Accept)},
   { 62, 69, sizeof(::Accepted)},
   { 71, 78, sizeof(::Decide)},
-  { 80, 91, sizeof(::WireMessage)},
+  { 80, 92, sizeof(::WireMessage)},
 };
 
 static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] = {
@@ -343,11 +345,12 @@ const char descriptor_table_protodef_Msg_2eproto[] PROTOBUF_SECTION_VARIABLE(pro
   "\005block\030\003 \002(\0132\t.MsgBlock\"<\n\010Accepted\022\026\n\005b"
   "_num\030\001 \002(\0132\007.Ballot\022\030\n\005block\030\002 \002(\0132\t.Msg"
   "Block\":\n\006Decide\022\026\n\005b_num\030\001 \002(\0132\007.Ballot\022"
-  "\030\n\005block\030\002 \002(\0132\t.MsgBlock\"\254\001\n\013WireMessag"
-  "e\022\033\n\007prepare\030\001 \001(\0132\010.PrepareH\000\022\033\n\007promis"
-  "e\030\002 \001(\0132\010.PromiseH\000\022\031\n\006accept\030\003 \001(\0132\007.Ac"
-  "ceptH\000\022\035\n\010accepted\030\006 \001(\0132\t.AcceptedH\000\022\031\n"
-  "\006decide\030\005 \001(\0132\007.DecideH\000B\016\n\014oneOfMessage"
+  "\030\n\005block\030\002 \002(\0132\t.MsgBlock\"\272\001\n\013WireMessag"
+  "e\022\014\n\004type\030\001 \002(\005\022\033\n\007prepare\030\002 \001(\0132\010.Prepa"
+  "reH\000\022\033\n\007promise\030\003 \001(\0132\010.PromiseH\000\022\031\n\006acc"
+  "ept\030\004 \001(\0132\007.AcceptH\000\022\035\n\010accepted\030\005 \001(\0132\t"
+  ".AcceptedH\000\022\031\n\006decide\030\006 \001(\0132\007.DecideH\000B\016"
+  "\n\014oneOfMessage"
   ;
 static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor_table_Msg_2eproto_deps[1] = {
 };
@@ -365,7 +368,7 @@ static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_Msg
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_Msg_2eproto_once;
 static bool descriptor_table_Msg_2eproto_initialized = false;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_Msg_2eproto = {
-  &descriptor_table_Msg_2eproto_initialized, descriptor_table_protodef_Msg_2eproto, "Msg.proto", 680,
+  &descriptor_table_Msg_2eproto_initialized, descriptor_table_protodef_Msg_2eproto, "Msg.proto", 694,
   &descriptor_table_Msg_2eproto_once, descriptor_table_Msg_2eproto_sccs, descriptor_table_Msg_2eproto_deps, 9, 0,
   schemas, file_default_instances, TableStruct_Msg_2eproto::offsets,
   file_level_metadata_Msg_2eproto, 9, file_level_enum_descriptors_Msg_2eproto, file_level_service_descriptors_Msg_2eproto,
@@ -2781,6 +2784,9 @@ void WireMessage::InitAsDefaultInstance() {
 class WireMessage::_Internal {
  public:
   using HasBits = decltype(std::declval<WireMessage>()._has_bits_);
+  static void set_has_type(HasBits* has_bits) {
+    (*has_bits)[0] |= 1u;
+  }
   static const ::Prepare& prepare(const WireMessage* msg);
   static const ::Promise& promise(const WireMessage* msg);
   static const ::Accept& accept(const WireMessage* msg);
@@ -2888,6 +2894,7 @@ WireMessage::WireMessage(const WireMessage& from)
       _internal_metadata_(nullptr),
       _has_bits_(from._has_bits_) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
+  type_ = from.type_;
   clear_has_oneOfMessage();
   switch (from.oneOfMessage_case()) {
     case kPrepare: {
@@ -2919,6 +2926,7 @@ WireMessage::WireMessage(const WireMessage& from)
 
 void WireMessage::SharedCtor() {
   ::PROTOBUF_NAMESPACE_ID::internal::InitSCC(&scc_info_WireMessage_Msg_2eproto.base);
+  type_ = 0;
   clear_has_oneOfMessage();
 }
 
@@ -2979,6 +2987,7 @@ void WireMessage::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
+  type_ = 0;
   clear_oneOfMessage();
   _has_bits_.Clear();
   _internal_metadata_.Clear();
@@ -2986,43 +2995,52 @@ void WireMessage::Clear() {
 
 const char* WireMessage::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) {
 #define CHK_(x) if (PROTOBUF_PREDICT_FALSE(!(x))) goto failure
+  _Internal::HasBits has_bits{};
   while (!ctx->Done(&ptr)) {
     ::PROTOBUF_NAMESPACE_ID::uint32 tag;
     ptr = ::PROTOBUF_NAMESPACE_ID::internal::ReadTag(ptr, &tag);
     CHK_(ptr);
     switch (tag >> 3) {
-      // optional .Prepare prepare = 1;
+      // required int32 type = 1;
       case 1:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 10)) {
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 8)) {
+          _Internal::set_has_type(&has_bits);
+          type_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint(&ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // optional .Prepare prepare = 2;
+      case 2:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 18)) {
           ptr = ctx->ParseMessage(_internal_mutable_prepare(), ptr);
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
-      // optional .Promise promise = 2;
-      case 2:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 18)) {
+      // optional .Promise promise = 3;
+      case 3:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 26)) {
           ptr = ctx->ParseMessage(_internal_mutable_promise(), ptr);
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
-      // optional .Accept accept = 3;
-      case 3:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 26)) {
+      // optional .Accept accept = 4;
+      case 4:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 34)) {
           ptr = ctx->ParseMessage(_internal_mutable_accept(), ptr);
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
-      // optional .Decide decide = 5;
+      // optional .Accepted accepted = 5;
       case 5:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 42)) {
-          ptr = ctx->ParseMessage(_internal_mutable_decide(), ptr);
+          ptr = ctx->ParseMessage(_internal_mutable_accepted(), ptr);
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
-      // optional .Accepted accepted = 6;
+      // optional .Decide decide = 6;
       case 6:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 50)) {
-          ptr = ctx->ParseMessage(_internal_mutable_accepted(), ptr);
+          ptr = ctx->ParseMessage(_internal_mutable_decide(), ptr);
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
@@ -3039,6 +3057,7 @@ const char* WireMessage::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID
     }  // switch
   }  // while
 success:
+  _has_bits_.Or(has_bits);
   return ptr;
 failure:
   ptr = nullptr;
@@ -3052,40 +3071,47 @@ failure:
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
+  cached_has_bits = _has_bits_[0];
+  // required int32 type = 1;
+  if (cached_has_bits & 0x00000001u) {
+    target = stream->EnsureSpace(target);
+    target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteInt32ToArray(1, this->_internal_type(), target);
+  }
+
   switch (oneOfMessage_case()) {
     case kPrepare: {
       target = stream->EnsureSpace(target);
       target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
         InternalWriteMessage(
-          1, _Internal::prepare(this), target, stream);
+          2, _Internal::prepare(this), target, stream);
       break;
     }
     case kPromise: {
       target = stream->EnsureSpace(target);
       target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
         InternalWriteMessage(
-          2, _Internal::promise(this), target, stream);
+          3, _Internal::promise(this), target, stream);
       break;
     }
     case kAccept: {
       target = stream->EnsureSpace(target);
       target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
         InternalWriteMessage(
-          3, _Internal::accept(this), target, stream);
-      break;
-    }
-    case kDecide: {
-      target = stream->EnsureSpace(target);
-      target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
-        InternalWriteMessage(
-          5, _Internal::decide(this), target, stream);
+          4, _Internal::accept(this), target, stream);
       break;
     }
     case kAccepted: {
       target = stream->EnsureSpace(target);
       target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
         InternalWriteMessage(
-          6, _Internal::accepted(this), target, stream);
+          5, _Internal::accepted(this), target, stream);
+      break;
+    }
+    case kDecide: {
+      target = stream->EnsureSpace(target);
+      target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+        InternalWriteMessage(
+          6, _Internal::decide(this), target, stream);
       break;
     }
     default: ;
@@ -3102,40 +3128,46 @@ size_t WireMessage::ByteSizeLong() const {
 // @@protoc_insertion_point(message_byte_size_start:WireMessage)
   size_t total_size = 0;
 
+  // required int32 type = 1;
+  if (_internal_has_type()) {
+    total_size += 1 +
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::Int32Size(
+        this->_internal_type());
+  }
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
   switch (oneOfMessage_case()) {
-    // optional .Prepare prepare = 1;
+    // optional .Prepare prepare = 2;
     case kPrepare: {
       total_size += 1 +
         ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
           *oneOfMessage_.prepare_);
       break;
     }
-    // optional .Promise promise = 2;
+    // optional .Promise promise = 3;
     case kPromise: {
       total_size += 1 +
         ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
           *oneOfMessage_.promise_);
       break;
     }
-    // optional .Accept accept = 3;
+    // optional .Accept accept = 4;
     case kAccept: {
       total_size += 1 +
         ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
           *oneOfMessage_.accept_);
       break;
     }
-    // optional .Accepted accepted = 6;
+    // optional .Accepted accepted = 5;
     case kAccepted: {
       total_size += 1 +
         ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
           *oneOfMessage_.accepted_);
       break;
     }
-    // optional .Decide decide = 5;
+    // optional .Decide decide = 6;
     case kDecide: {
       total_size += 1 +
         ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
@@ -3177,6 +3209,9 @@ void WireMessage::MergeFrom(const WireMessage& from) {
   ::PROTOBUF_NAMESPACE_ID::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
+  if (from._internal_has_type()) {
+    _internal_set_type(from._internal_type());
+  }
   switch (from.oneOfMessage_case()) {
     case kPrepare: {
       _internal_mutable_prepare()->::Prepare::MergeFrom(from._internal_prepare());
@@ -3219,6 +3254,7 @@ void WireMessage::CopyFrom(const WireMessage& from) {
 }
 
 bool WireMessage::IsInitialized() const {
+  if ((_has_bits_[0] & 0x00000001) != 0x00000001) return false;
   switch (oneOfMessage_case()) {
     case kPrepare: {
       if (has_prepare()) {
@@ -3261,6 +3297,7 @@ void WireMessage::InternalSwap(WireMessage* other) {
   using std::swap;
   _internal_metadata_.Swap(&other->_internal_metadata_);
   swap(_has_bits_[0], other->_has_bits_[0]);
+  swap(type_, other->type_);
   swap(oneOfMessage_, other->oneOfMessage_);
   swap(_oneof_case_[0], other->_oneof_case_[0]);
 }

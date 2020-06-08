@@ -45,11 +45,12 @@ message	Decide {
 }
 
 message WireMessage {
+    required int32 type = 1;
     oneof oneOfMessage {
-        Prepare prepare = 1;
-        Promise promise = 2;
-        Accept accept = 3;
-        Accepted accepted = 6;
-        Decide decide = 5;
+        Prepare prepare = 2;
+        Promise promise = 3;
+        Accept accept = 4;
+        Accepted accepted = 5;
+        Decide decide = 6;
     }
 }
