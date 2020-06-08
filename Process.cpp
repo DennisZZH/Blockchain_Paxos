@@ -25,7 +25,6 @@ int port = 8000;
 char *server_ip = "127.0.0.1";
 int sockfd;
 struct sockaddr_in servaddr, cliaddr;
-bool CONNECT[QUORUM_SIZE];
 
 int balance = 100;
 int pid;
@@ -37,6 +36,7 @@ Block accept_blo, my_blo;
 bool isPrepare = false;
 std::vector<WireMessage> proms;
 bool isSendBack = false;
+bool isAccepted = false;
 WireMessage SendBack;
 
 std::list<WireMessage> events; // require lock
@@ -60,24 +60,17 @@ void moneyTransfer(int receiver, int amount)
             ballot_num.set_seq_n(++seq_num);
             ballot_num.set_depth(bc.get_num_blocks() + 1);
 
-            std::cout << "000\n";
             WireMessage m;
             m.set_type(1);
             Prepare *p = m.mutable_prepare();
             Ballot *b = p->mutable_b_num();
-            std::cout << "111\n";
             b->set_depth(ballot_num.depth());
             b->set_proc_id(ballot_num.proc_id());
             b->set_seq_n(ballot_num.seq_n());
-            std::cout << "222\n";
-            std::cout << "333\n";
-            std::cout << events.size() << "\n";
 
             pthread_mutex_lock(&e_lock);
             events.push_back(m);
             pthread_mutex_unlock(&e_lock);
-            std::cout << events.size() << "\n";
-            std::cout << "444\n";
 
             isPrepare = true;
         }
@@ -294,17 +287,19 @@ void *process(void *arg)
         m.Clear();
         if (!events.empty())
         {
-            std::cout << "555\n";
             pthread_mutex_lock(&e_lock);
             m = events.front();
             events.pop_front();
             pthread_mutex_unlock(&e_lock);
-            std::cout << events.size() << "\n";
-            std::cout << "666\n";
 
             if (m.type() == 1)
             {
-                std::cout << "777\n";
+                if (isAccepted)
+                {
+                    pthread_mutex_lock(&e_lock);
+                    events.push_back(m);
+                    pthread_mutex_unlock(&e_lock);
+                }
                 if (m.prepare().b_num().proc_id() == pid)
                 {
                     if (compare_ballot(ballot_num, m.prepare().b_num()))
@@ -450,6 +445,7 @@ void *process(void *arg)
 
                         num_promise = 0;
                         proms.clear();
+                        isAccepted = true;
                     }
                 }
             }
@@ -482,6 +478,8 @@ void *process(void *arg)
 
                     sleep(3);
                     sendto(sockfd, str_message.c_str(), sizeof(WireMessage), 0, (const sockaddr *)&cliaddr, sizeof(cliaddr));
+
+                    isAccepted = true;
                 }
             }
             // Upon receiving accepted
@@ -527,6 +525,7 @@ void *process(void *arg)
                         }
 
                         num_accepted = 0;
+                        isAccepted = false;
 
                         if (isSendBack)
                         {
@@ -550,6 +549,7 @@ void *process(void *arg)
                 }
                 accept_blo = Block();
                 accept_num.Clear();
+                isAccepted = false;
             }
 
             else
