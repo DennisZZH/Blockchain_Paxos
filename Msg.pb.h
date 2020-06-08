@@ -1502,7 +1502,7 @@ class WireMessage :
     kPrepare = 1,
     kPromise = 2,
     kAccept = 3,
-    kAccepted = 4,
+    kAccepted = 6,
     kDecide = 5,
     ONEOFMESSAGE_NOT_SET = 0,
   };
@@ -1580,7 +1580,7 @@ class WireMessage :
     kPrepareFieldNumber = 1,
     kPromiseFieldNumber = 2,
     kAcceptFieldNumber = 3,
-    kAcceptedFieldNumber = 4,
+    kAcceptedFieldNumber = 6,
     kDecideFieldNumber = 5,
   };
   // optional .Prepare prepare = 1;
@@ -1628,7 +1628,7 @@ class WireMessage :
   ::Accept* _internal_mutable_accept();
   public:
 
-  // optional .Accepted accepted = 4;
+  // optional .Accepted accepted = 6;
   bool has_accepted() const;
   private:
   bool _internal_has_accepted() const;
@@ -2857,7 +2857,7 @@ inline ::Accept* WireMessage::mutable_accept() {
   return _internal_mutable_accept();
 }
 
-// optional .Accepted accepted = 4;
+// optional .Accepted accepted = 6;
 inline bool WireMessage::_internal_has_accepted() const {
   return oneOfMessage_case() == kAccepted;
 }

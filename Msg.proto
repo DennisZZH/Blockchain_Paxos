@@ -49,7 +49,7 @@ message WireMessage {
         Prepare prepare = 1;
         Promise promise = 2;
         Accept accept = 3;
-        Accepted accepted = 4;
+        Accepted accepted = 6;
         Decide decide = 5;
     }
 }

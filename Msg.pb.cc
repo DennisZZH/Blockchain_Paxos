@@ -346,7 +346,7 @@ const char descriptor_table_protodef_Msg_2eproto[] PROTOBUF_SECTION_VARIABLE(pro
   "\030\n\005block\030\002 \002(\0132\t.MsgBlock\"\254\001\n\013WireMessag"
   "e\022\033\n\007prepare\030\001 \001(\0132\010.PrepareH\000\022\033\n\007promis"
   "e\030\002 \001(\0132\010.PromiseH\000\022\031\n\006accept\030\003 \001(\0132\007.Ac"
-  "ceptH\000\022\035\n\010accepted\030\004 \001(\0132\t.AcceptedH\000\022\031\n"
+  "ceptH\000\022\035\n\010accepted\030\006 \001(\0132\t.AcceptedH\000\022\031\n"
   "\006decide\030\005 \001(\0132\007.DecideH\000B\016\n\014oneOfMessage"
   ;
 static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor_table_Msg_2eproto_deps[1] = {
@@ -3012,17 +3012,17 @@ const char* WireMessage::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
-      // optional .Accepted accepted = 4;
-      case 4:
-        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 34)) {
-          ptr = ctx->ParseMessage(_internal_mutable_accepted(), ptr);
-          CHK_(ptr);
-        } else goto handle_unusual;
-        continue;
       // optional .Decide decide = 5;
       case 5:
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 42)) {
           ptr = ctx->ParseMessage(_internal_mutable_decide(), ptr);
+          CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // optional .Accepted accepted = 6;
+      case 6:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 50)) {
+          ptr = ctx->ParseMessage(_internal_mutable_accepted(), ptr);
           CHK_(ptr);
         } else goto handle_unusual;
         continue;
@@ -3074,18 +3074,18 @@ failure:
           3, _Internal::accept(this), target, stream);
       break;
     }
-    case kAccepted: {
-      target = stream->EnsureSpace(target);
-      target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
-        InternalWriteMessage(
-          4, _Internal::accepted(this), target, stream);
-      break;
-    }
     case kDecide: {
       target = stream->EnsureSpace(target);
       target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
         InternalWriteMessage(
           5, _Internal::decide(this), target, stream);
+      break;
+    }
+    case kAccepted: {
+      target = stream->EnsureSpace(target);
+      target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::
+        InternalWriteMessage(
+          6, _Internal::accepted(this), target, stream);
       break;
     }
     default: ;
@@ -3128,7 +3128,7 @@ size_t WireMessage::ByteSizeLong() const {
           *oneOfMessage_.accept_);
       break;
     }
-    // optional .Accepted accepted = 4;
+    // optional .Accepted accepted = 6;
     case kAccepted: {
       total_size += 1 +
         ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(
