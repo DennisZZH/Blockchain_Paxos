@@ -35,7 +35,7 @@ class Block{
             nonce = find_nonce();
             hash = "";
         };
-        Block(Block blo){
+        Block(const Block &blo){
             prev = blo.prev;
             txns = blo.txns;
             nonce = blo.nonce;
@@ -74,7 +74,7 @@ class Blockchain{
         void find_block();
         void print_block_chain();
         int get_num_blocks(){return num_blocks;};
-        Block* get_curr(){return curr};
+        Block* get_curr(){return curr;};
 
     private:
         Block* head;

@@ -3,12 +3,12 @@
 #include <cstdlib>
 #include <string>
 #include <vector>
-
+#include <iomanip>
+#include <sstream>
 #include <openssl/sha.h>
 
-
 void Transaction::print_Transaction(){
-    std::cout<<"Print Transation: "<<"P"<<sid<<" send $"<<amt<<" To P"<<rid<<endl;
+    std::cout<<"Print Transation: "<<"P"<<sid<<" send $"<<amt<<" To P"<<rid<<std::endl;
 }
 
 std::string Transaction::serialize_transaction(){
@@ -22,7 +22,7 @@ std::string Block::find_hash(){
 	}
 	allInfo += nonce;
 	allInfo += hash;
-	return sha256(str);
+	return sha256(allInfo);
 }
 
 std::string Block::find_nonce(){
@@ -31,7 +31,7 @@ std::string Block::find_nonce(){
 	std::string hashInfo;
 	do{
 		srand(time(NULL));
-		tempNounce = string(1, char(rand()%26 + 97));
+		tempNounce = std::string(1, char(rand()%26 + 97));
 		for(int i = 0; i < txns.size(); i++){
 			allInfo += txns[i].serialize_transaction();
 		}
@@ -51,7 +51,7 @@ std::string Block::sha256(const std::string str){
 	    std::stringstream ss;
 	    for(int i = 0; i < SHA256_DIGEST_LENGTH; i++)
 	    {
-	        ss << hex << setw(2) << setfill('0') << (int)hash[i];
+	        ss << std::hex << std::setw(2) << std::setfill('0') << (int)hash[i];
 	    }
 	    return ss.str();
 }
@@ -76,21 +76,22 @@ Blockchain::~Blockchain(){
 }
 
 void Blockchain::add_block(Block blo){
+	Block* newblo;
 	if(num_blocks == 0){
 		head = new Block(blo);
 		curr = head;
 		num_blocks++;
 	}else{
-		Block* newblo = new Block(blo);
+		newblo = new Block(blo);
 		newblo->set_prev(curr);
 		newblo->set_hash(curr->find_hash());
 		curr = newblo;
 		num_blocks++;
 	}
 
-	cout<<"-------One Block has been added-------"<<endl;
+	std::cout<<"-------One Block has been added-------"<<std::endl;
 	curr->print_block();
-	cout<<"The previous Block's hash value is "<<newblo.get_hash()<<endl;
+	std::cout<<"The previous Block's hash value is "<<newblo->get_hash()<<std::endl;
 }
 
 void Blockchain::find_block(){

@@ -25,9 +25,9 @@ string sha256(const string str){
 }
 
 string findNounce(){
-	int amount = 1;
-	string sender = "A";
-	string receiver = "B";
+	int amount = 138;
+	int sender = 4;
+	int receiver = 5;
 
 	string tempNounce;
 	string allInfo;
@@ -37,7 +37,7 @@ string findNounce(){
 	do{
 	srand(time(NULL));
 	tempNounce = string(1, char(rand()%26 + 97));
-	allInfo = to_string(amount) + sender + receiver + tempNounce;
+	allInfo = to_string(amount) + to_string(sender) + to_string(receiver) + tempNounce;
 	hashInfo = sha256(allInfo);
 	}while( (*hashInfo.rbegin() != '0') && (*hashInfo.rbegin() != '1') && (*hashInfo.rbegin() != '2') && (*hashInfo.rbegin() != '3') && (*hashInfo.rbegin() != '4'));
 	
@@ -52,7 +52,6 @@ string findNounce(){
 
 int main(){
 	
-	//cout<<hashInfo<<endl;
 	findNounce();
 
 	return 0;
