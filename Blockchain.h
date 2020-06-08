@@ -40,6 +40,7 @@ class Block{
             txns = blo.txns;
             nonce = blo.nonce;
             hash = blo.hash;
+            h = blo.h;
         };
 
         void set_prev(Block* ptr){prev = ptr;};
@@ -49,6 +50,7 @@ class Block{
         std::vector<Transaction> get_txns(){return txns;};
         std::string get_hash(){return hash;};
         std::string get_nonce(){return nonce;};
+        std::string get_h(){return h;};
 
         static std::string sha256(const std::string str);
 
@@ -61,6 +63,7 @@ class Block{
         std::vector<Transaction> txns;
         std::string nonce;
         std::string hash;
+        std::string h;
 
         std::string find_nonce();
 };

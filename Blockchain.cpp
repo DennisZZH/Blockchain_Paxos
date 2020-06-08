@@ -39,6 +39,8 @@ std::string Block::find_nonce(){
 		hashInfo = sha256(allInfo);
 	}while( (*hashInfo.rbegin() != '0') && (*hashInfo.rbegin() != '1') && (*hashInfo.rbegin() != '2') && (*hashInfo.rbegin() != '3') && (*hashInfo.rbegin() != '4'));
 
+	h = hashInfo;
+
 	return tempNounce;
 }
 
@@ -62,7 +64,7 @@ void Block::print_block(){
 		std::cout<<"	";
 		txns[i].print_Transaction();
 	}
-	std::cout<<"Hash = "<<hash<<"; Nonce = "<<nonce<<std::endl;
+	std::cout<<"	hash = "<<hash<<"; h = "<<h<<"; Nonce = "<<nonce<<std::endl;
 }
 
 
@@ -89,9 +91,9 @@ void Blockchain::add_block(Block blo){
 		num_blocks++;
 	}
 
-	std::cout<<"-------One Block has been added-------"<<std::endl;
-	curr->print_block();
-	std::cout<<"The previous Block's hash value is "<<newblo->get_hash()<<std::endl;
+	// std::cout<<"-------One Block has been added-------"<<std::endl;
+	// curr->print_block();
+	// std::cout<<"The previous Block's hash value is "<<newblo->get_hash()<<std::endl;
 }
 
 void Blockchain::find_block(){
@@ -104,4 +106,6 @@ void Blockchain::print_block_chain(){
 		std::cout<<"	";
 		i->print_block();
 	}
+	std::cout<<"	";
+	head->print_block();
 }
