@@ -151,6 +151,9 @@ void *receiving(void *arg)
     memset(&recvaddr, 0, sizeof(recvaddr));
     while (true)
     {
+        m.Clear();
+        bzero(buf, sizeof(buf));
+        bzero(&str_WireMessage, sizeof(str_WireMessage));
         int len = sizeof(recvaddr);
         read_size = recvfrom(sockfd, buf, sizeof(buf), MSG_WAITALL, (struct sockaddr *)&recvaddr, (socklen_t *)&len);
         if (read_size < 0)
@@ -160,9 +163,9 @@ void *receiving(void *arg)
             exit(0);
         }
         str_WireMessage.append(buf);
-        bzero(buf, sizeof(buf));
 
         m.ParseFromString(str_WireMessage);
+        // std::cout << "From receiving: " << m.DebugString();
 
         // Push to messages with lock/unlock
         pthread_mutex_lock(&e_lock);
@@ -387,9 +390,9 @@ void *process(void *arg)
                         myBallot = myAccept->mutable_b_num();
                         myBallot->CopyFrom(ballot_num);
                         myAccept->set_pid(pid);
-                        str_message = response.SerializeAsString();
-
                         std::cout << "Broadcast " << response.DebugString();
+                        str_message = response.SerializeAsString();
+                        
 
                         memset(&cliaddr, 0, sizeof(cliaddr));
 
