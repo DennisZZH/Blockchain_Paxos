@@ -39,7 +39,7 @@ std::vector<WireMessage> proms;
 bool isSendBack = false;
 WireMessage SendBack;
 
-std::queue<WireMessage> events; // require lock
+std::list<WireMessage> events; // require lock
 std::list<Transaction> queue;   // required lock
 
 pthread_mutex_t e_lock, q_lock;
@@ -72,7 +72,7 @@ void moneyTransfer(int receiver, int amount)
             std::cout << "333\n";
 
             pthread_mutex_lock(&e_lock);
-            events.push(m);
+            events.push_back(m);
             pthread_mutex_unlock(&e_lock);
             std::cout << "444\n";
 
@@ -105,7 +105,7 @@ void fixLink(int dst)
 
     // Push with lock/unlock
     pthread_mutex_lock(&e_lock);
-    events.push(m);
+    events.push_back(m);
     pthread_mutex_unlock(&e_lock);
 }
 
@@ -215,7 +215,7 @@ void *receiving(void *arg)
 
         // Push to messages with lock/unlock
         pthread_mutex_lock(&e_lock);
-        events.push(m);
+        events.push_back(m);
         pthread_mutex_unlock(&e_lock);
     }
 }
@@ -315,7 +315,7 @@ void *process(void *arg)
             std::cout << "555\n";
             pthread_mutex_lock(&e_lock);
             m = events.front();
-            events.pop();
+            events.pop_front();
             pthread_mutex_unlock(&e_lock);
             std::cout << "666\n";
 
@@ -324,6 +324,7 @@ void *process(void *arg)
                 std::cout << "777\n";
                 if (m.prepare().b_num().proc_id() == pid)
                 {
+                     std::cout << "888\n";
                     if (compare_ballot(ballot_num, m.prepare().b_num()))
                         continue;
 
@@ -356,6 +357,7 @@ void *process(void *arg)
                 }
                 else if (compare_ballot(m.prepare().b_num(), ballot_num))
                 {
+                     std::cout << "999\n";
                     std::cout << "Received " << m.DebugString();
                     ballot_num = m.prepare().b_num();
                     // Send promise back
@@ -520,7 +522,7 @@ void *process(void *arg)
 
                         if (isSendBack)
                         {
-                            events.push(SendBack);
+                            events.push_back(SendBack);
                             isSendBack = false;
                         }
                     }
@@ -535,7 +537,7 @@ void *process(void *arg)
 
                 if (isSendBack)
                 {
-                    events.push(SendBack);
+                    events.push_back(SendBack);
                     isSendBack = false;
                 }
             }

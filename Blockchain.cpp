@@ -93,7 +93,7 @@ void Blockchain::add_block(Block blo){
 
 	// std::cout<<"-------One Block has been added-------"<<std::endl;
 	// curr->print_block();
-	// std::cout<<"The previous Block's hash value is "<<newblo->get_hash()<<std::endl;
+	// std::cout<<endl;
 }
 
 void Blockchain::find_block(){
