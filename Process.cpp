@@ -32,9 +32,11 @@ int seq_num = 0;
 Blockchain bc;
 
 Ballot ballot_num, accept_num;
-Block accept_blo;
+Block accept_blo, my_blo;
 bool isPrepare = false;
-std::vector<Promise> proms;
+std::vector<WireMessage> proms;
+bool isSendBack = false;
+WireMessage SendBack;
 
 std::queue<WireMessage> events; // require lock
 std::list<Transaction> queue;   // required lock
@@ -209,26 +211,36 @@ void *receiving(void *arg)
 
 bool compare_ballot(Ballot b1, Ballot b2)
 {
-    // return if b1 >= b2;
-    // STUB
+    if(b1.depth() > b2.depth()){
+        if(b1.seq_n() > b2.seq_n()) return true;
+        else if(b1.seq_n() == b2.seq_n()){
+            if(b1.proc_id() > b2.proc_id()) return true;
+        }
+    }
     return false;
 }
 
-Block find_blo_with_highest_b(std::vector<Promise> proms)
+Block find_blo_with_highest_b(std::vector<WireMessage> proms)
 {
-    // STUB
+    Block maxb = proms[0].promise().ablock();
+    for(int i = 0; i < proms.size() - 1; i++){
+        if(proms[i+1].)
+    }
 }
 
 // Set update to true if you want to update the receiver balance
-Block to_block(MsgBlock src, bool update) {
+Block to_block(MsgBlock src, bool update)
+{
     std::list<Transaction> trans_list;
-    for (int i = 0; i < src.trax().size(); i++) {
+    for (int i = 0; i < src.trax().size(); i++)
+    {
         int sender = src.trax().at(i).sender();
         int receiver = src.trax().at(i).receiver();
         int amount = src.trax().at(i).amount();
         Transaction newTrans(sender, receiver, amount);
         trans_list.push_back(newTrans);
-        if (update && receiver == pid) {
+        if (update && receiver == pid)
+        {
             balance += amount;
         }
     }
@@ -236,7 +248,8 @@ Block to_block(MsgBlock src, bool update) {
     return result;
 }
 
-MsgBlock to_message(Block src) {
+MsgBlock to_message(Block src)
+{
     std::vector<Transaction> trans_list;
     trans_list = src.get_txns();
     int hash = src.get_hash();
@@ -244,7 +257,8 @@ MsgBlock to_message(Block src) {
     MsgBlock result;
     result.set_hash(hash);
     result.set_nonce(nonce);
-    for (int i = 0; i < trans_list.size(); i++) {
+    for (int i = 0; i < trans_list.size(); i++)
+    {
         Txn newTxn;
         newTxn.set_sender(trans_list[i].get_sid());
         newTxn.set_receiver(trans_list[i].get_rid());
@@ -264,7 +278,8 @@ void *process(void *arg)
     char buf[sizeof(WireMessage)];
     Block newBlock;
 
-    while(!events.empty()){
+    while (!events.empty())
+    {
 
         pthread_mutex_lock(&e_lock);
         m = events.front();
@@ -275,6 +290,8 @@ void *process(void *arg)
         {
             if (m.prepare().b_num().proc_id() == pid)
             {
+                if(compare_ballot(ballot_num, m.prepare().b_num()) continue;
+
                 // Boradcast prepare message
                 str_message = m.SerializeAsString();
 
@@ -295,6 +312,10 @@ void *process(void *arg)
                 // Clear num accepted and promise
                 num_accepted = 0;
                 num_promise = 0;
+                // SendBack in case
+                SendBack = m;
+                SendBack.prepare().b_num().set_seq_n(++seq_num);
+                SendBack.prepare().b_num().set_depth(m.prepare().b_num().depth() + 1);
             }
             else
             {
@@ -317,17 +338,12 @@ void *process(void *arg)
                     int len = sizeof(cliaddr);
                     sendto(sockfd, str_message.c_str(), sizeof(WireMessage), &cliaddr, &len);
 
-                    if(num_promise < QUORUM_MAJORITY){
-                        ballot_num.set_seq_n(++seq_num);
-                        addback.Clear();
-                        addback.prepare();
-                        addback.prepare().set_b_num(ballot_num);
-                        pthread_mutex_lock(&e_lock);
-                        events.push(addback);
-                        pthread_mutex_unlock(&e_lock);
+                    if (isPrepare)
+                    {
+                        isSendBack = true;
+                        num_promise = 0;
+                        num_accepted = 0;
                     }
-                    num_promise = 0;
-                    num_accepted = 0;
                 }
             }
         }
@@ -342,25 +358,20 @@ void *process(void *arg)
                 }
                 else
                 {
+                    accept_num = ballot_num;
                     if (m.promise().ablock().tranxs().size() == 0)
                     {
                         pthread_mutex_lock(&q_lock);
-                        accept_blo = Block(queue);
-                        while(!queue.empty()) queue.pop_front();
+                        my_blo = Block(queue);
+                        while (!queue.empty())
+                            queue.pop_front();
                         pthread_mutex_unlock(&q_lock);
                         isPrepare = false;
                     }
                     else
                     {
-                        accept_blo = find_blo_with_highest_b(proms);
-                        
-                        ballot_num.set_seq_n(++seq_num);
-                        addback.Clear();
-                        addback.prepare();
-                        addback.prepare().set_b_num(ballot_num);
-                        pthread_mutex_lock(&e_lock);
-                        events.push(addback);
-                        pthread_mutex_unlock(&e_lock);
+                        my_blo = find_blo_with_highest_b(proms);
+                        isSendBack = true;
                     }
                     // Broadcast accept message
                     response.Clear();
@@ -390,7 +401,8 @@ void *process(void *arg)
         }
         else if (m.has_accept())
         {
-            if(compare_ballot(m.accept().b_num(), ballot_num)){
+            if (compare_ballot(m.accept().b_num(), ballot_num))
+            {
                 accept_num = m.accept().b_num();
                 accept_blo = m.accept().block();
                 // Send accepted back
@@ -408,11 +420,11 @@ void *process(void *arg)
                 int len = sizeof(cliaddr);
                 sendto(sockfd, str_message.c_str(), sizeof(WireMessage), &cliaddr, &len);
             }
-
         }
         else if (m.has_accpted())
         {
-            if(m.accepted().b_num() == ballot_num){
+            if (m.accepted().b_num() == ballot_num)
+            {
                 num_accepted++;
                 if (num_accepted >= QUORUM_MAJORITY)
                 {
@@ -438,6 +450,12 @@ void *process(void *arg)
                     }
 
                     num_accepted = 0;
+
+                    if (isSendBack)
+                    {
+                        events.push(SendBack);
+                        isSendBack = false;
+                    }
                 }
             }
         }
@@ -446,66 +464,19 @@ void *process(void *arg)
             // Extract all the transactions and update the balance if it is needed
             newBlock = to_block(m.decide().block(), true);
             bc.add_block(newBlock);
+
+            if (isSendBack)
+            {
+                events.push(SendBack);
+                isSendBack = false;
+            }
         }
-        // else if (m.has_restore())
-        // {
-        //     if (m.restore().pid == pid)
-        //     {
-        //         if (m.restore().blocks().size() == 0)
-        //         {
-        //             // Send the message out
-        //             for (int i = 0; i < QUORUM_SIZE; i++)
-        //             {
-        //                 if (CONNECT[i] == true)
-        //                     break;
-        //             }
-        //             memset(&cliaddr, 0, sizeof(cliaddr));
 
-        //             cliaddr.sin_family = AF_INET;
-        //             cliaddr.sin_addr.s_addr = server_ip;
-        //             cliaddr.sin_port = htons(port + i + 1);
-        //             str_message = m.SerializeAsString();
-
-        //             int len = sizeof(cliaddr);
-        //             sendto(sockfd, str_message.c_str(), sizeof(WireMessage), &cliaddr, &len);
-        //         }
-        //         else
-        //         {
-        //             // Add new blocks to blockchain
-        //             for (int i = m.restore().depth() - bc.get_num_blocks - 1; i >= 0; i-) {
-        //                 newBlock = to_block(m.restore().blocks().at(i), true);
-        //                 bc.add_block(newBlock);
-        //             }
-        //         }
-        //     }
-        //     else
-        //     {
-        //         // Send a copy of blocks that the sender does not have
-        //         Block* curr = bc;
-        //         int i = bc.get_num_blocks() - m.restore().depth();
-        //         m.restore().set_depth(bc.get_num_blocks());
-        //         while (i) {
-        //             newBlock = to_message(*curr);
-        //             m.restore().blocks().Add(newBlock);
-        //         }
-
-        //         // Send back to the sender
-        //         memset(&cliaddr, 0, sizeof(cliaddr));
-        //         cliaddr.sin_family = AF_INET;
-        //         cliaddr.sin_addr.s_addr = server_ip;
-        //         cliaddr.sin_port = htons(port + m.restore().pid());
-        //         str_message = m.SerializeAsString();
-
-        //         int len = sizeof(cliaddr);
-        //         sendto(sockfd, str_message.c_str(), sizeof(WireMessage), &cliaddr, &len);
-        //     }
-        // }
         else
-    {
-        std::cout << "ERROR: Wrong message type!" << std::endl;
-        exit(0);
-    }
-    
+        {
+            std::cout << "ERROR: Wrong message type!" << std::endl;
+            exit(0);
+        }
     }
 }
 
