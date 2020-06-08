@@ -146,11 +146,12 @@ void *receiving(void *arg)
     char buf[sizeof(WireMessage)];
     std::string str_WireMessage;
     WireMessage m;
-    memset(&cliaddr, 0, sizeof(cliaddr));
+    struct sockaddr_in recvaddr;
+    memset(&recvaddr, 0, sizeof(recvaddr));
     while (true)
     {
-        int len = sizeof(cliaddr);
-        read_size = recvfrom(sockfd, buf, sizeof(buf), MSG_WAITALL, (struct sockaddr *)&cliaddr, (socklen_t *)&len);
+        int len = sizeof(recvaddr);
+        read_size = recvfrom(sockfd, buf, sizeof(buf), MSG_WAITALL, (struct sockaddr *)&recvaddr, (socklen_t *)&len);
         if (read_size < 0)
         {
             std::cerr << "Error: Failed to receive message from P"
@@ -273,7 +274,6 @@ void *process(void *arg)
                 std::cout << "777\n";
                 if (m.prepare().b_num().proc_id() == pid)
                 {
-                    std::cout << "888\n";
                     if (compare_ballot(ballot_num, m.prepare().b_num()))
                         continue;
 
@@ -295,7 +295,6 @@ void *process(void *arg)
                             sendto(sockfd, str_message.c_str(), sizeof(WireMessage), 0, (struct sockaddr *)&cliaddr, sizeof(cliaddr));
                         }
                     }
-                    std::cout << "Event size = " << events.size() << "\n";
                     // Clear num accepted and promise
                     num_accepted = 0;
                     num_promise = 0;
@@ -308,7 +307,6 @@ void *process(void *arg)
                 }
                 else if (compare_ballot(m.prepare().b_num(), ballot_num))
                 {
-                    std::cout << "999\n";
                     std::cout << "Received " << m.DebugString();
                     ballot_num = m.prepare().b_num();
                     // Send promise back
@@ -346,66 +344,68 @@ void *process(void *arg)
                     }
                 }
             }
-            // else if (m.has_promise())
-            // {
-            //     if (m.promise().b_num().depth() == ballot_num.depth() &&
-            //         m.promise().b_num().seq_n() == ballot_num.seq_n() &&
-            //         m.promise().b_num().proc_id() == ballot_num.proc_id())
-            //     {
-            //         std::cout << "Received " << m.DebugString();
-            //         if (num_promise < QUORUM_MAJORITY)
-            //         {
-            //             num_promise++;
-            //             proms.push_back(m);
-            //         }
-            //         else
-            //         {
-            //             accept_num = ballot_num;
-            //             if (m.promise().ablock().tranxs().size() == 0)
-            //             {
-            //                 pthread_mutex_lock(&q_lock);
-            //                 my_blo = Block(queue);
-            //                 while (!queue.empty())
-            //                     queue.pop_front();
-            //                 pthread_mutex_unlock(&q_lock);
-            //                 isPrepare = false;
-            //             }
-            //             else
-            //             {
-            //                 my_blo = find_blo_with_highest_b(proms);
-            //                 isSendBack = true;
-            //             }
-            //             // Broadcast accept message
-            //             response.Clear();
-            //             myAccept = response.mutable_accept();
-            //             myBlock = myAccept->mutable_block();
-            //             *myBlock = to_message(accept_blo);
-            //             myBallot = myAccept->mutable_b_num();
-            //             myBallot->CopyFrom(accept_num);
-            //             myAccept->set_pid(pid);
-            //             str_message = response.SerializeAsString();
+            else if (m.has_promise())
+            {
+                if (m.promise().b_num().depth() == ballot_num.depth() &&
+                    m.promise().b_num().seq_n() == ballot_num.seq_n() &&
+                    m.promise().b_num().proc_id() == ballot_num.proc_id())
+                {
+                    std::cout << "Received " << m.DebugString();
+                    if (num_promise < QUORUM_MAJORITY)
+                    {
+                        num_promise++;
+                        proms.push_back(m);
+                    }
+                    else
+                    {
+                        accept_num = ballot_num;
+                        if (m.promise().ablock().tranxs().size() == 0)
+                        {
+                            pthread_mutex_lock(&q_lock);
+                            my_blo = Block(queue);
+                            while (!queue.empty())
+                                queue.pop_front();
+                            pthread_mutex_unlock(&q_lock);
+                            isPrepare = false;
+                        }
+                        else
+                        {
+                            my_blo = find_blo_with_highest_b(proms);
+                            isSendBack = true;
+                        }
+                        // Broadcast accept message
+                        response.Clear();
+                        myAccept = response.mutable_accept();
+                        myBlock = myAccept->mutable_block();
+                        *myBlock = to_message(accept_blo);
+                        myBallot = myAccept->mutable_b_num();
+                        myBallot->CopyFrom(accept_num);
+                        myAccept->set_pid(pid);
+                        str_message = response.SerializeAsString();
 
-            //             std::cout << "Broadcast " << response.DebugString();
+                        std::cout << "Broadcast " << response.DebugString();
 
-            //             memset(&cliaddr, 0, sizeof(cliaddr));
+                        memset(&cliaddr, 0, sizeof(cliaddr));
 
-            //             cliaddr.sin_family = AF_INET;
-            //             cliaddr.sin_addr.s_addr = inet_addr(server_ip);
-            //             for (int i = 0; i < QUORUM_SIZE; i++)
-            //             {
-            //                 if (i == (pid - 1))
-            //                     continue;
-            //                 cliaddr.sin_port = htons(port + i + 1);
-            //                 int len = sizeof(cliaddr);
-            //                 sleep(2);
-            //                 sendto(sockfd, str_message.c_str(), sizeof(WireMessage), 0, (const sockaddr *) &cliaddr, len);
-            //             }
+                        cliaddr.sin_family = AF_INET;
+                        cliaddr.sin_addr.s_addr = inet_addr(server_ip);
+                        for (int i = 1; i <= QUORUM_SIZE; i++)
+                        {
+                            if (i != pid)
+                            {
+                                std::cout << "Sending to P" << i << "\n";
+                                cliaddr.sin_port = htons(port + i + 1);
+                                int len = sizeof(cliaddr);
+                                sleep(2);
+                                sendto(sockfd, str_message.c_str(), sizeof(WireMessage), 0, (const sockaddr *)&cliaddr, len);
+                            }
+                        }
 
-            //             num_promise = 0;
-            //             proms.clear();
-            //         }
-            //     }
-            // }
+                        num_promise = 0;
+                        proms.clear();
+                    }
+                }
+            }
             // else if (m.has_accept())
             // {
             //     if (compare_ballot(m.accept().b_num(), ballot_num))
