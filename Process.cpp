@@ -60,8 +60,9 @@ void moneyTransfer(int receiver, int amount)
             ballot_num.set_depth(bc.get_num_blocks() + 1);
 
             WireMessage m;
-            m.prepare();
-            m.prepare().set_b_num(ballot_num);
+            Prepare* p = new Prepare();
+            p->set_allocated_b_num(&ballot_num);
+            m.set_allocated_prepare(p);
 
             pthread_mutex_lock(&e_lock);
             events.push(m);
@@ -89,9 +90,10 @@ void fixLink(int dst)
     CONNECT[dst - 1] = true;
     // Push a restore message to the queue
     WireMessage m;
-    m.restore();
-    m.restore().set_depth(bc.get_num_blocks);
-    m.restore().set_pid(pid);
+    Restore* r = new Restore();
+    r->set_depth(bc.get_num_blocks());
+    r->set_pid(pid);
+    m.set_allocated_restore(r);
 
     // Push with lock/unlock
     pthread_mutex_lock(&e_lock);
@@ -157,7 +159,7 @@ void connection_setup(int pid)
         exit(0);
     }
 
-    memset(&servaddr, sizeof(servaddr));
+    memset(&servaddr, 0, sizeof(servaddr));
 
     // Filling server information
     servaddr.sin_family = AF_INET;
@@ -165,7 +167,7 @@ void connection_setup(int pid)
     servaddr.sin_addr.s_addr = server_ip;
 
     // Bind the socket
-    if (bind(sockfd, (const sturct sockaddr *)&servaddr, sizeof(servaaddr)) < 0)
+    if (bind(sockfd, (const sturct sockaddr *)&servaddr, sizeof(servaddr)) < 0)
     {
         std::cerr << "Socket bind failed!\n";
         exit(0);
