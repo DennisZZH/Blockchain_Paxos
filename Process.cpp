@@ -327,7 +327,7 @@ void *process(void *arg)
                         {
                             std::cout << "Sending to P" << i << "\n";
                             cliaddr.sin_port = htons(port + i);
-                            sleep(2);
+                            sleep(3);
                             sendto(sockfd, str_message.c_str(), sizeof(WireMessage), 0, (struct sockaddr *)&cliaddr, sizeof(cliaddr));
                         }
                     }
@@ -372,6 +372,7 @@ void *process(void *arg)
                     str_message = response.SerializeAsString();
 
                     int len = sizeof(cliaddr);
+                    sleep(3);
                     sendto(sockfd, str_message.c_str(), sizeof(WireMessage), 0, (const sockaddr *)&cliaddr, len);
                     std::cout << "Send " << response.DebugString();
 
@@ -442,7 +443,7 @@ void *process(void *arg)
                             {
                                 std::cout << "Sending to P" << i << "\n";
                                 cliaddr.sin_port = htons(port + i);
-                                sleep(2);
+                                sleep(3);
                                 sendto(sockfd, str_message.c_str(), sizeof(WireMessage), 0, (const sockaddr *)&cliaddr, sizeof(cliaddr));
                             }
                         }
@@ -479,6 +480,7 @@ void *process(void *arg)
 
                     std::cout << "Send " << response.DebugString();
 
+                    sleep(3);
                     sendto(sockfd, str_message.c_str(), sizeof(WireMessage), 0, (const sockaddr *)&cliaddr, sizeof(cliaddr));
                 }
             }
@@ -519,7 +521,7 @@ void *process(void *arg)
                             {
                                 std::cout << "Sending to P" << i << "\n";
                                 cliaddr.sin_port = htons(port + i);
-                                sleep(2);
+                                sleep(3);
                                 sendto(sockfd, str_message.c_str(), sizeof(WireMessage), 0, (const sockaddr *)&cliaddr, sizeof(cliaddr));
                             }
                         }
